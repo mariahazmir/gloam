@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.hypothesis/
+.pytest_cache/
+
+# Node
+node_modules/
+dist/
+.vite/
+
+# Secrets and local config
+.env
+.env.*
+
+# Big raw data (small exported scores in /data are kept)
+pipeline/data/raw/
+pipeline/data/interim/
+*.osm.pbf
+
+# OS and editor
+.DS_Store
+Thumbs.db
+.idea/
