@@ -11,9 +11,9 @@ inclusion: always
 - **Open source (MIT).** The `.kiro/` folder is committed and never added to `.gitignore`.
 - **Attribution:** show "© OpenStreetMap contributors" wherever the map is shown.
 - **No accounts, no route storage** (see product rules).
+- **Map:** MapLibre GL JS with OpenFreeMap tiles (3D extruded buildings). Loaded successfully from China in a 8 Nov test. Show attribution for OpenFreeMap, OpenMapTiles and OpenStreetMap contributors wherever the map appears.
 
 ## Not decided yet (ask me before choosing; don't pick silently)
-- Map library and tile source (must load from China and Malaysia, and support extruded 3D buildings).
 - Front-end language and framework.
 - Whether routing runs fully in the browser or needs a small hosted service.
 - Hosting for the optional corrections store.
