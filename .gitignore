@@ -23,3 +23,6 @@ pipeline/data/interim/
 .DS_Store
 Thumbs.db
 .idea/
+# Large intermediate pipeline files
+pipeline/data/*.pbf
+pipeline/data/*.parquet
