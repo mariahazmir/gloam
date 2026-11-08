@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gloam_pipeline"
+version = "0.1.0"
+description = "Gloam offline pipeline: estimates which streets are likely well lit from map data."
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = [
+    "numpy==2.2.6",
+    "scikit-learn==1.7.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "hypothesis==6.170.15",
+    "pytest==9.2.0",
+]
+
+[tool.setuptools]
+packages = ["gloam_pipeline"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

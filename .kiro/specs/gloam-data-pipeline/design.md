@@ -83,7 +83,7 @@ No module imports from `io.py` or `cli.py` except `cli.py`. Dependencies point d
 | hypothesis (dev) | property-based tests | required by steering |
 | pytest (dev) | test runner | standard |
 
-Not added: shapely and geopandas (a local equirectangular projection plus a few small functions in `geometry.py` is enough at 2 km city scale), click (stdlib `argparse` is enough), pickle or joblib (the model is plain JSON, so it is readable and portable). Python 3.10 or later.
+Not added: shapely and geopandas (a local equirectangular projection plus a few small functions in `geometry.py` is enough at 2 km city scale), click (stdlib `argparse` is enough), pickle or joblib (the model is plain JSON, so it is readable and portable). Python 3.11 or later.
 
 ## Components and Interfaces
 

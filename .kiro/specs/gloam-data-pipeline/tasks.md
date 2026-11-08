@@ -5,7 +5,7 @@
 Implement the offline Python package `gloam_pipeline` under `pipeline/`, in the order the design's dependency direction allows: scaffolding, errors and config, loading, geometry and segments, features, scoring, baselines, model, validation, export, file I/O, CLI, then docs. Pure modules come first; `io.py` and `cli.py` are the only modules that touch files, the clock or stdout. Every step builds on the one before and ends with the CLI wiring everything together.
 
 Conventions for all tasks:
-- Language: Python 3.10 or later. Code in `pipeline/gloam_pipeline/`, tests in `pipeline/tests/`.
+- Language: Python 3.11 or later. Code in `pipeline/gloam_pipeline/`, tests in `pipeline/tests/`.
 - Small, targeted diffs. Pure logic has no I/O and no hidden state.
 - Every public function rejects NaN, infinite and out-of-range values with `InvalidArgumentError` naming the argument.
 - Each property test is one Hypothesis test in its own file `pipeline/tests/test_property_NN_<topic>.py`, runs at least 100 examples (shared settings profile in `conftest.py`), and carries the tag comment `# Feature: gloam-data-pipeline, Property N: <text>`.
@@ -20,21 +20,21 @@ New dependencies (explained, as the technical rules require):
 
 ## Tasks
 
-- [ ] 1. Project scaffolding and shared foundations
-  - [ ] 1.1 Create the package skeleton and pinned dependencies
-    - Create `pipeline/pyproject.toml` (Python >= 3.10, package `gloam_pipeline`, console entry via `python -m gloam_pipeline`), with `numpy` and `scikit-learn` pinned exactly as runtime dependencies and `hypothesis` and `pytest` pinned exactly as dev dependencies
+- [x] 1. Project scaffolding and shared foundations
+  - [x] 1.1 Create the package skeleton and pinned dependencies
+    - Create `pipeline/pyproject.toml` (Python >= 3.11, package `gloam_pipeline`, console entry via `python -m gloam_pipeline`), with `numpy` and `scikit-learn` pinned exactly as runtime dependencies and `hypothesis` and `pytest` pinned exactly as dev dependencies
     - Create `pipeline/gloam_pipeline/__init__.py`, `__main__.py` (stub that calls `cli.main`), and empty module files named in the design layout
     - Create `pipeline/tests/conftest.py` with a Hypothesis settings profile (`max_examples=100`, deterministic database off) and `pipeline/tests/strategies.py` stub
     - Ignore only the large intermediate files under `pipeline/data/`. Do not ignore the root `data/` folder (exported city files the web app loads) and do not ignore `.kiro/`. After editing, check with `git check-ignore -v` that `data/` and `.kiro/` are not ignored and that a file under `pipeline/data/` is
     - _Requirements: 10.9_
 
-  - [ ] 1.2 Verify pinned dependency versions and install the environment
+  - [x] 1.2 Verify pinned dependency versions and install the environment
     - Pins must come from versions confirmed to exist, never guessed. Look up the real released versions of `numpy`, `scikit-learn`, `hypothesis` and `pytest` (for example `pip index versions <pkg>` or `pip install --dry-run` with the pins) and confirm each is compatible with the chosen Python version
     - Fix any pin in `pipeline/pyproject.toml` that does not exist or is incompatible
     - Install the dev environment and confirm `python -m pytest` runs with zero tests
     - _Requirements: 10.9_
 
-  - [ ] 1.3 Implement `errors.py`, `checks.py` and `config.py`
+  - [x] 1.3 Implement `errors.py`, `checks.py` and `config.py`
     - `GloamError`, `InvalidArgumentError(argument, value, allowed)`, `InputFileError`, `DataError`, `TrainingError`; messages like `argument 'feature_distance_m' rejected value nan; allowed 10 to 1000`
     - `check_finite`, `check_range` (open and closed bounds), `check_text_length` (also rejects whitespace-only), `check_count_between`
     - Frozen config dataclasses validated in `__post_init__` with the defaults and ranges from the design table, including `low_value < high_value`
