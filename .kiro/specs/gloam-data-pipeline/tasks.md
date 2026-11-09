@@ -94,34 +94,34 @@ New dependencies (explained, as the technical rules require):
     - **Property 4: Lengths are valid and degenerate or closed ways are handled**
     - **Validates: Requirements 2.4, 2.5, 2.6**
 
-- [ ] 4. Checkpoint - Ensure all tests pass
+- [x] 4. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 5. Build features
-  - [ ] 5.1 Implement scaling in `features.py`
+- [x] 5. Build features
+  - [x] 5.1 Implement scaling in `features.py`
     - `percentile_linear(sorted_values, q)` with linear interpolation, `scale_counts` as `min(1, c / p95)`, zeros when fewer than two distinct values or `p95 = 0`, min-max scaling for length over non-missing segments
     - _Requirements: 3.6_
 
-  - [ ] 5.2 Write property test for scaling
+  - [x] 5.2 Write property test for scaling
     - **Property 5: Percentile-capped scaling stays in range and is monotone**
     - **Validates: Requirements 3.6**
 
-  - [ ] 5.3 Implement `raw_features` and `to_vector`
+  - [x] 5.3 Implement `raw_features` and `to_vector`
     - `RawFeatures`, `ScaledCounts`; counts of bus stops, food places, shops and building footprint centroids within the feature distance (using `GridIndex`); land use at the segment midpoint mapped to {residential, commercial, retail, industrial, other, none}; footway kind {sidewalk, crossing, other, none}
     - Validate feature distance 10 to 1000 m before computing; defaults plus `missing=True` when a feature cannot be computed, then continue
     - Use only the city's own data; never read `label` or the `lit` tag
     - 31-value vector: highway one-hot (16), footway kind (4), scaled length (1), four scaled counts (4), land use (6)
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7_
 
-  - [ ] 5.4 Write property test for order and city independence
+  - [x] 5.4 Write property test for order and city independence
     - **Property 6: Features do not depend on input order or other cities**
     - **Validates: Requirements 3.5, 10.2**
 
-  - [ ] 5.5 Write property test that features ignore the lit tag
+  - [x] 5.5 Write property test that features ignore the lit tag
     - **Property 7: Features ignore the lit tag**
     - **Validates: Requirements 3.4, 10.3**
 
-  - [ ] 5.6 Write unit tests for features
+  - [x] 5.6 Write unit tests for features
     - Hand-built street with known counts at known distances; land-use midpoint lookup; missing-feature defaults
     - Scaling examples computed by hand: `[0, 2, 4]` gives `p95 = 3.8` and `[0.0, 0.526, 1.0]`; `[3, 3]` gives zeros; twenty zeros and one 9 give all zeros
     - Invalid feature distance (NaN, infinite, 5, 2000) names the argument and allowed range

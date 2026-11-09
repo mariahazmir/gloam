@@ -19,6 +19,18 @@
     "3.4 Write property test for lengths and degenerate or closed ways": {
       "status": "passed",
       "lastRunTimestamp": 1794189264436
+    },
+    "5.2 Write property test for scaling": {
+      "status": "passed",
+      "lastRunTimestamp": 1794190024431
+    },
+    "5.4 Write property test for order and city independence": {
+      "status": "passed",
+      "lastRunTimestamp": 1794190134729
+    },
+    "5.5 Write property test that features ignore the lit tag": {
+      "status": "passed",
+      "lastRunTimestamp": 1794190323609
     }
   },
   "executionHistory": {
@@ -224,6 +236,97 @@
         "executionId": "6a7bb091-21cf-4d17-a4d8-8f30d80b12e4",
         "chatSessionId": "sess_ee3c707a-0de4-4c0a-a943-87e038c4932d",
         "timestamp": 1794189273832
+      }
+    ],
+    "4. Checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "0afde2de-c055-4286-aa84-6289f65cfe7c",
+        "chatSessionId": "sess_29b8e5fe-d73e-4d44-9cdf-14dad2805ec4",
+        "timestamp": 1794189618704
+      },
+      {
+        "executionId": "0afde2de-c055-4286-aa84-6289f65cfe7c",
+        "chatSessionId": "sess_29b8e5fe-d73e-4d44-9cdf-14dad2805ec4",
+        "timestamp": 1794189640838
+      }
+    ],
+    "5.1 Implement scaling in `features.py`": [
+      {
+        "executionId": "1e0ec56c-61de-4ea0-b963-a5729c2541be",
+        "chatSessionId": "sess_7201f007-4335-45ac-9e2f-097b6e83c443",
+        "timestamp": 1794189938623
+      },
+      {
+        "executionId": "1e0ec56c-61de-4ea0-b963-a5729c2541be",
+        "chatSessionId": "sess_7201f007-4335-45ac-9e2f-097b6e83c443",
+        "timestamp": 1794189985110
+      }
+    ],
+    "5.2 Write property test for scaling": [
+      {
+        "executionId": "1e0ec56c-61de-4ea0-b963-a5729c2541be",
+        "chatSessionId": "sess_7201f007-4335-45ac-9e2f-097b6e83c443",
+        "timestamp": 1794190000423
+      },
+      {
+        "executionId": "1e0ec56c-61de-4ea0-b963-a5729c2541be",
+        "chatSessionId": "sess_7201f007-4335-45ac-9e2f-097b6e83c443",
+        "timestamp": 1794190088433
+      }
+    ],
+    "5.3 Implement `raw_features` and `to_vector`": [
+      {
+        "executionId": "1e0ec56c-61de-4ea0-b963-a5729c2541be",
+        "chatSessionId": "sess_7201f007-4335-45ac-9e2f-097b6e83c443",
+        "timestamp": 1794190000551
+      },
+      {
+        "executionId": "1e0ec56c-61de-4ea0-b963-a5729c2541be",
+        "chatSessionId": "sess_7201f007-4335-45ac-9e2f-097b6e83c443",
+        "timestamp": 1794190088956
+      }
+    ],
+    "5.4 Write property test for order and city independence": [
+      {
+        "executionId": "1e0ec56c-61de-4ea0-b963-a5729c2541be",
+        "chatSessionId": "sess_7201f007-4335-45ac-9e2f-097b6e83c443",
+        "timestamp": 1794190092799
+      },
+      {
+        "executionId": "1e0ec56c-61de-4ea0-b963-a5729c2541be",
+        "chatSessionId": "sess_7201f007-4335-45ac-9e2f-097b6e83c443",
+        "timestamp": 1794190334263
+      }
+    ],
+    "5.5 Write property test that features ignore the lit tag": [
+      {
+        "executionId": "1e0ec56c-61de-4ea0-b963-a5729c2541be",
+        "chatSessionId": "sess_7201f007-4335-45ac-9e2f-097b6e83c443",
+        "timestamp": 1794190093421
+      },
+      {
+        "executionId": "1e0ec56c-61de-4ea0-b963-a5729c2541be",
+        "chatSessionId": "sess_7201f007-4335-45ac-9e2f-097b6e83c443",
+        "timestamp": 1794190335006
+      }
+    ],
+    "5.6 Write unit tests for features": [
+      {
+        "executionId": "1e0ec56c-61de-4ea0-b963-a5729c2541be",
+        "chatSessionId": "sess_7201f007-4335-45ac-9e2f-097b6e83c443",
+        "timestamp": 1794190094140
+      },
+      {
+        "executionId": "1e0ec56c-61de-4ea0-b963-a5729c2541be",
+        "chatSessionId": "sess_7201f007-4335-45ac-9e2f-097b6e83c443",
+        "timestamp": 1794190335671
+      }
+    ],
+    "5. Build features": [
+      {
+        "executionId": "1e0ec56c-61de-4ea0-b963-a5729c2541be",
+        "chatSessionId": "sess_7201f007-4335-45ac-9e2f-097b6e83c443",
+        "timestamp": 1794190335754
       }
     ]
   }
