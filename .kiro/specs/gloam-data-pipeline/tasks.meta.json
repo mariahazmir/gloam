@@ -31,6 +31,42 @@
     "5.5 Write property test that features ignore the lit tag": {
       "status": "passed",
       "lastRunTimestamp": 1794190323609
+    },
+    "6.4 Write property test for score range": {
+      "status": "passed",
+      "lastRunTimestamp": 1794190996968
+    },
+    "6.5 Write property test for label source and tagged values": {
+      "status": "passed",
+      "lastRunTimestamp": 1794191001492
+    },
+    "6.6 Write property test for count monotonicity": {
+      "status": "passed",
+      "lastRunTimestamp": 1794191005132
+    },
+    "6.7 Write property test for missing features": {
+      "status": "passed",
+      "lastRunTimestamp": 1794191006304
+    },
+    "6.3 Write property test for invalid arguments": {
+      "status": "passed",
+      "lastRunTimestamp": 1794191017257
+    },
+    "6.8 Write property test for distribution shift": {
+      "status": "passed",
+      "lastRunTimestamp": 1794191058517
+    },
+    "6.9 Write property test for scoring determinism": {
+      "status": "passed",
+      "lastRunTimestamp": 1794191062026
+    },
+    "7.2 Write property test for the rule baseline": {
+      "status": "passed",
+      "lastRunTimestamp": 1794191678167
+    },
+    "7.3 Write property test for the highway-rate baseline": {
+      "status": "passed",
+      "lastRunTimestamp": 1794191678910
     }
   },
   "executionHistory": {
@@ -327,6 +363,166 @@
         "executionId": "1e0ec56c-61de-4ea0-b963-a5729c2541be",
         "chatSessionId": "sess_7201f007-4335-45ac-9e2f-097b6e83c443",
         "timestamp": 1794190335754
+      }
+    ],
+    "6.1 Implement `shift.py`": [
+      {
+        "executionId": "eeaef280-a417-439a-a8f4-6e238a5b1de2",
+        "chatSessionId": "sess_e2058877-e376-4d01-864b-f402c02c012f",
+        "timestamp": 1794190840427
+      },
+      {
+        "executionId": "eeaef280-a417-439a-a8f4-6e238a5b1de2",
+        "chatSessionId": "sess_e2058877-e376-4d01-864b-f402c02c012f",
+        "timestamp": 1794190895649
+      }
+    ],
+    "6.2 Implement `scoring.py`": [
+      {
+        "executionId": "eeaef280-a417-439a-a8f4-6e238a5b1de2",
+        "chatSessionId": "sess_e2058877-e376-4d01-864b-f402c02c012f",
+        "timestamp": 1794190906014
+      },
+      {
+        "executionId": "eeaef280-a417-439a-a8f4-6e238a5b1de2",
+        "chatSessionId": "sess_e2058877-e376-4d01-864b-f402c02c012f",
+        "timestamp": 1794190954961
+      }
+    ],
+    "6.3 Write property test for invalid arguments": [
+      {
+        "executionId": "eeaef280-a417-439a-a8f4-6e238a5b1de2",
+        "chatSessionId": "sess_e2058877-e376-4d01-864b-f402c02c012f",
+        "timestamp": 1794190960506
+      },
+      {
+        "executionId": "eeaef280-a417-439a-a8f4-6e238a5b1de2",
+        "chatSessionId": "sess_e2058877-e376-4d01-864b-f402c02c012f",
+        "timestamp": 1794191028199
+      }
+    ],
+    "6.4 Write property test for score range": [
+      {
+        "executionId": "eeaef280-a417-439a-a8f4-6e238a5b1de2",
+        "chatSessionId": "sess_e2058877-e376-4d01-864b-f402c02c012f",
+        "timestamp": 1794190960656
+      },
+      {
+        "executionId": "eeaef280-a417-439a-a8f4-6e238a5b1de2",
+        "chatSessionId": "sess_e2058877-e376-4d01-864b-f402c02c012f",
+        "timestamp": 1794191029089
+      }
+    ],
+    "6.5 Write property test for label source and tagged values": [
+      {
+        "executionId": "eeaef280-a417-439a-a8f4-6e238a5b1de2",
+        "chatSessionId": "sess_e2058877-e376-4d01-864b-f402c02c012f",
+        "timestamp": 1794190961290
+      },
+      {
+        "executionId": "eeaef280-a417-439a-a8f4-6e238a5b1de2",
+        "chatSessionId": "sess_e2058877-e376-4d01-864b-f402c02c012f",
+        "timestamp": 1794191029626
+      }
+    ],
+    "6.6 Write property test for count monotonicity": [
+      {
+        "executionId": "eeaef280-a417-439a-a8f4-6e238a5b1de2",
+        "chatSessionId": "sess_e2058877-e376-4d01-864b-f402c02c012f",
+        "timestamp": 1794190962315
+      },
+      {
+        "executionId": "eeaef280-a417-439a-a8f4-6e238a5b1de2",
+        "chatSessionId": "sess_e2058877-e376-4d01-864b-f402c02c012f",
+        "timestamp": 1794191030393
+      }
+    ],
+    "6.7 Write property test for missing features": [
+      {
+        "executionId": "eeaef280-a417-439a-a8f4-6e238a5b1de2",
+        "chatSessionId": "sess_e2058877-e376-4d01-864b-f402c02c012f",
+        "timestamp": 1794190963004
+      },
+      {
+        "executionId": "eeaef280-a417-439a-a8f4-6e238a5b1de2",
+        "chatSessionId": "sess_e2058877-e376-4d01-864b-f402c02c012f",
+        "timestamp": 1794191031199
+      }
+    ],
+    "6.8 Write property test for distribution shift": [
+      {
+        "executionId": "eeaef280-a417-439a-a8f4-6e238a5b1de2",
+        "chatSessionId": "sess_e2058877-e376-4d01-864b-f402c02c012f",
+        "timestamp": 1794191032279
+      },
+      {
+        "executionId": "eeaef280-a417-439a-a8f4-6e238a5b1de2",
+        "chatSessionId": "sess_e2058877-e376-4d01-864b-f402c02c012f",
+        "timestamp": 1794191091959
+      }
+    ],
+    "6.9 Write property test for scoring determinism": [
+      {
+        "executionId": "eeaef280-a417-439a-a8f4-6e238a5b1de2",
+        "chatSessionId": "sess_e2058877-e376-4d01-864b-f402c02c012f",
+        "timestamp": 1794191033058
+      },
+      {
+        "executionId": "eeaef280-a417-439a-a8f4-6e238a5b1de2",
+        "chatSessionId": "sess_e2058877-e376-4d01-864b-f402c02c012f",
+        "timestamp": 1794191092755
+      }
+    ],
+    "6.10 Write unit tests for scoring and shift": [
+      {
+        "executionId": "eeaef280-a417-439a-a8f4-6e238a5b1de2",
+        "chatSessionId": "sess_e2058877-e376-4d01-864b-f402c02c012f",
+        "timestamp": 1794191033633
+      },
+      {
+        "executionId": "eeaef280-a417-439a-a8f4-6e238a5b1de2",
+        "chatSessionId": "sess_e2058877-e376-4d01-864b-f402c02c012f",
+        "timestamp": 1794191093494
+      }
+    ],
+    "6. Distribution shift and scoring": [
+      {
+        "executionId": "eeaef280-a417-439a-a8f4-6e238a5b1de2",
+        "chatSessionId": "sess_e2058877-e376-4d01-864b-f402c02c012f",
+        "timestamp": 1794191093625
+      }
+    ],
+    "7.1 Implement `baselines.py`": [
+      {
+        "executionId": "e999da44-0cbd-4554-89ce-7f8f0845cc71",
+        "chatSessionId": "sess_0659db75-36fb-45ab-b62c-8684ab37cdda",
+        "timestamp": 1794191626200
+      },
+      {
+        "executionId": "e999da44-0cbd-4554-89ce-7f8f0845cc71",
+        "chatSessionId": "sess_0659db75-36fb-45ab-b62c-8684ab37cdda",
+        "timestamp": 1794191690154
+      }
+    ],
+    "7.2 Write property test for the rule baseline": [
+      {
+        "executionId": "e999da44-0cbd-4554-89ce-7f8f0845cc71",
+        "chatSessionId": "sess_0659db75-36fb-45ab-b62c-8684ab37cdda",
+        "timestamp": 1794191694470
+      }
+    ],
+    "7.3 Write property test for the highway-rate baseline": [
+      {
+        "executionId": "e999da44-0cbd-4554-89ce-7f8f0845cc71",
+        "chatSessionId": "sess_0659db75-36fb-45ab-b62c-8684ab37cdda",
+        "timestamp": 1794191694812
+      }
+    ],
+    "7. Baselines": [
+      {
+        "executionId": "e999da44-0cbd-4554-89ce-7f8f0845cc71",
+        "chatSessionId": "sess_0659db75-36fb-45ab-b62c-8684ab37cdda",
+        "timestamp": 1794191694885
       }
     ]
   }
