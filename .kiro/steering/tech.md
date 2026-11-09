@@ -13,11 +13,12 @@ inclusion: always
 - **No accounts, no route storage** (see product rules).
 - **Map:** MapLibre GL JS with OpenFreeMap tiles (3D extruded buildings). Loaded successfully from China in a 8 Nov test. Show attribution for OpenFreeMap, OpenMapTiles and OpenStreetMap contributors wherever the map appears.
 
-## Not decided yet (ask me before choosing; don't pick silently)
-- Front-end language and framework.
-- Whether routing runs fully in the browser or needs a small hosted service.
-- Hosting for the optional corrections store.
-
+## Decided on 9 Nov
+- Routing runs fully in the browser on the exported scores. No routing server.
+- Corrections are stored on the user's device only. No hosted database in version 1. Community totals in the demo come from a bundled sample file labeled "SAMPLE DATA".
+- Front end: TypeScript with Vite, no UI framework. `maplibre-gl` is the only runtime dependency. Tests: Vitest plus `fast-check` for property-based tests.
+- Hosting: Render static site (free, HTTPS, CDN, Brotli) as the main URL; GitHub Pages as a fallback built with a /gloam/ base path. Tested reachable from Ningbo and Kuala Lumpur on 9 Nov. Must stay up 16 Dec to 29 Jan; recheck before submitting.
+  
 ## How to work
 - **Spec first.** If behaviour changes, update the requirements and design before the code.
 - **Small diffs.** Prefer minimal, targeted edits. Don't rewrite or regenerate whole files unless asked. (Credits are limited.)

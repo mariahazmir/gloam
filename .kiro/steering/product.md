@@ -16,6 +16,7 @@ People who walk alone at night and feel uneasy about unfamiliar or poorly lit st
 - **Use instead:** "likely well lit", "likely dark", "better lit", "estimated", "confirmed by N people", "unknown".
 - Inferred results are always labeled as estimates and shown with confidence.
 - Sample or seeded data is always labeled "sample data" in the UI.
+- **No fixed probability cut-offs.** The model's probabilities are relative scores (biased low, not calibrated). Never call a street lit or dark because it crosses 0.5. Use rank within the city ("brighter than most streets here", "darker than most streets here").
 - Every screen that shows a route includes the disclaimer below.
 
 **Disclaimer text:** "Gloam estimates which streets are likely well lit from map data. Estimates can be wrong, and Gloam can't tell you whether a route is safe. Trust your surroundings."
