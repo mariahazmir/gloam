@@ -188,32 +188,32 @@ New dependencies (explained, as the technical rules require):
     - **Property 19: Highway-rate baseline uses the training rate, with fallback**
     - **Validates: Requirements 4.3, 4.4, 4.5**
 
-- [ ] 8. Train the model
-  - [ ] 8.1 Implement `model.py`
+- [x] 8. Train the model
+  - [x] 8.1 Implement `model.py`
     - Row targets and weights (`tagged_lit` 1/1, `tagged_unlit` 0/1, `untagged` 0/`untagged_weight`), rows sorted by `(city_id, segment_id)`, `LogisticRegression(C=1.0, solver="lbfgs", max_iter=1000, random_state=seed)` with `sample_weight`
     - Check 1 to 20 distinct cities, held-out city known and leaving at least one training city; drop held-out rows; `TrainingError` naming cities and count when there are zero `tagged_lit` rows or no target-0 rows
     - Pure numpy `predict` (sigmoid of `x @ w + b`) with no scikit-learn import; feature importance as `|coefficient|` ranked highest first with ties by name
     - Build the training log text (unknown-not-unlit statement, the three weights, row counts, importance ranking); model dict also carries highway rates, overall lit rate, unseen highway types, training histograms, seed
     - _Requirements: 4.3, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 5.9, 5.10_
 
-  - [ ] 8.2 Write property test for training weights
+  - [x] 8.2 Write property test for training weights
     - **Property 8: Training weights follow the label**
     - **Validates: Requirements 5.1, 5.4, 5.6**
 
-  - [ ] 8.3 Write property test for reproducibility
+  - [x] 8.3 Write property test for reproducibility
     - **Property 9: Training is reproducible**
     - Use small generated datasets (tens of rows)
     - **Validates: Requirements 5.7**
 
-  - [ ] 8.4 Write property test for the held-out city
+  - [x] 8.4 Write property test for the held-out city
     - **Property 10: The held-out city does not influence the model**
     - **Validates: Requirements 4.3, 5.8**
 
-  - [ ] 8.5 Write property test for feature importance
+  - [x] 8.5 Write property test for feature importance
     - **Property 11: Feature importance covers every feature in ranked order**
     - **Validates: Requirements 5.10**
 
-  - [ ] 8.6 Write unit tests for training
+  - [x] 8.6 Write unit tests for training
     - Zero `tagged_lit` rows raises `TrainingError` and leaves the model dict result unwritten; log text contains the unknown-not-unlit statement and the three weights; unknown held-out city and "leaves zero training cities" errors name the city; invalid untagged weight names the argument
     - _Requirements: 5.2, 5.3, 5.5, 5.6, 5.9_
 
