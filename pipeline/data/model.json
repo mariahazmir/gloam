@@ -1,0 +1,187 @@
+{
+ "schema_version": 1,
+ "feature_names": [
+  "highway_primary",
+  "highway_secondary",
+  "highway_tertiary",
+  "highway_unclassified",
+  "highway_residential",
+  "highway_living_street",
+  "highway_service",
+  "highway_pedestrian",
+  "highway_footway",
+  "highway_path",
+  "highway_cycleway",
+  "highway_track",
+  "highway_steps",
+  "highway_primary_link",
+  "highway_secondary_link",
+  "highway_tertiary_link",
+  "footway_sidewalk",
+  "footway_crossing",
+  "footway_other",
+  "footway_none",
+  "length",
+  "bus_stops",
+  "food_places",
+  "shops",
+  "buildings",
+  "landuse_residential",
+  "landuse_commercial",
+  "landuse_retail",
+  "landuse_industrial",
+  "landuse_other",
+  "landuse_none"
+ ],
+ "intercept": 1.2099637293634433,
+ "coefficients": [
+  1.2646988533340968,
+  0.9095204079863817,
+  1.551916781837311,
+  0.8026055971564747,
+  1.107214475008183,
+  0.9613188944844094,
+  -1.4216164942177119,
+  -0.03640842534409716,
+  -1.111931396079199,
+  -2.3463160272769428,
+  0.31723838555736944,
+  -0.3729177028471873,
+  -1.1611492183574552,
+  0.14808940724080563,
+  0.19256480823503677,
+  0.256043445267,
+  0.12618035081579704,
+  0.612178282304038,
+  0.8690871204597514,
+  -0.5465739615951828,
+  1.5987380294084224,
+  0.4517964980480162,
+  1.9349930164203872,
+  0.09432537209394931,
+  -0.8629173905511924,
+  0.559480335839174,
+  0.2838385317229818,
+  0.692905072216913,
+  -1.2936384544471835,
+  0.11864514493579167,
+  0.69964116171672
+ ],
+ "training_cities": [
+  "berlin",
+  "london",
+  "manchester",
+  "seattle"
+ ],
+ "held_out_city": "kl",
+ "untagged_weight": 0.2,
+ "seed": 0,
+ "highway_rates": {
+  "cycleway": 0.9592651757188498,
+  "footway": 0.9271536226173472,
+  "living_street": 1.0,
+  "path": 0.6964285714285714,
+  "pedestrian": 0.9606854838709677,
+  "primary": 1.0,
+  "primary_link": 1.0,
+  "residential": 0.9949132256134051,
+  "secondary": 1.0,
+  "secondary_link": 1.0,
+  "service": 0.9507412721186035,
+  "steps": 0.817451205510907,
+  "tertiary": 1.0,
+  "tertiary_link": 1.0,
+  "track": 0.3333333333333333,
+  "unclassified": 0.9965437788018433
+ },
+ "pair_rates": {
+  "cycleway": {
+   "crossing": 1.0,
+   "none": 0.9588045234248789,
+   "other": 1.0,
+   "sidewalk": 1.0
+  },
+  "footway": {
+   "crossing": 0.9869281045751634,
+   "none": 0.7524243023946171,
+   "other": 0.9707903780068728,
+   "sidewalk": 0.9847896080826024
+  },
+  "living_street": {
+   "none": 1.0
+  },
+  "path": {
+   "none": 0.6946107784431138,
+   "sidewalk": 1.0
+  },
+  "pedestrian": {
+   "crossing": 1.0,
+   "none": 0.9606458123107972
+  },
+  "primary": {
+   "none": 1.0
+  },
+  "primary_link": {
+   "none": 1.0
+  },
+  "residential": {
+   "none": 0.9949132256134051
+  },
+  "secondary": {
+   "none": 1.0
+  },
+  "secondary_link": {
+   "none": 1.0
+  },
+  "service": {
+   "none": 0.9507412721186035
+  },
+  "steps": {
+   "none": 0.817451205510907
+  },
+  "tertiary": {
+   "none": 1.0
+  },
+  "tertiary_link": {
+   "none": 1.0
+  },
+  "track": {
+   "none": 0.3333333333333333
+  },
+  "unclassified": {
+   "none": 0.9965437788018433
+  }
+ },
+ "overall_lit_rate": 0.9444703686420906,
+ "unseen_highway_types": 0,
+ "training_histograms": {
+  "bus_stops": [
+   0.4845976559206273,
+   0.1795862728013716,
+   0.1745411619213581,
+   0.1399983136119621,
+   0.02127659574468085
+  ],
+  "food_places": [
+   0.26757356867815285,
+   0.12470839540178195,
+   0.07920402484611709,
+   0.14110851907023805,
+   0.38740549200371005
+  ],
+  "shops": [
+   0.26445375080806094,
+   0.11983192332555721,
+   0.08403833722139464,
+   0.1473059951094747,
+   0.38436999353551254
+  ],
+  "buildings": [
+   0.004567300935945361,
+   0.0077011720396863315,
+   0.01124258691925012,
+   0.06486972652407319,
+   0.911619213581045
+  ]
+ }
+}

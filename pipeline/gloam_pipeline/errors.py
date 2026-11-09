@@ -38,6 +38,19 @@ class DataError(GloamError):
         )
 
 
+class FileSizeError(GloamError):
+    """An exported file is over its size limit. Names city, file, size and limit."""
+
+    def __init__(self, city: object, file: str, size_kb: float, limit_kb: float):
+        self.city = city
+        self.file = file
+        self.size_kb = size_kb
+        self.limit_kb = limit_kb
+        super().__init__(
+            f"city '{city}' {file} file is {size_kb:.1f} KB, over the limit of {limit_kb:g} KB"
+        )
+
+
 class TrainingError(GloamError):
     """Training cannot run, for example when no tagged lit segments exist."""
 
