@@ -18,7 +18,6 @@ dist/
 pipeline/data/raw/
 pipeline/data/interim/
 *.osm.pbf
-data/*.geojson
 
 # OS and editor
 .DS_Store
@@ -29,3 +28,4 @@ pipeline/data/*.pbf
 pipeline/data/*.parquet
 pipeline/data/*/city.json
 pipeline/data/*/features.json
+*.egg-info/

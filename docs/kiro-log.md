@@ -153,7 +153,6 @@ Credits: 4,000 at start (redeemed 8 Nov).
 
 ### Task 5 (5.1 to 5.6)
 
-
 - Ran as one group because credits aren't the constraint (about 80 used of 4,000); time is.
 - check_features.py output matched my independent calc: means/shares/p95/max within 1% (buildings 24.41 vs 24.51 mean, likely a centroid-definition difference); 9 of 10 sample segments exact, one off by 1. Missing segments 0; vector length 31. Run time 33 s for KL.
 - Kiro's choices: midpoint = half the length along the line; scale_counts takes an optional missing list; the Property 7 test disables the deadline.
@@ -244,3 +243,61 @@ Credits: 4,000 at start (redeemed 8 Nov).
 
 - 271 tests passing in 25 s, no code changes.
 - Credits: 1.76
+
+## 9 Nov: Spec 2, `web-app` (Build a Feature)
+
+### Requirements
+
+- What I did: Updated the steering files first (tech.md decisions, a "no fixed probability cut-offs" rule in product.md, and a new design.md that only loads for files under `app/`). Then I started a Build a Feature spec called `gloam-web-app`, pasted in my requirements draft and attached 4 design screenshots. Kiro produced 17 requirements.
+- What Kiro got right: relative tiers with no 0.5 cutoff, the street graph split at shared coordinates, the dread formula, no network calls in the routing code, the flicker cap, and the first-run requirements for judges.
+- What I reviewed and sent back (Kiro was changed in 2 rounds):
+  - Default dread slider was 0, so the first sample walk would show two identical routes. Changed to 3.
+  - The "more dread weight = never more dark exposure" property broke when personal settings were on. Split routing distance (with setting penalties) from displayed distance, and made Shortest_Route ignore the toggles.
+  - The "only these network requests" rule was wrong (the app also fetches the map style, glyphs and sprites). Listed the allowed requests, and scoped the zero-requests test to route planning.
+  - Tapping the map was overloaded and impossible by keyboard. Added crosshair buttons ("Set start here / Set end here") and a Plan/Report mode switch.
+  - The low-confidence marker used a fixed 0.5. Changed to the lowest quarter of the pack's confidences.
+  - Tie-break for equal-cost routes was written for a list of candidates that Dijkstra doesn't have. Replaced with a canonical order by street id.
+  - Smaller: whole-word banned-word matching, CSV formula-injection escaping, a smaller browser test list, and 3 new properties.
+- Decisions I made: ship KL, London and Seattle only; a user's own note changes only their own routing, never anyone's tiers; the validation page is bundled at build time; the About screen says the tile provider can see the viewed area but not routes.
+- Observation: Kiro applied all nine sets of changes but only read back the first part of the file, so I had it print the changed criteria to check them. Reviewing the output was worth doing: the spec was good on the first pass, but the problems I found were interactions between criteria, such as the dread slider default against the sample walk, and the monotonicity property against the personal settings.
+- Credits: 11
+
+### Design
+
+- What I did: Approved requirements, then had Kiro generate `design.md` for `gloam-web-app`. It read the real files in `data/` and `docs/validation.md` first, which it quoted correctly (segment counts, the highway types in the data, which cities have validation tables).
+- What Kiro got right:
+  - Split the app into a pure core (graph, tiers, router, corrections, wording checks, flicker maths) with no network or DOM, and a thin shell around it. That makes "zero network calls" a testable property.
+  - Checked its own maths: tier cut-offs use integer comparisons instead of floating point, the equal-cost tie-break is a worked example (140/165, 180/180, 340/240), and it included a short proof of why raising the dread slider can never increase dark exposure.
+  - 33 correctness properties, each linked back to a requirement.
+  - Flagged its own gaps as open items (same-place route, duplicate ids, TileJSON request).
+- What I reviewed and sent back:
+  - The flicker limit (max 25% brightness change per 100 ms) was only met by the ideal curve. The map updates opacity in steps, so the real change could reach about 0.39. Fixed with shallower dips and faster updates, and the property now tests the stepped curve.
+  - Every street in a layer would have flashed in sync. Added phase offsets.
+  - A validation test hard-coded which cities fail to beat the baseline. Changed it to read the parsed file, since the numbers will change when I pick the final training weight.
+  - Sample walks only had to differ from the shortest route. Now each must cross at least 3 tiers so glow, flicker and fog are all visible on first run.
+  - Fixed smaller things: marker updates using feature-state, TileJSON added to the allowed requests, `clearExample` state.
+-Decisions I made:
+  - All five cities ship (Seattle, KL, London, Berlin, Manchester). Berlin, London and Manchester are the ones with real validation numbers, and packs only load when picked.
+  - Skipped jsdom. It can't check layout or keyboard use, so I'll check those by hand in Chrome device mode.
+  - Hosting: Render static site as main (tested open from Ningbo and KL), GitHub Pages as fallback.
+- Observation: the first pass was strong again. The problems I found came from the gap between the maths and what actually runs (a smooth curve versus the stepped opacity updates the map can render). That kind of gap is hard to catch from the spec alone.
+- Credits: 21.58
+
+### Tasks
+
+- What I did: Approved the design, then had Kiro generate `tasks.md` for `gloam-web-app`. It produced 19 top-level tasks, with all 33 correctness properties as their own sub-tasks and checkpoints at tasks 5, 11, 16 and 19.
+- What Kiro got right:
+  - Built the pure core first (validation, parsing, graph, scoring, routing, corrections, flicker maths) and its tests, then the shell, map, UI and docs. Each task names the files it touches and the requirements it covers.
+  - Flagged three problems in its own plan before I did: an unrequested fallback host in the hosting task, a dependency-ordering slip between two tasks, and placeholder sample-walk points that nothing should read yet.
+- What I reviewed and sent back:
+  - Every test was marked optional, which would let "run all tasks" skip the property tests. I had the same problem in the pipeline spec. All tests are now required.
+  - One task had Kiro writing `docs/kiro-log.md` and another rewriting the README. I write the log myself, and the README task now only adds an app section.
+  - Hosting results were going into `docs/validation.md`, which the pipeline regenerates and the app parses. Moved them to `docs/app-checks.md` and fixed the requirement that pointed at it.
+  - The Render config built from `app/` but the packs live in `data/`, so I had it build from the repo root. Node version pinned.
+  - Reordered so the sample-walk picker runs before the UI wiring, so there is a walk to show on first run.
+- Decisions I made:
+  - Keep the GitHub Pages fallback build, as a back-up host.
+  - Ignore Kiro's wave ordering and run tasks in numbered order, as with the pipeline.
+  - Cut order if I fall behind: the Dark_Spot_List first, then corrections. The route, heartbeat and first-run walk stay.
+  - Pack files have to be committed before Render can build, so `data/*.geojson` comes out of `.gitignore`.
+  - Credits: 10.2
