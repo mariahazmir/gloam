@@ -94,7 +94,7 @@ New dependencies (explained, as the technical rules require):
     - **Property 4: Lengths are valid and degenerate or closed ways are handled**
     - **Validates: Requirements 2.4, 2.5, 2.6**
 
-- [ ] 4. Checkpoint - Ensure all tests pass
+- [x] 4. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 5. Build features
