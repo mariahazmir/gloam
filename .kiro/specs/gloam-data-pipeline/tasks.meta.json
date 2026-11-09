@@ -11,6 +11,14 @@
     "2.5 Write property test for the footprint pass": {
       "status": "passed",
       "lastRunTimestamp": 1794149538700
+    },
+    "3.3 Write property test for segment selection and labels": {
+      "status": "passed",
+      "lastRunTimestamp": 1794188710756
+    },
+    "3.4 Write property test for lengths and degenerate or closed ways": {
+      "status": "passed",
+      "lastRunTimestamp": 1794189264436
     }
   },
   "executionHistory": {
@@ -161,6 +169,61 @@
         "executionId": "6c0cffb1-dcf9-40dd-b799-e3b50c3768e4",
         "chatSessionId": "sess_6f909521-a572-4f81-a54d-2d85528a7906",
         "timestamp": 1794186866881
+      }
+    ],
+    "3.1 Implement `geometry.py`": [
+      {
+        "executionId": "e2260257-a158-4171-8771-46aba51ccf5b",
+        "chatSessionId": "sess_51338233-664e-45f1-91de-e32b0369c8fd",
+        "timestamp": 1794187213858
+      },
+      {
+        "executionId": "e2260257-a158-4171-8771-46aba51ccf5b",
+        "chatSessionId": "sess_51338233-664e-45f1-91de-e32b0369c8fd",
+        "timestamp": 1794187264776
+      }
+    ],
+    "3.2 Implement `segments.py`": [
+      {
+        "executionId": "cee352f0-5d95-4dd8-a551-25be573da2fe",
+        "chatSessionId": "sess_93b675d5-a8dc-4de1-b926-56a5d3daead4",
+        "timestamp": 1794187652883
+      },
+      {
+        "executionId": "cee352f0-5d95-4dd8-a551-25be573da2fe",
+        "chatSessionId": "sess_93b675d5-a8dc-4de1-b926-56a5d3daead4",
+        "timestamp": 1794187719692
+      }
+    ],
+    "3.3 Write property test for segment selection and labels": [
+      {
+        "executionId": "d8a85e9e-1e45-4a20-9d36-474a4d1ebc2a",
+        "chatSessionId": "sess_7e50ebd1-3d90-4c91-bab7-5ac4877f21fd",
+        "timestamp": 1794188675907
+      },
+      {
+        "executionId": "d8a85e9e-1e45-4a20-9d36-474a4d1ebc2a",
+        "chatSessionId": "sess_7e50ebd1-3d90-4c91-bab7-5ac4877f21fd",
+        "timestamp": 1794188719620
+      }
+    ],
+    "3.4 Write property test for lengths and degenerate or closed ways": [
+      {
+        "executionId": "6a7bb091-21cf-4d17-a4d8-8f30d80b12e4",
+        "chatSessionId": "sess_ee3c707a-0de4-4c0a-a943-87e038c4932d",
+        "timestamp": 1794189221831
+      },
+      {
+        "executionId": "6a7bb091-21cf-4d17-a4d8-8f30d80b12e4",
+        "chatSessionId": "sess_ee3c707a-0de4-4c0a-a943-87e038c4932d",
+        "timestamp": 1794189273719
+      }
+    ],
+    "3. Geometry and segments": [
+      {
+        "executionId": "6a7bb091-21cf-4d17-a4d8-8f30d80b12e4",
+        "chatSessionId": "sess_ee3c707a-0de4-4c0a-a943-87e038c4932d",
+        "timestamp": 1794189273832
       }
     ]
   }
