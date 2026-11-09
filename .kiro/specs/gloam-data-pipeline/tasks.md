@@ -377,33 +377,33 @@ New dependencies (explained, as the technical rules require):
     - Attribution text and licence name in both files; only allow-listed properties present; a shop polygon also tagged `building` appears in the buildings file
     - _Requirements: 8.4, 8.5, 8.7_
 
-- [ ] 12. Intermediate files and file I/O
-  - [~] 12.1 Implement `artifacts.py` and the rest of `io.py`
+- [x] 12. Intermediate files and file I/O
+  - [x] 12.1 Implement `artifacts.py` and the rest of `io.py`
     - Pure dict-to-dataclass conversions for `city.json` (segments, point sets, building footprints and height tags, land-use polygons, reports), `features.json` (raw features, scaled counts, feature distance, shift) and `model.json`
     - `io.py`: JSON read and write with temp-file-then-rename atomic writes; `write_geojson_checked(path, doc, limit_kb)` that measures the temp file, renames on success and returns size in kilobytes, or deletes the temp file and raises an error naming city, file, size and limit; earlier valid files stay untouched
     - _Requirements: 8.2, 8.3, 9.2, 9.5, 9.6_
 
-  - [~] 12.2 Write property test for intermediate file round trip
+  - [x] 12.2 Write property test for intermediate file round trip
     - **Property 27: Intermediate files round-trip**
     - **Validates: Requirements 9.2**
 
-  - [~] 12.3 Write unit tests for file writes
+  - [x] 12.3 Write unit tests for file writes
     - Oversized city file and oversized buildings file are each removed, error names city, file, size and limit, earlier valid file unchanged (temporary directory); failed write leaves existing outputs unchanged
     - _Requirements: 8.3, 9.5, 9.6_
 
-- [ ] 13. Command line and wording check
-  - [~] 13.1 Implement `cli.py` and wire all stages
+- [x] 13. Command line and wording check
+  - [x] 13.1 Implement `cli.py` and wire all stages
     - `argparse` sub-commands `summarise`, `features`, `train`, `validate`, `export` with the arguments and defaults from the design; city ids match `[a-z0-9_]{1,50}`; each command runs only its own stage from files on disk
     - Print `warning: ...` lines, then a summary (command, city, records processed, files written, warning count)
     - Exit codes: 0 success; 1 data error; 2 missing or invalid argument or input file, and ground-truth city mismatch (checked before any work, nothing written); 3 validation written with ground truth "not run"; `-h` prints name, purpose and arguments and exits 0
     - `train` writes `model.json` and `train.log`; `export` computes the city's shift against the model's training histograms, scores, and writes the two GeoJSON files
     - _Requirements: 5.2, 7.6, 7.10, 9.1, 9.2, 9.3, 9.4, 9.5, 9.6, 9.7_
 
-  - [~] 13.2 Write CLI end-to-end tests
+  - [x] 13.2 Write CLI end-to-end tests
     - Tiny fixture city runs all five commands; summary and `warning:` lines present; missing argument or file exits 2 and writes nothing; invalid value names argument and value; ground-truth city mismatch exits 2 and leaves an existing `docs/validation.md` unchanged; ground truth "not run" exits 3 with the report written; `--help` exits 0
     - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5, 9.6, 9.7, 7.10_
 
-  - [~] 13.3 Write wording check test
+  - [x] 13.3 Write wording check test
     - Scan package strings, report templates and docs for the banned words in the product rules and fail if any appear
     - _Requirements: 7.7_
 
