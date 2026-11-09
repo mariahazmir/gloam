@@ -40,35 +40,35 @@ New dependencies (explained, as the technical rules require):
     - Frozen config dataclasses validated in `__post_init__` with the defaults and ranges from the design table, including `low_value < high_value`
     - _Requirements: 1.4, 3.2, 3.3, 5.4, 5.5, 6.2, 6.3, 6.4, 6.6, 8.3, 10.8_
 
-- [ ] 2. Load city packs
-  - [ ] 2.1 Implement `classify.py`
+- [x] 2. Load city packs
+  - [x] 2.1 Implement `classify.py`
     - `parse_osm_key(feature)`: read top-level `id` (`way/123`) first, fall back to `properties["@id"]` only when the top-level id is missing or unparseable, else return `None`
     - `classify(feature)`: first match wins in the design order (segment, bus_stop, food, shop, building, landuse, other)
     - _Requirements: 1.2, 1.5, 1.6, 2.1_
 
-  - [ ] 2.2 Write property test for id parsing
+  - [x] 2.2 Write property test for id parsing
     - **Property 30: Top-level id wins, with fallback to `@id`**
     - **Validates: Requirements 1.2**
 
-  - [ ] 2.3 Implement `loader.py` merge and footprint pass
+  - [x] 2.3 Implement `loader.py` merge and footprint pass
     - `merge_features`: keep first occurrence per `(element type, id)` in file-list order, synthetic key `("unknown", file_index, position)` plus a warning for features with no parseable id, counts per type, unmatched and duplicates removed
     - `collect_building_footprints`: scan all deduplicated features, keep every Polygon with a `building` tag whatever its summary type, count non-Polygon building-tagged features as warnings; footprints are outside the exclusive counts
     - _Requirements: 1.1, 1.2, 1.5, 1.6, 3.1, 8.4_
 
-  - [ ] 2.4 Write property test for merge accounting
+  - [x] 2.4 Write property test for merge accounting
     - **Property 1: Merge keeps the first copy and accounts for every feature**
     - **Validates: Requirements 1.2, 1.5, 1.6**
 
-  - [ ] 2.5 Write property test for the footprint pass
+  - [x] 2.5 Write property test for the footprint pass
     - **Property 28: Any building-tagged polygon is a footprint, and the summary counts it once**
     - **Validates: Requirements 1.5, 1.6, 3.1, 8.4**
 
-  - [ ] 2.6 Implement `io.read_geojson` and `summarise` argument checks
+  - [x] 2.6 Implement `io.read_geojson` and `summarise` argument checks
     - `io.py`: `read_geojson(path)` raising `InputFileError(path, problem)` for missing, unreadable, invalid or empty files
     - Loader entry point that checks 1 to 50 paths and a 1 to 100 character, non-whitespace city name before reading any file, and builds no dataset if any file fails
     - _Requirements: 1.1, 1.3, 1.4_
 
-  - [ ] 2.7 Write unit tests for loading and key parsing
+  - [x] 2.7 Write unit tests for loading and key parsing
     - Three files with one missing, one invalid, one empty (error names file and problem); merge of two small files
     - `parse_osm_key` examples: both ids present and different, top-level absent, unparseable top-level, neither present (synthetic key and one warning)
     - A polygon tagged both `shop` and `building` counts once as a shop and also appears in the footprint list
