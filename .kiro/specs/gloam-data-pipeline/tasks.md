@@ -127,6 +127,16 @@ New dependencies (explained, as the technical rules require):
     - Invalid feature distance (NaN, infinite, 5, 2000) names the argument and allowed range
     - _Requirements: 3.1, 3.2, 3.3, 3.6, 3.7_
 
+  - [x] 5.7 Extract `footway_kind_of` as a pure function used by `raw_features`
+    - Add `footway_kind_of(footway: str) -> str` to `features.py`: `sidewalk` gives `sidewalk`, `crossing` gives `crossing`, empty gives `none`, any other non-empty value gives `other`; reject non-string input naming the argument
+    - `segments.py` currently stores an already-mapped kind (`_footway_kind` returns `none` for a missing tag). Change it to store the raw `footway` tag value (empty string if none), as Requirement 2.3 says, so that `footway_kind_of` is the only place the mapping happens (the mapped string `none` would otherwise map to `other`). Update the existing segment tests that expect `none`
+    - Make `raw_features` set `RawFeatures.footway_kind = footway_kind_of(segment.footway)` (default `none` for missing-feature segments is unchanged)
+    - _Requirements: 2.3, 3.1, 3.7, 4.10_
+
+  - [x] 5.8 Write unit tests for `footway_kind_of`
+    - Examples: `sidewalk`, `crossing`, empty string, `none` (maps to `other`, since only an empty value means no footway tag), `track_side` (maps to `other`); non-string raises `InvalidArgumentError` naming the argument; `raw_features` output uses the same mapping
+    - _Requirements: 3.1, 4.10_
+
 - [x] 6. Distribution shift and scoring
   - [x] 6.1 Implement `shift.py`
     - Bin each raw count into {0, 1, 2, 3 to 5, 6 or more}, proportions over non-missing segments, total variation distance per feature, mean as the city shift (0 to 1), pooled training histograms
@@ -188,6 +198,34 @@ New dependencies (explained, as the technical rules require):
     - **Property 19: Highway-rate baseline uses the training rate, with fallback**
     - **Validates: Requirements 4.3, 4.4, 4.5**
 
+  - [x] 7.4 Implement `learn_pair_rates` and `highway_footway_rate_baseline`
+    - In `baselines.py` add the frozen `PairRates` dataclass (`rates` keyed by `(highway, footway_kind)`, a copy of the highway rates, `overall_lit_rate`; no fallback count fields)
+    - `learn_pair_rates(training)` takes `(highway, footway_kind, label)` triples, skips `untagged`, and computes `lit / (lit + unlit)` per pair (no grid counting, since training does not know the evaluated city); `TrainingError` when there are no `tagged_lit` and no `tagged_unlit` rows. Held-out rows are never passed in
+    - `highway_footway_rate_baseline(pairs, highway, footway_kind)` reads only those two arguments and returns the pair rate, else the highway-type rate, else the overall lit rate; validate both arguments against the vocabularies, naming the argument
+    - Add the pure function `pair_fallback_counts(pairs: PairRates, city_pairs: Iterable[(highway, footway_kind)]) -> (type_fallback_pairs, overall_fallback_pairs)`: it counts distinct city pairs (not segments) with no tagged training segments, split by whether their highway type has training data
+    - No import cycle: take `HIGHWAY_ORDER` and `FOOTWAY_ORDER` from `features.py` only if `features.py` does not import `baselines.py`; otherwise pass the vocabularies in
+    - _Requirements: 4.9, 4.10, 4.11, 4.12, 4.13_
+
+  - [x] 7.5 Write property test for pair rates
+    - **Property 31: Pair rates come from tagged training segments only**
+    - File `pipeline/tests/test_property_31_pair_rates_tagged_only.py`
+    - **Validates: Requirements 4.9, 4.13**
+
+  - [x] 7.6 Write property test for pair baseline fallback
+    - **Property 32: Pair baseline falls back from pair to highway type to overall, and counts each fallback**
+    - File `pipeline/tests/test_property_32_pair_fallback.py`
+    - The counts equal the number of distinct city pairs on each fallback level; pairs with data plus both counts equal the number of distinct pairs in the city; duplicate pairs do not change the counts
+    - **Validates: Requirements 4.11, 4.12, 4.13**
+
+  - [x] 7.7 Write property test for pair baseline inputs
+    - **Property 33: Pair baseline prediction depends only on highway type and footway kind**
+    - File `pipeline/tests/test_property_33_pair_baseline_inputs.py`; generate raw `footway` values and map them with `footway_kind_of`
+    - **Validates: Requirements 4.10**
+
+  - [x] 7.8 Write unit tests for the pair-rate example
+    - The design's hand-checked example: (residential, sidewalk) 12 lit / 3 unlit gives 0.8; (residential, none) 18 / 7 gives 0.72; (residential, crossing) falls back to 0.75; (footway, crossing) falls back to 0.667; (steps, none) falls back to 0.7; for an evaluated city with pairs (residential, sidewalk) twice, (residential, crossing), (footway, crossing) and (steps, none), `pair_fallback_counts` gives type fallback 2 and overall fallback 1, with 1 pair having data over 4 distinct pairs (1 + 2 + 1 = 4; the duplicate is not counted); no tagged rows raises `TrainingError`; invalid highway or footway kind names the argument
+    - _Requirements: 4.9, 4.11, 4.12, 4.13_
+
 - [x] 8. Train the model
   - [x] 8.1 Implement `model.py`
     - Row targets and weights (`tagged_lit` 1/1, `tagged_unlit` 0/1, `untagged` 0/`untagged_weight`), rows sorted by `(city_id, segment_id)`, `LogisticRegression(C=1.0, solver="lbfgs", max_iter=1000, random_state=seed)` with `sample_weight`
@@ -217,20 +255,31 @@ New dependencies (explained, as the technical rules require):
     - Zero `tagged_lit` rows raises `TrainingError` and leaves the model dict result unwritten; log text contains the unknown-not-unlit statement and the three weights; unknown held-out city and "leaves zero training cities" errors name the city; invalid untagged weight names the argument
     - _Requirements: 5.2, 5.3, 5.5, 5.6, 5.9_
 
+  - [x] 8.7 Carry footway kind in `TrainingRow` and store `pair_rates` in the model
+    - Add a `footway_kind: str` field to `TrainingRow` in `model.py` (after `highway`, validated against `FOOTWAY_ORDER` in `_check_rows`), and populate it from `RawFeatures.footway_kind` wherever rows are built (the CLI stage and the test strategies in `pipeline/tests/strategies.py`). Update existing tests that construct `TrainingRow`
+    - In `fit`, call `learn_pair_rates` on the training rows only (never the held-out city) and write `pair_rates` to the model dict as a nested object `{highway: {footway_kind: rate}}` with sorted keys, next to `highway_rates`; the fallback counts are not stored in the model or written to the training log
+    - Update the test strategies in `pipeline/tests/strategies.py` in this same task so generated `TrainingRow` values carry `footway_kind`
+    - _Requirements: 4.9, 4.13, 5.8_
+
+  - [x] 8.8 Update the held-out city property test for pair rates
+    - Edit `pipeline/tests/test_property_10_held_out.py`: replacing the held-out city's rows must also leave the learned pair rates, highway rates and overall lit rate unchanged
+    - **Property 10: The held-out city does not influence the model**
+    - **Validates: Requirements 4.3, 4.9, 5.8**
+
 - [x] 9. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 10. Validation and report
-  - [ ] 10.1 Implement `metrics.py`
+- [x] 10. Validation and report
+  - [x] 10.1 Implement `metrics.py`
     - `auc` (Mann-Whitney with average ranks, `None` when no positives or no negatives), `precision_at` (`None` when nothing scores at or above the cutoff), `road_type` (walking_path vs vehicle_road)
     - Positives `tagged_lit`, negatives `tagged_unlit`; `untagged` dropped before either metric
     - _Requirements: 7.1, 7.2, 7.3, 7.11_
 
-  - [ ] 10.2 Write property test for AUC and precision
+  - [x] 10.2 Write property test for AUC and precision
     - **Property 20: AUC and precision are valid or explicitly undefined**
     - **Validates: Requirements 7.1, 7.11**
 
-  - [ ] 10.3 Implement `validation.py`
+  - [x] 10.3 Implement `validation.py`
     - Hold-one-out orchestration: qualify cities by `min_unlit_city`, train on other cities only, learn highway rates from the same set, score the model (raw output), rule baseline and highway-rate baseline on identical segment sets (error naming city and split if they differ, no baseline metrics written)
     - Per road type metrics only at or above `min_unlit_road_type`; skipped cities and road types listed with count and threshold; no combined figure
     - "Did not beat" decision per baseline when both AUCs are defined
@@ -238,31 +287,72 @@ New dependencies (explained, as the technical rules require):
     - `check_ground_truth_city(gt_city, held_out_city)` raising `InvalidArgumentError` naming both values unless `held_out_city` is non-null and equal
     - _Requirements: 4.6, 4.8, 7.1, 7.3, 7.4, 7.5, 7.6, 7.8, 7.9, 7.10_
 
-  - [ ] 10.4 Write property test for tagged-only metrics and minimums
+  - [x] 10.4 Write property test for tagged-only metrics and minimums
     - **Property 21: Metrics use tagged segments only and respect road-type minimums**
     - **Validates: Requirements 7.2, 7.3, 7.4, 7.5, 7.8**
 
-  - [ ] 10.5 Write property test for ground-truth accuracy
+  - [x] 10.5 Write property test for ground-truth accuracy
     - **Property 22: Ground-truth accuracy excludes unsure rows**
     - **Validates: Requirements 7.6**
 
-  - [ ] 10.6 Write property test for the ground-truth city guard
+  - [x] 10.6 Write property test for the ground-truth city guard
     - **Property 29: Ground truth is only scored with a model that held out its city**
     - **Validates: Requirements 7.6**
 
-  - [ ] 10.7 Implement `report.py`
+  - [x] 10.7 Implement `report.py`
     - Pure `render_validation(data) -> str`: per-city counts of the three classes, side-by-side model, rule and highway-rate tables to 3 decimals with "undefined" where needed, skipped cities and road types, tagged-only statement, untagged-is-unknown caveat, low-bias note, did-not-beat statements with both figures, ground-truth section or "not run" reason
     - Honest wording only; no banned words
     - _Requirements: 4.7, 7.7, 7.9, 7.10, 7.11_
 
-  - [ ] 10.8 Write property test for the did-not-beat statement
+  - [x] 10.8 Write property test for the did-not-beat statement
     - **Property 23: The did-not-beat statement appears exactly when it should**
     - **Validates: Requirements 7.9**
 
-  - [ ] 10.9 Write unit tests for validation and report
+  - [x] 10.9 Write unit tests for validation and report
     - Hand-computed AUC 0.875 (positives `[0.9, 0.6]`, negatives `[0.6, 0.2]`) and highway rates 0.75 and 0.7
     - Mismatched segment sets raise an error naming city and split; report contents include per-class counts, tagged-only statement and caveat; ground-truth file missing, unreadable and only `unsure`; guard error includes both values for a different city and for a null `held_out_city`
     - _Requirements: 4.6, 4.7, 4.8, 7.7, 7.10_
+
+  - [x] 10.10 Add the highway-footway-rate baseline to `validation.py`
+    - Add `highway_footway_rate` to `METHODS` and `BASELINES`; extend `rates_from_model` (or add a sibling) to rebuild `PairRates` from the model's `pair_rates`, `highway_rates` and `overall_lit_rate`
+    - Extend `score_methods` to take the pair rates and score `highway_footway_rate_baseline(pairs, r.highway, r.footway_kind)` using the new `TrainingRow.footway_kind` (task 8.7); include the method in `check_identical_segment_sets` and in `CityMetrics.auc` and `precision` keys
+    - In the hold-one-out loop, call `learn_pair_rates` on the same training rows as `learn_highway_rates`; for each validated city, compute `type_fallback_pairs` and `overall_fallback_pairs` with `pair_fallback_counts` over that city's segment pairs and add them to `ValidationResult`, next to `unseen_highway_types`
+    - Produce a `DidNotBeat` entry per baseline (three), each decided separately; add the fourth method to ground-truth accuracy (same non-`unsure` rows) and to `GroundTruthResult.accuracy`
+    - _Requirements: 4.6, 4.8, 4.13, 7.1, 7.6, 7.9_
+
+  - [x] 10.11 Add the fourth column and fallback counts to `report.py`
+    - `render_validation` shows model, rule, highway-rate and highway-footway-rate side by side (four columns, 3 decimals, "undefined" where needed), a "did not beat" statement per baseline including the highway-footway-rate baseline, and `type_fallback_pairs` and `overall_fallback_pairs` next to `unseen_highway_types`; add the fourth accuracy to the ground-truth section
+    - Honest wording only; no banned words
+    - _Requirements: 4.7, 4.13, 7.6, 7.9_
+
+  - [x] 10.12 Update the tagged-only metrics property test
+    - Edit `pipeline/tests/test_property_21_tagged_only_minimums.py`: the model and all three baselines are scored on exactly the same segment ids in every city and road-type split, and a differing set raises an error naming city and split with no baseline metrics written
+    - **Property 21: Metrics use tagged segments only and respect road-type minimums**
+    - **Validates: Requirements 4.6, 4.8, 7.2, 7.3, 7.4, 7.5, 7.8**
+
+  - [x] 10.13 Update the ground-truth accuracy property test
+    - Edit `pipeline/tests/test_property_22_ground_truth_accuracy.py`: accuracy for the model and all three baselines is between 0 and 1 and computed over the same non-`unsure` rows
+    - **Property 22: Ground-truth accuracy excludes unsure rows**
+    - **Validates: Requirements 7.6**
+
+  - [x] 10.14 Update the did-not-beat property test
+    - Edit `pipeline/tests/test_property_23_did_not_beat.py`: parametrise over the rule, highway-rate and highway-footway-rate baselines; each statement appears with both figures if and only if the model AUC is not higher than that baseline's AUC, decided separately
+    - **Property 23: The did-not-beat statement appears exactly when it should**
+    - **Validates: Requirements 7.9**
+
+  - [x] 10.15 Write unit tests for the fourth baseline in validation and report
+    - Report contains the fourth column header and 3-decimal values, "undefined" for an undefined AUC, the fallback counts next to `unseen_highway_types`, and a did-not-beat statement for the highway-footway-rate baseline with both figures
+    - Mismatched segment sets for the fourth method raise an error naming city and split; ground-truth accuracy lists four methods
+    - _Requirements: 4.6, 4.7, 4.8, 4.13, 7.9_
+
+  - [x] 10.16 Name the odd method in the segment-set mismatch error
+    - In `check_identical_segment_sets` (validation.py), choose as reference the segment set shared by the most methods. Break ties by `METHODS` order. Name every method whose set differs from that reference, including `model` when it is the odd one out. Don't treat the first method as the reference.
+    - Add a unit test in `pipeline/tests/test_validation_report.py`: when only `model` differs, the error names `model` and does not name any baseline, and it still names the city and split.
+    - _Requirements: 4.8_
+
+  - [x] 10.17 Fix the fallback-count intro wording in the report
+    - In `report.py`, replace "Pairs of highway type and footway kind in this city with no tagged training data:" with "Pairs of highway type and footway kind with no tagged training data, per city:". Update any test that checks the old text.
+    - _Requirements: 4.13_
 
 - [ ] 11. Export
   - [ ] 11.1 Implement `export.py`
@@ -355,11 +445,13 @@ New dependencies (explained, as the technical rules require):
     { "id": 3, "tasks": ["2.1", "3.1", "5.1", "6.1", "7.1"] },
     { "id": 4, "tasks": ["2.2", "2.3", "3.2", "5.2", "6.2", "7.2", "7.3"] },
     { "id": 5, "tasks": ["2.4", "2.5", "2.6", "3.3", "3.4", "5.3", "6.4", "6.5", "6.6", "6.7", "6.8", "6.9", "6.10", "10.1", "11.1"] },
-    { "id": 6, "tasks": ["2.7", "5.4", "5.5", "5.6", "6.3", "8.1", "10.2", "11.2", "11.3", "11.4", "11.5"] },
-    { "id": 7, "tasks": ["8.2", "8.3", "8.4", "8.5", "8.6", "10.3", "12.1"] },
-    { "id": 8, "tasks": ["10.4", "10.5", "10.6", "10.7", "12.2", "12.3"] },
-    { "id": 9, "tasks": ["10.8", "10.9", "13.1"] },
-    { "id": 10, "tasks": ["13.2", "13.3", "15.1", "15.2"] }
+    { "id": 6, "tasks": ["2.7", "5.4", "5.5", "5.6", "6.3", "8.1", "10.2", "11.2", "11.3", "11.4", "11.5", "5.7"] },
+    { "id": 7, "tasks": ["8.2", "8.3", "8.4", "8.5", "8.6", "10.3", "12.1", "5.8", "7.4"] },
+    { "id": 8, "tasks": ["10.4", "10.5", "10.6", "10.7", "12.2", "12.3", "7.5", "7.6", "7.7", "7.8", "8.7"] },
+    { "id": 9, "tasks": ["10.8", "10.9", "13.1", "8.8", "10.10"] },
+    { "id": 10, "tasks": ["13.2", "13.3", "15.1", "15.2", "10.11", "10.12", "10.13"] },
+    { "id": 11, "tasks": ["10.14", "10.15"] },
+    { "id": 12, "tasks": ["10.16", "10.17"] }
   ]
 }
 ```

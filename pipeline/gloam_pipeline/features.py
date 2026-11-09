@@ -178,6 +178,15 @@ def _landuse_class(value: object) -> str:
     return value if isinstance(value, str) and value in _NAMED_LANDUSE else "other"
 
 
+def footway_kind_of(footway: str) -> str:
+    """Map a raw `footway` tag value to sidewalk | crossing | other | none (R3.1)."""
+    if not isinstance(footway, str):
+        raise InvalidArgumentError("footway", footway, "a string")
+    if footway == "":
+        return "none"
+    return footway if footway in ("sidewalk", "crossing") else "other"
+
+
 def raw_features(
     segments, points: PointSets, polygons: LanduseAreas, feature_distance_m: float
 ) -> list[RawFeatures]:
@@ -243,7 +252,7 @@ def raw_features(
             length = float(s.length_m)
             if not math.isfinite(length) or length < 0:
                 raise InvalidArgumentError("length_m", length, "a finite number of 0 or more")
-            out.append(RawFeatures(s.osm_id, s.highway, s.footway, length, counts["bus_stops"],
+            out.append(RawFeatures(s.osm_id, s.highway, footway_kind_of(s.footway), length, counts["bus_stops"],
                                    counts["food_places"], counts["shops"], counts["buildings"],
                                    landuse, False))
         except (InvalidArgumentError, ValueError, TypeError, AttributeError):

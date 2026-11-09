@@ -9,7 +9,6 @@ from .errors import InvalidArgumentError
 from .geometry import polyline_length_m
 
 LIT_VALUES = frozenset({"yes", "24/7", "automatic", "dusk-dawn"})
-FOOTWAY_KINDS = frozenset({"sidewalk", "crossing"})
 
 
 @dataclass(frozen=True)
@@ -17,7 +16,7 @@ class Segment:
     osm_id: int
     name: str
     highway: str
-    footway: str  # sidewalk | crossing | other | none
+    footway: str  # raw `footway` tag value, "" if absent
     coords: tuple[tuple[float, float], ...]  # (lon, lat), closing point kept for closed ways
     length_m: float
     label: str  # tagged_lit | tagged_unlit | untagged
@@ -44,10 +43,9 @@ def lit_label(value: str | None) -> tuple[str, bool]:
     return "untagged", False
 
 
-def _footway_kind(value: object) -> str:
-    if not isinstance(value, str) or value == "":
-        return "none"
-    return value if value in FOOTWAY_KINDS else "other"
+def _footway_tag(value: object) -> str:
+    """Raw `footway` tag value, or "" if missing or not a string (R2.3)."""
+    return value if isinstance(value, str) else ""
 
 
 def _ring_or_line(geometry: object) -> tuple[list | None, str]:
@@ -129,7 +127,7 @@ def build_segments(features: Sequence[dict]) -> SegmentResult:
                 osm_id=osm_id,
                 name=name if isinstance(name, str) else "",
                 highway=props["highway"],
-                footway=_footway_kind(props.get("footway")),
+                footway=_footway_tag(props.get("footway")),
                 coords=coords,
                 length_m=polyline_length_m(coords),
                 label=label,

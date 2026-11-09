@@ -33,7 +33,7 @@ def segment_st(draw, osm_id):
         osm_id=osm_id,
         name="",
         highway=draw(st.sampled_from(HIGHWAY_ORDER)),
-        footway=draw(st.sampled_from(("sidewalk", "crossing", "other", "none"))),
+        footway=draw(st.sampled_from(("sidewalk", "crossing", "", "track_side"))),
         coords=coords,
         length_m=draw(st.floats(1, 500, allow_nan=False, allow_infinity=False)),
         label=draw(st.sampled_from(LABELS)),

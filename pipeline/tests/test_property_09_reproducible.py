@@ -6,6 +6,7 @@ from hypothesis import HealthCheck, given, settings
 from hypothesis import strategies as st
 
 from gloam_pipeline.model import TrainingRow, fit, predict
+from strategies import FOOTWAY_KINDS
 
 HIGHWAYS = ["residential", "primary", "footway", "service"]
 CITIES = ["city_a", "city_b"]
@@ -31,6 +32,7 @@ def training_sets(draw):
             city_id=cities[i],
             segment_id=i,
             highway=draw(st.sampled_from(HIGHWAYS)),
+            footway_kind=draw(FOOTWAY_KINDS),
             label=labels[i],
             vector=tuple(draw(st.lists(value, min_size=n_features, max_size=n_features))),
         )

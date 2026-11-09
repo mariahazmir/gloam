@@ -2,6 +2,9 @@
 
 from hypothesis import strategies as st
 
+from gloam_pipeline.features import FOOTWAY_ORDER
+
+FOOTWAY_KINDS = st.sampled_from(FOOTWAY_ORDER)
 NON_FINITE = st.sampled_from([float("nan"), float("inf"), float("-inf")])
 
 

@@ -15,7 +15,7 @@ from gloam_pipeline.segments import Segment
 # Feature: gloam-data-pipeline, Property 6: Features do not depend on input order or other cities
 
 HIGHWAYS = ["residential", "primary", "footway", "service", "path"]
-FOOTWAYS = ["sidewalk", "crossing", "other", "none"]
+FOOTWAYS = ["sidewalk", "crossing", "", "track_side"]
 LANDUSES = ["residential", "commercial", "retail", "industrial", "farmland"]
 
 # Small area so nearby points actually land within the feature distance.

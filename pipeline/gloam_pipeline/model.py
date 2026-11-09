@@ -10,9 +10,10 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from .baselines import learn_highway_rates
+from .baselines import learn_highway_rates, learn_pair_rates
 from .checks import check_count_between, check_range
 from .errors import InvalidArgumentError, TrainingError
+from .features import FOOTWAY_ORDER
 from .shift import pool_histograms
 
 SCHEMA_VERSION = 1
@@ -24,11 +25,12 @@ MAX_CITIES = 20
 
 @dataclass(frozen=True)
 class TrainingRow:
-    """One segment: city, id, highway type, label and its model vector."""
+    """One segment: city, id, highway type, footway kind, label and its model vector."""
 
     city_id: str
     segment_id: int
     highway: str
+    footway_kind: str
     label: str
     vector: tuple
 
@@ -47,6 +49,10 @@ def row_target_and_weight(label: str, untagged_weight: float) -> tuple[int, floa
 
 def _check_rows(rows: Sequence[TrainingRow], n_features: int) -> None:
     for r in rows:
+        if r.footway_kind not in FOOTWAY_ORDER:
+            raise InvalidArgumentError(
+                "footway_kind", r.footway_kind, "one of " + ", ".join(FOOTWAY_ORDER)
+            )
         if r.label not in LABELS:
             raise InvalidArgumentError("label", r.label, "tagged_lit, tagged_unlit or untagged")
         if len(r.vector) != n_features:
@@ -113,6 +119,10 @@ def fit(
     clf.fit(x, np.array(targets), sample_weight=np.array(weights))
 
     rates = learn_highway_rates([(r.highway, r.label) for r in train_rows])
+    pairs = learn_pair_rates([(r.highway, r.footway_kind, r.label) for r in train_rows])
+    pair_rates: dict[str, dict[str, float]] = {}
+    for (highway, kind), rate in sorted(pairs.rates.items()):
+        pair_rates.setdefault(highway, {})[kind] = rate
     model = {
         "schema_version": SCHEMA_VERSION,
         "feature_names": names,
@@ -123,6 +133,7 @@ def fit(
         "untagged_weight": float(untagged_weight),
         "seed": seed,
         "highway_rates": dict(sorted(rates.rates.items())),
+        "pair_rates": pair_rates,
         "overall_lit_rate": rates.overall_lit_rate,
         "unseen_highway_types": rates.unseen_highway_types,
         "training_histograms": pool_histograms([city_histograms[c] for c in train_cities]),

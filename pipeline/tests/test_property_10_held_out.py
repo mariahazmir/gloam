@@ -4,6 +4,7 @@ from hypothesis import HealthCheck, given, settings
 from hypothesis import strategies as st
 
 from gloam_pipeline.model import LABELS, TrainingRow, fit
+from strategies import FOOTWAY_KINDS
 
 FEATURES = ["f0", "f1"]
 HIGHWAYS = ["residential", "primary", "service", "footway"]
@@ -26,8 +27,8 @@ def _hist(seed: int) -> dict:
 def _training_rows(draw):
     """Rows for two training cities; always has a tagged_lit and a target-0 row."""
     rows = [
-        TrainingRow("alpha", 0, "primary", "tagged_lit", draw(_vector)),
-        TrainingRow("alpha", 1, "service", "untagged", draw(_vector)),
+        TrainingRow("alpha", 0, "primary", draw(FOOTWAY_KINDS), "tagged_lit", draw(_vector)),
+        TrainingRow("alpha", 1, "service", draw(FOOTWAY_KINDS), "untagged", draw(_vector)),
     ]
     for city in ("alpha", "beta"):
         n = draw(st.integers(0, 4))
@@ -37,11 +38,12 @@ def _training_rows(draw):
                     city,
                     100 + i,
                     draw(st.sampled_from(HIGHWAYS)),
+                    draw(FOOTWAY_KINDS),
                     draw(st.sampled_from(LABELS)),
                     draw(_vector),
                 )
             )
-    rows.append(TrainingRow("beta", 0, "residential", "tagged_unlit", draw(_vector)))
+    rows.append(TrainingRow("beta", 0, "residential", draw(FOOTWAY_KINDS), "tagged_unlit", draw(_vector)))
     return rows
 
 
@@ -53,6 +55,7 @@ def _held_out_rows(draw):
             HELD_OUT,
             i,
             draw(st.sampled_from(HIGHWAYS + ["motorway", "path"])),
+            draw(FOOTWAY_KINDS),
             draw(st.sampled_from(LABELS)),
             draw(_vector),
         )
@@ -61,7 +64,7 @@ def _held_out_rows(draw):
 
 
 # Feature: gloam-data-pipeline, Property 10: The held-out city does not influence the model
-# **Validates: Requirements 4.3, 5.8**
+# **Validates: Requirements 4.3, 4.9, 5.8**
 @settings(max_examples=100, deadline=None, suppress_health_check=[HealthCheck.too_slow])
 @given(
     train=_training_rows(),
@@ -83,10 +86,21 @@ def test_held_out_city_does_not_influence_model(train, held_a, held_b, hist_a, h
         "coefficients",
         "intercept",
         "highway_rates",
+        "pair_rates",
         "overall_lit_rate",
         "training_histograms",
     ):
         assert model_a[key] == model_b[key], key
+
+    # Pairs seen only in the held-out city never appear in pair_rates.
+    train_pairs = {(r.highway, r.footway_kind) for r in train if r.label != "untagged"}
+    for model, held in ((model_a, held_a), (model_b, held_b)):
+        model_pairs = {(h, k) for h, kinds in model["pair_rates"].items() for k in kinds}
+        assert model_pairs <= train_pairs
+        for r in held:
+            pair = (r.highway, r.footway_kind)
+            if pair not in train_pairs:
+                assert pair not in model_pairs, pair
     assert model_a == model_b
     assert HELD_OUT not in model_a["training_cities"]
     assert HELD_OUT not in model_b["training_cities"]

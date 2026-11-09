@@ -10,7 +10,7 @@ HIST = {f: [1, 0, 0, 0, 0] for f in FEATURES}
 
 
 def _row(city, seg, label, x=0.0):
-    return TrainingRow(city, seg, "residential", label, (x, 0.0, 0.0, 0.0))
+    return TrainingRow(city, seg, "residential", "sidewalk", label, (x, 0.0, 0.0, 0.0))
 
 
 def _good_rows(city):
@@ -76,3 +76,35 @@ def test_invalid_untagged_weight_names_argument(bad):
     with pytest.raises(InvalidArgumentError) as exc:
         fit(_good_rows("kl"), FEATURES, _hists("kl"), untagged_weight=bad)
     assert "'untagged_weight'" in str(exc.value)
+
+
+def _kind_row(city, seg, highway, kind, label):
+    return TrainingRow(city, seg, highway, kind, label, (float(seg), 0.0, 0.0, 0.0))
+
+
+def test_pair_rates_are_nested_sorted_and_exclude_held_out_city():
+    # Hand-computed on kl: (residential, sidewalk) 1 lit / 2 tagged = 0.5, (residential, none) 1.0,
+    # (footway, crossing) 0.0. ldn rows are held out and must not change anything.
+    kl = [
+        _kind_row("kl", 1, "residential", "sidewalk", "tagged_lit"),
+        _kind_row("kl", 2, "residential", "sidewalk", "tagged_unlit"),
+        _kind_row("kl", 3, "residential", "none", "tagged_lit"),
+        _kind_row("kl", 4, "footway", "crossing", "tagged_unlit"),
+        _kind_row("kl", 5, "footway", "other", "untagged"),
+    ]
+    ldn = [_kind_row("ldn", 1, "footway", "crossing", "tagged_lit")]
+    model, log = fit(kl + ldn, FEATURES, _hists("kl", "ldn"), held_out_city="ldn")
+    assert model["pair_rates"] == {
+        "footway": {"crossing": 0.0},
+        "residential": {"none": 1.0, "sidewalk": 0.5},
+    }
+    assert list(model["pair_rates"]) == ["footway", "residential"]
+    assert list(model["pair_rates"]["residential"]) == ["none", "sidewalk"]
+    assert "fallback" not in log.lower()
+
+
+def test_invalid_footway_kind_names_argument():
+    rows = _good_rows("kl") + [TrainingRow("kl", 9, "residential", "bogus", "untagged", (0.0,) * 4)]
+    with pytest.raises(InvalidArgumentError) as exc:
+        fit(rows, FEATURES, _hists("kl"))
+    assert "'footway_kind'" in str(exc.value)

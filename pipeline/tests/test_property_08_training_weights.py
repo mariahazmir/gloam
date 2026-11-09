@@ -32,7 +32,7 @@ def test_training_weights_follow_the_label(untagged_weight, labels, values):
 
     # The training log states all three weights (R5.6). Fit needs one of each class.
     rows = [
-        TrainingRow("a", i, "residential", label, tuple(values))
+        TrainingRow("a", i, "residential", "sidewalk", label, tuple(values))
         for i, label in enumerate(["tagged_lit", "untagged", *labels])
     ]
     _, log = fit(rows, ["f1", "f2", "f3", "f4"], {"a": _HIST}, untagged_weight=untagged_weight)
