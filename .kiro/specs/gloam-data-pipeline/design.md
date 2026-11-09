@@ -60,7 +60,7 @@ pipeline/
 │   ├── features.py             # raw features, scaling, vectors (pure)
 │   ├── shift.py                # distribution shift measure (pure)
 │   ├── scoring.py              # probability, confidence, label source (pure)
-│   ├── baselines.py            # rule and highway-rate baselines (pure)
+│   ├── baselines.py            # rule, highway-rate and highway-footway-rate baselines (pure)
 │   ├── model.py                # PU weights, fit, predict, importance (fit uses scikit-learn)
 │   ├── metrics.py              # AUC, precision, accuracy, road-type split (pure)
 │   ├── validation.py           # hold-one-out orchestration, report data (pure)
@@ -208,7 +208,7 @@ def to_vector(raw: RawFeatures, scaled: ScaledCounts, length_scaled: float) -> l
 
 - Count features: number of bus stops, food places, shops and buildings whose location (point, or polygon centroid) is within `feature_distance_m` of the segment polyline. Bus stops, food places and shops come from the exclusive summary classification. Buildings come from the footprint list (every Polygon with a `building` tag, whatever its summary type), so a shop polygon that also carries a `building` tag counts as a shop and as a building.
 - Land use: `landuse` of the first polygon (file order) that contains the segment midpoint, mapped to the fixed vocabulary {residential, commercial, retail, industrial, other}; `none` if no polygon contains it.
-- Footway kind: {sidewalk, crossing, other, none}; any other non-empty `footway` value is `other`.
+- Footway kind: {sidewalk, crossing, other, none}; any other non-empty `footway` value is `other`. The mapping is the pure function `footway_kind_of(footway: str) -> str` (`sidewalk` → `sidewalk`, `crossing` → `crossing`, empty → `none`, anything else → `other`). `raw_features` and the highway-footway-rate baseline both call it, so the two always agree.
 - The function takes only a city's own data (R3.5). It reads no `label` and no `lit` tag (R3.4, R10.3).
 
 **Defaults and missing features (R3.7).** If a feature cannot be computed (for example the midpoint lookup fails on bad geometry), the segment gets `missing=True` and: counts 0, land use `none`, footway kind `none`, length 0.
@@ -273,7 +273,7 @@ This is the weighted "unlabeled as down-weighted negatives" approach. It is simp
 
 **Reproducibility (R5.7).** The `lbfgs` solver has no randomness; sorted rows make order irrelevant; scikit-learn is pinned exactly. The `seed` is still recorded in `model.json` and passed as `random_state`, so a later solver change cannot silently alter the contract. The saved model is only `intercept`, `coefficients` and `feature_names`; prediction is a pure numpy function (`sigmoid(x @ w + b)`) with no scikit-learn import, so predictions are the same wherever the JSON is read.
 
-**Training artifact `model.json`** (plain JSON): `schema_version`, `feature_names`, `intercept`, `coefficients`, `training_cities`, `held_out_city`, `untagged_weight`, `seed`, `highway_rates` (for the baseline), `overall_lit_rate`, `unseen_highway_types`, `training_histograms` (for shift).
+**Training artifact `model.json`** (plain JSON): `schema_version`, `feature_names`, `intercept`, `coefficients`, `training_cities`, `held_out_city`, `untagged_weight`, `seed`, `highway_rates` (for the baseline), `pair_rates` (for the highway-footway-rate baseline, see below), `overall_lit_rate`, `unseen_highway_types`, `training_histograms` (for shift). `pair_rates` is a nested object `{highway: {footway_kind: rate}}` holding only pairs that have tagged training segments; the fallbacks are rebuilt from `highway_rates` and `overall_lit_rate` by `rates_from_model`, so ground-truth scoring can score all three baselines from `model.json` alone.
 
 ### scoring.py (R6) — decision (b)
 
@@ -322,11 +322,17 @@ RULE_LIT_CLASSES = frozenset({"primary", "secondary", "tertiary"})
 def rule_baseline(highway: str) -> float          # 1.0 or 0.0
 def learn_highway_rates(training: Sequence[(highway, label)]) -> HighwayRates
 def highway_rate_baseline(rates: HighwayRates, highway: str) -> float
+def learn_pair_rates(training: Sequence[(highway, footway_kind, label)]) -> PairRates
+def highway_footway_rate_baseline(pairs: PairRates, highway: str, footway_kind: str) -> float
 ```
 
 - Rule baseline: depends on highway class only (R4.2).
 - Highway-rate baseline: for each type, `rate = lit / (lit + unlit)` over training cities' tagged segments. A type with no tagged segments uses `overall_lit_rate = lit / (lit + unlit)` over all training cities, and the count of such types is recorded (`unseen_highway_types`, R4.5). Held-out city segments are never passed to `learn_highway_rates` (R4.3). If the training set has no tagged segments at all, the function raises `TrainingError`.
 - Example: residential has 30 `tagged_lit` and 10 `tagged_unlit` → 0.75; training totals of 70 lit and 30 unlit give an overall rate of 0.7.
+- Highway-footway-rate baseline (R4.9 to R4.13): `learn_pair_rates` takes training triples `(highway, footway_kind, label)`; `footway_kind` is already the feature vocabulary value `{sidewalk, crossing, other, none}`, because it comes from `RawFeatures.footway_kind`, which is `footway_kind_of(segment.footway)`. Rows labelled `untagged` are skipped, and held-out rows are never passed in, so only tagged training segments count. `PairRates` holds `rates: dict[(highway, kind), float]` for pairs with at least one tagged segment (`lit / (lit + unlit)`), a copy of the `HighwayRates` and the `overall_lit_rate`. `highway_footway_rate_baseline` reads only its `highway` and `footway_kind` arguments, and returns, in this order: the pair rate; else the highway-type rate (R4.11); else the overall lit rate (R4.12).
+- Fallback counts (R4.13) count distinct pairs, not segments, over the pairs that appear in the evaluated city, not the fixed 16 × 4 grid, because training does not know the evaluated city. They come from a pure function `pair_fallback_counts(pairs: PairRates, city_pairs: Iterable[(highway, footway_kind)]) -> (type_fallback_pairs, overall_fallback_pairs)`: `type_fallback_pairs` is the number of distinct city pairs with no tagged training segments whose type has some; `overall_fallback_pairs` is the number of distinct city pairs with no tagged training segments whose type has none. Together with the distinct city pairs that have data, the three counts equal the number of distinct pairs in the city. Validation computes both counts per validated city, and the report shows them next to `unseen_highway_types`. They are not stored in `PairRates`, `model.json` or the training log.
+- Errors: as for the highway-rate baseline, `learn_pair_rates` raises `TrainingError` when the training set has no `tagged_lit` and no `tagged_unlit` rows, and nothing is returned.
+- Hand-checked example (training cities have only residential and footway tagged segments). Residential: (sidewalk) 12 lit, 3 unlit; (none) 18 lit, 7 unlit, so residential totals 30 / 10 → 0.75. Footway: (sidewalk) 40 lit, 20 unlit → 0.6667 for the type. Totals: lit 12 + 18 + 40 = 70, unlit 3 + 7 + 20 = 30, overall 70 / 100 = 0.7. Predictions: (residential, sidewalk) = 12 / 15 = 0.8; (residential, none) = 18 / 25 = 0.72; (residential, crossing) has no data, so it falls back to the residential rate 0.75; (footway, crossing) falls back to 40 / 60 = 0.667; (steps, none) has no data and steps has none, so it uses 0.7. Counts for an evaluated city whose segments have the pairs (residential, sidewalk), (residential, sidewalk) again, (residential, crossing), (footway, crossing) and (steps, none): the duplicate is not counted, so there are 4 distinct pairs. (residential, sidewalk) has data: 1; type fallback = (residential, crossing) and (footway, crossing) = 2; overall fallback = (steps, none) = 1; 1 + 2 + 1 = 4.
 
 ### metrics.py and validation.py (R7) — decision (i)
 
@@ -349,16 +355,16 @@ def ground_truth_accuracy(rows) -> GTResult
 **Hold-one-out procedure (R7.1, R7.8).**
 
 1. Cities with at least `min_unlit_city` (default 200) `tagged_unlit` segments qualify; others are listed as skipped with count and threshold.
-2. For each qualifying city, train on all other available cities (never the city itself), learn highway rates from the same set, then score the city's segments with the model, the rule baseline and the highway-rate baseline on identical segment sets (R4.6). If the sets differ, raise an error naming the city and split, and write no baseline metrics (R4.8).
+2. For each qualifying city, train on all other available cities (never the city itself), learn highway rates and pair rates from the same set, then score the city's segments with the model, the rule baseline, the highway-rate baseline and the highway-footway-rate baseline on identical segment sets (R4.6). Each segment's `highway` and `footway_kind` come from its `RawFeatures`, so no new field is needed at validation time. If the sets differ, raise an error naming the city and split, and write no baseline metrics (R4.8).
 3. Split rows into walking paths (pedestrian, footway, path, cycleway, steps) and vehicle roads (everything else listed in R2.1).
 4. For each road type, compute AUC and precision only when the city has at least `min_unlit_road_type` (default 100) `tagged_unlit` segments of that type; otherwise list it as skipped with count and threshold (R7.4, R7.5). There is no combined figure (R7.3).
-5. If the model AUC is not higher than a baseline's AUC for the same city and road type, the report states "the model did not beat <baseline>" with both figures, separately for each baseline (R7.9). If either AUC is undefined, no comparison is made and the report says so.
+5. If the model AUC is not higher than a baseline's AUC for the same city and road type, the report states "the model did not beat <baseline>" with both figures, separately for each of the three baselines (R7.9; method keys `rule`, `highway_rate`, `highway_footway_rate`). If either AUC is undefined, no comparison is made and the report says so.
 
 **Ground-truth city guard.** Ground truth is scored with the saved `model.json`. If that model was trained on the ground-truth city, the accuracy would be measured on streets the model has already seen. So when `--ground-truth` is given, `validate` first calls the pure function `check_ground_truth_city(gt_city, held_out_city)`. It raises `InvalidArgumentError` naming both values (for example `argument '--ground-truth-city' value 'kl_core' does not match model.json held_out_city None; train with --held-out kl_core`) when `held_out_city` is null or differs from `gt_city`. This is a hard error, not the status-3 "not run" case: it exits with status 2, and `validate` stops before doing any work and writes nothing, leaving any existing `docs/validation.md` unchanged. Status 3 is kept for ground-truth file problems only.
 
-**Ground truth (R7.6, R7.10).** CSV columns `osm_id,label` where `label` is `lit`, `dark` or `unsure`. Rows marked `unsure` are excluded and their count is reported. Accuracy is the share of rows where `(score >= 0.5) == (label == "lit")`, for the model, the rule baseline and the highway-rate baseline, using the saved `model.json`. If the file is missing, unreadable, or has only `unsure` rows, the report section is "not run" with the reason. Rows whose `osm_id` is not a segment of the city are counted and reported.
+**Ground truth (R7.6, R7.10).** CSV columns `osm_id,label` where `label` is `lit`, `dark` or `unsure`. Rows marked `unsure` are excluded and their count is reported. Accuracy is the share of rows where `(score >= 0.5) == (label == "lit")`, for the model, the rule baseline, the highway-rate baseline and the highway-footway-rate baseline, using the saved `model.json` (`rates_from_model` rebuilds both rate tables from it). If the file is missing, unreadable, or has only `unsure` rows, the report section is "not run" with the reason. Rows whose `osm_id` is not a segment of the city are counted and reported.
 
-**Report (`report.py`, R7.7, R4.7).** `render_validation(data) -> str` is pure. It contains: per-city counts of `tagged_lit`, `tagged_unlit`, `untagged`; metric tables with model, rule baseline and highway-rate baseline side by side, three decimal places, "undefined" where needed; skipped cities and road types; the statement that AUC and precision use tagged segments only; the caveat that untagged segments are unknown rather than unlit; the low-bias note on probabilities. The writer saves it to `docs/validation.md`.
+**Report (`report.py`, R7.7, R4.7).** `render_validation(data) -> str` is pure. It contains: per-city counts of `tagged_lit`, `tagged_unlit`, `untagged`; metric tables with model, rule baseline, highway-rate baseline and highway-footway-rate baseline side by side (four columns), three decimal places, "undefined" where needed; a "did not beat" statement per baseline, including the highway-footway-rate baseline; the evaluation counts `unseen_highway_types`, `type_fallback_pairs` and `overall_fallback_pairs`; skipped cities and road types; the statement that AUC and precision use tagged segments only; the caveat that untagged segments are unknown rather than unlit; the low-bias note on probabilities. The writer saves it to `docs/validation.md`.
 
 ### export.py (R8) — decision (h)
 
@@ -464,12 +470,18 @@ class SegmentReports: skipped_ways:list; closed_ways:int; unrecognised_lit:dict[
 @dataclass(frozen=True)
 class Model: feature_names:list[str]; intercept:float; coefficients:list[float]
              training_cities:list[str]; held_out_city:str|None; untagged_weight:float; seed:int
-             highway_rates:dict[str,float]; overall_lit_rate:float; unseen_highway_types:int
+             highway_rates:dict[str,float]; pair_rates:dict[str,dict[str,float]]
+             overall_lit_rate:float; unseen_highway_types:int
              training_histograms:dict[str, list[float]]
 
 @dataclass(frozen=True)
 class CityMetrics: city:str; road_type:str; counts:dict[str,int]; skipped:str|None
-                   auc:dict[str,float|None]; precision:dict[str,float|None]    # keys: model, rule, highway_rate
+                   auc:dict[str,float|None]; precision:dict[str,float|None]    # keys: model, rule, highway_rate, highway_footway_rate
+# METHODS = ("model", "rule", "highway_rate", "highway_footway_rate"); BASELINES = METHODS[1:]
+
+@dataclass(frozen=True)
+class PairRates: rates:dict[tuple[str,str],float]; highway_rates:dict[str,float]; overall_lit_rate:float
+def pair_fallback_counts(pairs:PairRates, city_pairs:Iterable[tuple[str,str]]) -> tuple[int,int]: ...   # (type_fallback_pairs, overall_fallback_pairs) over distinct city pairs
 ```
 
 Allowed values: `label` in {tagged_lit, tagged_unlit, untagged}; `label_source` in {tagged_lit, tagged_unlit, estimated}; `road_type` in {walking_path, vehicle_road}. Walkable highway set (R2.1): primary, secondary, tertiary, unclassified, residential, living_street, service, pedestrian, footway, path, cycleway, track, steps, primary_link, secondary_link, tertiary_link.
@@ -478,7 +490,7 @@ Allowed values: `label` in {tagged_lit, tagged_unlit, untagged}; `label_source` 
 
 *A property is a characteristic or behavior that should hold true across all valid executions of a system-essentially, a formal statement about what the system should do. Properties serve as the bridge between human-readable specifications and machine-verifiable correctness guarantees.*
 
-Reflection applied (Properties 28, 29 and 30 cover the building-footprint pass, the ground-truth city guard and the OSM key id order): R2.1, 2.2, 2.7, 2.8 and 2.9 merge into one segment-building property; R6.2 to 6.5 and 6.7 merge into one label-source property; AUC and "undefined precision" merge into one metrics property; argument-validation cases (R1.4, 3.3, 5.5, 6.6, 8.6, 10.8) merge into two properties (inputs, and outputs).
+Reflection applied (Properties 31, 32 and 33 cover the highway-footway-rate baseline; Properties 28, 29 and 30 cover the building-footprint pass, the ground-truth city guard and the OSM key id order): R2.1, 2.2, 2.7, 2.8 and 2.9 merge into one segment-building property; R6.2 to 6.5 and 6.7 merge into one label-source property; AUC and "undefined precision" merge into one metrics property; argument-validation cases (R1.4, 3.3, 5.5, 6.6, 8.6, 10.8) merge into two properties (inputs, and outputs).
 
 ### Property 1: Merge keeps the first copy and accounts for every feature
 
@@ -536,9 +548,9 @@ Reflection applied (Properties 28, 29 and 30 cover the building-footprint pass, 
 
 ### Property 10: The held-out city does not influence the model
 
-*For any* set of training cities and a held-out city, replacing the held-out city's segments with any other segments leaves the trained coefficients unchanged, and no held-out segment is used to learn highway rates.
+*For any* set of training cities and a held-out city, replacing the held-out city's segments with any other segments leaves the trained coefficients unchanged, and no held-out segment is used to learn highway rates or pair rates.
 
-**Validates: Requirements 4.3, 5.8**
+**Validates: Requirements 4.3, 4.9, 5.8**
 
 ### Property 11: Feature importance covers every feature in ranked order
 
@@ -602,19 +614,19 @@ Reflection applied (Properties 28, 29 and 30 cover the building-footprint pass, 
 
 ### Property 21: Metrics use tagged segments only and respect road-type minimums
 
-*For any* set of segments, adding any number of `untagged` segments leaves AUC and precision unchanged; every segment belongs to exactly one road type; and a road type's metrics are computed if and only if the city has at least the configured number of `tagged_unlit` segments of that type (and a city is validated if and only if it has at least the city minimum), otherwise it is listed as skipped with its count.
+*For any* set of segments, adding any number of `untagged` segments leaves AUC and precision unchanged; every segment belongs to exactly one road type; and a road type's metrics are computed if and only if the city has at least the configured number of `tagged_unlit` segments of that type (and a city is validated if and only if it has at least the city minimum), otherwise it is listed as skipped with its count. The model, the rule baseline, the highway-rate baseline and the highway-footway-rate baseline are scored on exactly the same segment ids in every city and road-type split; if the sets differ, validation raises an error naming the city and split and writes no baseline metrics.
 
-**Validates: Requirements 7.2, 7.3, 7.4, 7.5, 7.8**
+**Validates: Requirements 4.6, 4.8, 7.2, 7.3, 7.4, 7.5, 7.8**
 
 ### Property 22: Ground-truth accuracy excludes unsure rows
 
-*For any* ground-truth rows, the reported accuracy is computed over the rows not marked `unsure`, the reported excluded count equals the number of `unsure` rows, and accuracy is between 0 and 1.
+*For any* ground-truth rows, the reported accuracy is computed over the rows not marked `unsure`, the reported excluded count equals the number of `unsure` rows, and accuracy is between 0 and 1 for each of the model, the rule baseline, the highway-rate baseline and the highway-footway-rate baseline, all computed over the same non-`unsure` rows.
 
 **Validates: Requirements 7.6**
 
 ### Property 23: The did-not-beat statement appears exactly when it should
 
-*For any* model AUC and baseline AUC that are both defined, the report text contains a "did not beat" statement for that baseline, with both figures, if and only if the model AUC is not higher than the baseline AUC.
+*For any* model AUC and any baseline AUC that are both defined, where the baseline is the rule baseline, the highway-rate baseline or the highway-footway-rate baseline, the report text contains a "did not beat" statement for that baseline, with both figures, if and only if the model AUC is not higher than that baseline's AUC; each baseline is decided separately.
 
 **Validates: Requirements 7.9**
 
@@ -660,6 +672,24 @@ Reflection applied (Properties 28, 29 and 30 cover the building-footprint pass, 
 
 **Validates: Requirements 1.2** (design decision: confirmed extract format and id order)
 
+### Property 31: Pair rates come from tagged training segments only
+
+*For any* training rows `(highway, footway_kind, label)`, every pair with at least one tagged row has rate `lit / (lit + unlit)` over its `tagged_lit` and `tagged_unlit` rows; adding any number of `untagged` rows, or any rows of the held-out city, to the data leaves the learned pair rates, highway rates and overall lit rate unchanged; and a training set with no tagged rows raises `TrainingError`.
+
+**Validates: Requirements 4.9, 4.13**
+
+### Property 32: Pair baseline falls back from pair to highway type to overall, and counts each fallback
+
+*For any* learned pair rates and any (highway, footway kind) pair: a pair with tagged training segments is predicted at its own rate; a pair with none whose highway type has some is predicted at the highway-rate baseline value for that type; a pair with none whose type also has none is predicted at the overall lit rate; and for any collection of city pairs, `pair_fallback_counts` returns `type_fallback_pairs` and `overall_fallback_pairs` equal to the number of distinct city pairs on the second and third level, so the distinct city pairs with data plus both counts equal the number of distinct pairs in the city, and repeating a pair in the collection does not change the counts.
+
+**Validates: Requirements 4.11, 4.12, 4.13**
+
+### Property 33: Pair baseline prediction depends only on highway type and footway kind
+
+*For any* learned pair rates and any two segments with the same highway type and the same footway kind (after `footway_kind_of`), and any other differences (label, lit tag, length, counts, land use, city, model output), the highway-footway-rate baseline gives the same prediction, which is finite and between 0 and 1.
+
+**Validates: Requirements 4.10**
+
 ## Error Handling
 
 | Condition | Error | Effect |
@@ -676,7 +706,7 @@ Reflection applied (Properties 28, 29 and 30 cover the building-footprint pass, 
 | Building-tagged feature that is not a Polygon | warning | left out of the footprint list, processing continues |
 | Ground-truth city differs from `model.json` `held_out_city`, or `held_out_city` is null | `InvalidArgumentError` naming both values | hard error, exit status 2, nothing written; prevents scoring ground truth with a model trained on that city |
 | Ground truth missing, unreadable or only `unsure` | reported reason, section "not run" | rest of report written, exit status 3 (R7.10) |
-| Model or highway-rate baseline predicts no lit segments | precision "undefined" | not an error (R7.11) |
+| Model or any baseline predicts no lit segments | precision "undefined" | not an error (R7.11) |
 
 All writes are temp-file-then-rename, so any failing command leaves existing outputs unchanged (R9.5, R9.6).
 
@@ -696,6 +726,7 @@ Property-based testing applies: the core is pure functions over large input spac
 - Training: zero `tagged_lit` rows leaves an existing `model.json` unchanged (R5.2); the training log contains the unknown-not-unlit statement and the three weights (R5.3, R5.6); unknown held-out city (R5.9); word count of `docs/model.md` is under 150 (R5.11).
 - Scoring: the hand-computed confidence values 0.457, 0.320 and 0.083125 from the formula above; NaN injected into a computed score raises `DataError` (R6.12).
 - Metrics: the hand-computed AUC of 0.875 and the 0.75 and 0.7 highway rates.
+- Highway-footway-rate baseline: the hand-checked example from the baselines section: (residential, sidewalk) 12 / 3 → 0.8; (residential, none) 18 / 7 → 0.72; (residential, crossing) falls back to 0.75; (footway, crossing) falls back to 0.667; (steps, none) falls back to 0.7; fallback counts for an evaluated city with pairs (residential, sidewalk) twice, (residential, crossing), (footway, crossing) and (steps, none): 1 pair with data, 2 (highway type) and 1 (overall) over 4 distinct pairs (1 + 2 + 1 = 4), the duplicate not counted; a training set with no tagged rows raises `TrainingError`.
 - Validation: baseline and model on identical segment sets; mismatch error (R4.6 to R4.8); report contents including per-class counts, tagged-only statement and the unknown-not-unlit caveat (R7.7); ground-truth file missing, unreadable, only `unsure` (R7.10, exit status 3, report still written); ground-truth city different from `held_out_city`, or `held_out_city` null, exits 2 with both values in the message and writes nothing (an existing `docs/validation.md` is unchanged).
 - Export: attribution text and licence name present in both files (R8.5); only allow-listed properties present (R8.7); an oversized city file and an oversized buildings file are each removed, the error names city, file, size and limit, and an earlier valid file is untouched (R8.3), using a temporary directory.
 - CLI: five commands run end to end on a tiny fixture city; summary and `warning:` lines; missing argument or file exits 2 and writes nothing; invalid value names the argument; `--help` exits 0 (R9.1 to R9.7).

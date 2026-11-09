@@ -22,8 +22,9 @@ Honesty constraints that shape this spec:
 - **Confidence**: a number from 0 to 1 for how much the estimate can be trusted. It is low where nearby map data is sparse or the city is unlike the training cities.
 - **Rule baseline**: the rule "primary, secondary and tertiary roads are lit, everything else is not".
 - **Highway-rate baseline**: a baseline that uses, as the lit probability of a segment, the lit rate of its highway type, where the lit rate of a highway type is the number of `tagged_lit` segments divided by the number of `tagged_lit` plus `tagged_unlit` segments of that type, learned from the training cities only.
+- **Highway-footway-rate baseline**: a baseline that uses, as the lit probability of a segment, the lit rate of its pair of highway type and footway kind, where the lit rate of a pair is the number of `tagged_lit` segments divided by the number of `tagged_lit` plus `tagged_unlit` segments of that pair, learned from the training cities only. `untagged` segments are never counted. The footway kind takes the same values as the footway kind feature: sidewalk, crossing, other or none.
 - **Overall lit rate**: the number of `tagged_lit` segments divided by the number of `tagged_lit` plus `tagged_unlit` segments across all training cities.
-- **Baselines**: the rule baseline and the highway-rate baseline together.
+- **Baselines**: the rule baseline, the highway-rate baseline and the highway-footway-rate baseline together.
 - **Held-out city**: a city left out of training and used only to evaluate the model.
 - **Walking path**: a segment whose highway type is pedestrian, footway, path, cycleway or steps.
 - **Vehicle road**: a segment whose highway type is any other walkable type listed in Requirement 2.
@@ -76,7 +77,7 @@ Honesty constraints that shape this spec:
 
 ### Requirement 4: Baseline
 
-**User Story:** As a developer, I want two simple baselines, so that the model has something to beat.
+**User Story:** As a developer, I want three simple baselines, so that the model has something to beat.
 
 #### Acceptance Criteria
 
@@ -85,9 +86,14 @@ Honesty constraints that shape this spec:
 3. THE pipeline SHALL provide a highway-rate baseline whose lit rate for each highway type is learned from the training cities only, and SHALL NOT use any segment of the held-out city to learn it.
 4. THE pipeline SHALL derive each highway-rate baseline prediction from the segment's highway type alone, without reading any lighting tag of the segment, any other feature, or any model output.
 5. IF a highway type has no `tagged_lit` and no `tagged_unlit` segments in the training cities, THEN THE pipeline SHALL use the overall lit rate as the highway-rate baseline prediction for segments of that type, and SHALL record the count of such highway types in the evaluation output.
-6. THE pipeline SHALL evaluate the model, the rule baseline and the highway-rate baseline using the same metrics, the same data splits, and the same held-out cities, on identical segment sets, and SHALL exclude `untagged` segments from AUC and precision as stated in Requirement 7.
-7. WHEN the evaluation completes, THE pipeline SHALL write the model metrics, the rule baseline metrics and the highway-rate baseline metrics side by side in one validation results document, with each metric reported to 3 decimal places.
-8. IF the model, the rule baseline and the highway-rate baseline cannot be evaluated on identical segment sets, THEN THE pipeline SHALL stop with an error indicating which city or split differs, and SHALL NOT write baseline metrics.
+6. THE pipeline SHALL evaluate the model, the rule baseline, the highway-rate baseline and the highway-footway-rate baseline using the same metrics, the same data splits, and the same held-out cities, on identical segment sets, and SHALL exclude `untagged` segments from AUC and precision as stated in Requirement 7.
+7. WHEN the evaluation completes, THE pipeline SHALL write the model metrics, the rule baseline metrics, the highway-rate baseline metrics and the highway-footway-rate baseline metrics side by side in one validation results document, with each metric reported to 3 decimal places.
+8. IF the model, the rule baseline, the highway-rate baseline and the highway-footway-rate baseline cannot be evaluated on identical segment sets, THEN THE pipeline SHALL stop with an error indicating which city or split differs, and SHALL NOT write baseline metrics.
+9. THE pipeline SHALL provide a highway-footway-rate baseline whose lit rate for each pair of highway type and footway kind is learned from the `tagged_lit` and `tagged_unlit` segments of the training cities only, SHALL NOT count `untagged` segments in any rate, and SHALL NOT use any segment of the held-out city to learn it.
+10. THE pipeline SHALL derive each highway-footway-rate baseline prediction from the segment's highway type and footway kind alone, without reading any lighting tag of the segment, any other feature, or any model output.
+11. IF a pair of highway type and footway kind has no `tagged_lit` and no `tagged_unlit` segments in the training cities, THEN THE pipeline SHALL use the highway-rate baseline value for the highway type of that pair as the highway-footway-rate baseline prediction.
+12. IF a pair of highway type and footway kind has no `tagged_lit` and no `tagged_unlit` segments in the training cities and its highway type also has none, THEN THE pipeline SHALL use the overall lit rate as the highway-footway-rate baseline prediction.
+13. WHEN the evaluation completes, THE pipeline SHALL record in the evaluation output the count of distinct pairs of highway type and footway kind that appear in the evaluated (held-out) city and used the highway-type fallback in criterion 11, and the count of such distinct pairs that used the overall lit rate fallback in criterion 12.
 
 ### Requirement 5: Train the model
 
@@ -132,17 +138,17 @@ Honesty constraints that shape this spec:
 
 #### Acceptance Criteria
 
-1. FOR EACH city with at least a configured number of `tagged_unlit` segments (default 200; the Berlin and London extracts qualify), THE pipeline SHALL hold the city out of training, hide its `lit` tags, estimate lit probability for every segment in that city, and report both AUC (0.0 to 1.0) and precision at a cutoff of 0.5 lit probability, for the model, the rule baseline and the highway-rate baseline (precision is "undefined" when a method predicts no lit segments, see criterion 11).
+1. FOR EACH city with at least a configured number of `tagged_unlit` segments (default 200; the Berlin and London extracts qualify), THE pipeline SHALL hold the city out of training, hide its `lit` tags, estimate lit probability for every segment in that city, and report both AUC (0.0 to 1.0) and precision at a cutoff of 0.5 lit probability, for the model, the rule baseline, the highway-rate baseline and the highway-footway-rate baseline (precision is "undefined" when a method predicts no lit segments, see criterion 11).
 2. THE pipeline SHALL compute the AUC and precision metrics in criterion 1 using `tagged_lit` segments as positives and `tagged_unlit` segments as the only negatives, and SHALL exclude `untagged` segments from both metrics, because counting `untagged` as negative would reward copying mapping habits.
 3. THE pipeline SHALL report every metric in criteria 1 and 6 separately for walking paths and for vehicle roads, and SHALL NOT report a single combined figure in place of the separate figures.
 4. THE pipeline SHALL compute the AUC and precision metrics in criterion 1 for a road type (walking paths or vehicle roads) in a held-out city only WHEN that city has at least the configured minimum number of `tagged_unlit` segments of that road type (default 100).
 5. IF a held-out city has fewer than the configured minimum number of `tagged_unlit` segments for a road type, THEN THE pipeline SHALL skip the metrics for that road type and SHALL list it in `docs/validation.md` as skipped, with the `tagged_unlit` segment count and the threshold.
-6. WHEN a hand-labeled ground-truth CSV is provided for a city (Kuala Lumpur), THE pipeline SHALL report accuracy on the labeled segments for the model, the rule baseline and the highway-rate baseline, excluding every row marked `unsure` and stating the number of rows excluded.
+6. WHEN a hand-labeled ground-truth CSV is provided for a city (Kuala Lumpur), THE pipeline SHALL report accuracy on the labeled segments for the model, the rule baseline, the highway-rate baseline and the highway-footway-rate baseline, excluding every row marked `unsure` and stating the number of rows excluded.
 7. THE pipeline SHALL write all results to `docs/validation.md`, including the number of segments per class (`tagged_lit`, `tagged_unlit`, `untagged`) for each city, a statement that the AUC and precision metrics are computed on tagged segments only, and the caveat that untagged segments are unknown rather than unlit.
 8. IF a city has fewer than the configured number of `tagged_unlit` segments, THEN THE pipeline SHALL skip hold-out validation for that city and SHALL list the city in `docs/validation.md` as skipped, with the segment count and the threshold.
-9. IF the model's AUC is not higher than the AUC of the rule baseline, or not higher than the AUC of the highway-rate baseline, on a held-out city, THEN THE pipeline SHALL state in `docs/validation.md`, separately for each such baseline, that the model did not beat that baseline for that city, and SHALL include the figures for the model and that baseline.
+9. IF the model's AUC is not higher than the AUC of the rule baseline, not higher than the AUC of the highway-rate baseline, or not higher than the AUC of the highway-footway-rate baseline, on a held-out city, THEN THE pipeline SHALL state in `docs/validation.md`, separately for each such baseline, that the model did not beat that baseline for that city, and SHALL include the figures for the model and that baseline.
 10. IF the ground-truth CSV is missing, unreadable, or contains no rows other than `unsure`, THEN THE pipeline SHALL report an error indicating which condition occurred, SHALL still write the other results to `docs/validation.md`, and SHALL mark the ground-truth section as not run.
-11. WHEN the model, the rule baseline or the highway-rate baseline predicts no lit segments at the 0.5 cutoff for a city and road type, THE pipeline SHALL report its precision as "undefined" in `docs/validation.md`, and SHALL NOT treat this case as an error and SHALL NOT report the precision as 0.
+11. WHEN the model, the rule baseline, the highway-rate baseline or the highway-footway-rate baseline predicts no lit segments at the 0.5 cutoff for a city and road type, THE pipeline SHALL report its precision as "undefined" in `docs/validation.md`, and SHALL NOT treat this case as an error and SHALL NOT report the precision as 0.
 
 ### Requirement 8: Export
 
