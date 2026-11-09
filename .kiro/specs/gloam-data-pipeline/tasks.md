@@ -74,23 +74,23 @@ New dependencies (explained, as the technical rules require):
     - A polygon tagged both `shop` and `building` counts once as a shop and also appears in the footprint list
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6_
 
-- [ ] 3. Geometry and segments
-  - [ ] 3.1 Implement `geometry.py`
+- [x] 3. Geometry and segments
+  - [x] 3.1 Implement `geometry.py`
     - `Projector(lat0, lon0)` local equirectangular projection to metres, `polyline_length_m`, `point_polyline_distance_m`, `point_in_polygon` (outer ring), `GridIndex` with cell size equal to the feature distance
     - All outputs finite; reject NaN and infinite coordinates naming the argument
     - _Requirements: 2.4, 3.1_
 
-  - [ ] 3.2 Implement `segments.py`
+  - [x] 3.2 Implement `segments.py`
     - `Segment` dataclass, `lit_label` mapping (`yes`, `24/7`, `automatic`, `dusk-dawn` to `tagged_lit`; `no` to `tagged_unlit`; missing to `untagged`; other present values to `untagged` and counted), `build_segments`
     - Accept LineString and Polygon (outer ring); skip ways with fewer than 2 distinct coordinates or unresolvable geometry and record the reason; closed ways with at least 2 distinct coordinates become one segment and are counted; never drop untagged segments
     - Exclude motorway, trunk, missing and unlisted highway values; store id, name, highway, footway kind, geometry, length
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9_
 
-  - [ ] 3.3 Write property test for segment selection and labels
+  - [x] 3.3 Write property test for segment selection and labels
     - **Property 3: Segment building selects exactly the walkable ways and labels all of them**
     - **Validates: Requirements 2.1, 2.2, 2.7, 2.8, 2.9**
 
-  - [ ] 3.4 Write property test for lengths and degenerate or closed ways
+  - [x] 3.4 Write property test for lengths and degenerate or closed ways
     - **Property 4: Lengths are valid and degenerate or closed ways are handled**
     - **Validates: Requirements 2.4, 2.5, 2.6**
 
