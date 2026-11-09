@@ -143,3 +143,36 @@ def test_invalid_feature_distance_rejected(bad):
     assert "10 to 1000" in exc.value.allowed
     assert "10 to 1000" in str(exc.value)
     assert not math.isfinite(bad) or bad in (5, 2000)
+
+
+# --- footway_kind_of (R3.1, R4.10) ---
+
+
+@pytest.mark.parametrize("tag, kind", [
+    ("sidewalk", "sidewalk"),
+    ("crossing", "crossing"),
+    ("", "none"),
+    ("none", "other"),  # only an empty value means there is no footway tag
+    ("track_side", "other"),
+])
+def test_footway_kind_of_mapping(tag, kind):
+    from gloam_pipeline.features import footway_kind_of
+    assert footway_kind_of(tag) == kind
+
+
+@pytest.mark.parametrize("bad", [None, 1, 1.5, b"sidewalk", ["sidewalk"]])
+def test_footway_kind_of_rejects_non_string(bad):
+    from gloam_pipeline.features import footway_kind_of
+    with pytest.raises(InvalidArgumentError) as exc:
+        footway_kind_of(bad)
+    assert exc.value.argument == "footway"
+    assert "footway" in str(exc.value)
+
+
+@pytest.mark.parametrize("tag", ["sidewalk", "crossing", "", "none", "track_side"])
+def test_raw_features_uses_footway_kind_of(tag):
+    from gloam_pipeline.features import footway_kind_of
+    (r,) = raw_features([_street(footway=tag)], PointSets(), LanduseAreas(), DIST)
+    assert r.footway_kind == footway_kind_of(tag)
+    if tag == "":
+        assert r.footway_kind == "none"

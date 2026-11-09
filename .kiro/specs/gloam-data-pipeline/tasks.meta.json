@@ -26,7 +26,7 @@
     },
     "5.4 Write property test for order and city independence": {
       "status": "passed",
-      "lastRunTimestamp": 1794190134729
+      "lastRunTimestamp": 1794194020546
     },
     "5.5 Write property test that features ignore the lit tag": {
       "status": "passed",
@@ -67,6 +67,70 @@
     "7.3 Write property test for the highway-rate baseline": {
       "status": "passed",
       "lastRunTimestamp": 1794191678910
+    },
+    "8.3 Write property test for reproducibility": {
+      "status": "passed",
+      "lastRunTimestamp": 1794192544164
+    },
+    "8.5 Write property test for feature importance": {
+      "status": "passed",
+      "lastRunTimestamp": 1794192547045
+    },
+    "8.4 Write property test for the held-out city": {
+      "status": "passed",
+      "lastRunTimestamp": 1794192551196
+    },
+    "8.2 Write property test for training weights": {
+      "status": "passed",
+      "lastRunTimestamp": 1794192552471
+    },
+    "10.2 Write property test for AUC and precision": {
+      "status": "passed",
+      "lastRunTimestamp": 1794198045251
+    },
+    "10.4 Write property test for tagged-only metrics and minimums": {
+      "status": "passed",
+      "lastRunTimestamp": 1794198258913
+    },
+    "10.5 Write property test for ground-truth accuracy": {
+      "status": "passed",
+      "lastRunTimestamp": 1794198306747
+    },
+    "10.6 Write property test for the ground-truth city guard": {
+      "status": "passed",
+      "lastRunTimestamp": 1794198351200
+    },
+    "10.8 Write property test for the did-not-beat statement": {
+      "status": "passed",
+      "lastRunTimestamp": 1794198491562
+    },
+    "7.5 Write property test for pair rates": {
+      "status": "passed",
+      "lastRunTimestamp": 1794199712934
+    },
+    "7.6 Write property test for pair baseline fallback": {
+      "status": "passed",
+      "lastRunTimestamp": 1794199780686
+    },
+    "7.7 Write property test for pair baseline inputs": {
+      "status": "passed",
+      "lastRunTimestamp": 1794199863387
+    },
+    "8.8 Update the held-out city property test for pair rates": {
+      "status": "passed",
+      "lastRunTimestamp": 1794202614666
+    },
+    "10.12 Update the tagged-only metrics property test": {
+      "status": "passed",
+      "lastRunTimestamp": 1794203104847
+    },
+    "10.13 Update the ground-truth accuracy property test": {
+      "status": "passed",
+      "lastRunTimestamp": 1794203367108
+    },
+    "10.14 Update the did-not-beat property test": {
+      "status": "passed",
+      "lastRunTimestamp": 1794203437277
     }
   },
   "executionHistory": {
@@ -363,6 +427,11 @@
         "executionId": "1e0ec56c-61de-4ea0-b963-a5729c2541be",
         "chatSessionId": "sess_7201f007-4335-45ac-9e2f-097b6e83c443",
         "timestamp": 1794190335754
+      },
+      {
+        "executionId": "363ceea9-ecf6-441c-86db-601fb54f7656",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794199528899
       }
     ],
     "6.1 Implement `shift.py`": [
@@ -502,6 +571,16 @@
         "executionId": "e999da44-0cbd-4554-89ce-7f8f0845cc71",
         "chatSessionId": "sess_0659db75-36fb-45ab-b62c-8684ab37cdda",
         "timestamp": 1794191690154
+      },
+      {
+        "executionId": "91747612-046f-4101-84de-d8b9d6a426e6",
+        "chatSessionId": "sess_0659db75-36fb-45ab-b62c-8684ab37cdda",
+        "timestamp": 1794191881840
+      },
+      {
+        "executionId": "91747612-046f-4101-84de-d8b9d6a426e6",
+        "chatSessionId": "sess_0659db75-36fb-45ab-b62c-8684ab37cdda",
+        "timestamp": 1794191936433
       }
     ],
     "7.2 Write property test for the rule baseline": [
@@ -523,6 +602,591 @@
         "executionId": "e999da44-0cbd-4554-89ce-7f8f0845cc71",
         "chatSessionId": "sess_0659db75-36fb-45ab-b62c-8684ab37cdda",
         "timestamp": 1794191694885
+      },
+      {
+        "executionId": "363ceea9-ecf6-441c-86db-601fb54f7656",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794199978876
+      }
+    ],
+    "8.1 Implement `model.py`": [
+      {
+        "executionId": "2dde66ee-561f-4fe9-b0ef-06a0d73bfab0",
+        "chatSessionId": "sess_af9b63d9-870d-4eed-a9f8-3facfd465023",
+        "timestamp": 1794192119160
+      },
+      {
+        "executionId": "2dde66ee-561f-4fe9-b0ef-06a0d73bfab0",
+        "chatSessionId": "sess_af9b63d9-870d-4eed-a9f8-3facfd465023",
+        "timestamp": 1794192490156
+      }
+    ],
+    "8.2 Write property test for training weights": [
+      {
+        "executionId": "2dde66ee-561f-4fe9-b0ef-06a0d73bfab0",
+        "chatSessionId": "sess_af9b63d9-870d-4eed-a9f8-3facfd465023",
+        "timestamp": 1794192500368
+      },
+      {
+        "executionId": "2dde66ee-561f-4fe9-b0ef-06a0d73bfab0",
+        "chatSessionId": "sess_af9b63d9-870d-4eed-a9f8-3facfd465023",
+        "timestamp": 1794192566252
+      }
+    ],
+    "8.3 Write property test for reproducibility": [
+      {
+        "executionId": "2dde66ee-561f-4fe9-b0ef-06a0d73bfab0",
+        "chatSessionId": "sess_af9b63d9-870d-4eed-a9f8-3facfd465023",
+        "timestamp": 1794192501141
+      },
+      {
+        "executionId": "2dde66ee-561f-4fe9-b0ef-06a0d73bfab0",
+        "chatSessionId": "sess_af9b63d9-870d-4eed-a9f8-3facfd465023",
+        "timestamp": 1794192566475
+      }
+    ],
+    "8.4 Write property test for the held-out city": [
+      {
+        "executionId": "2dde66ee-561f-4fe9-b0ef-06a0d73bfab0",
+        "chatSessionId": "sess_af9b63d9-870d-4eed-a9f8-3facfd465023",
+        "timestamp": 1794192502196
+      },
+      {
+        "executionId": "2dde66ee-561f-4fe9-b0ef-06a0d73bfab0",
+        "chatSessionId": "sess_af9b63d9-870d-4eed-a9f8-3facfd465023",
+        "timestamp": 1794192567466
+      }
+    ],
+    "8.5 Write property test for feature importance": [
+      {
+        "executionId": "2dde66ee-561f-4fe9-b0ef-06a0d73bfab0",
+        "chatSessionId": "sess_af9b63d9-870d-4eed-a9f8-3facfd465023",
+        "timestamp": 1794192502996
+      },
+      {
+        "executionId": "2dde66ee-561f-4fe9-b0ef-06a0d73bfab0",
+        "chatSessionId": "sess_af9b63d9-870d-4eed-a9f8-3facfd465023",
+        "timestamp": 1794192568273
+      }
+    ],
+    "8.6 Write unit tests for training": [
+      {
+        "executionId": "2dde66ee-561f-4fe9-b0ef-06a0d73bfab0",
+        "chatSessionId": "sess_af9b63d9-870d-4eed-a9f8-3facfd465023",
+        "timestamp": 1794192503954
+      },
+      {
+        "executionId": "2dde66ee-561f-4fe9-b0ef-06a0d73bfab0",
+        "chatSessionId": "sess_af9b63d9-870d-4eed-a9f8-3facfd465023",
+        "timestamp": 1794192569028
+      }
+    ],
+    "8. Train the model": [
+      {
+        "executionId": "2dde66ee-561f-4fe9-b0ef-06a0d73bfab0",
+        "chatSessionId": "sess_af9b63d9-870d-4eed-a9f8-3facfd465023",
+        "timestamp": 1794192569188
+      },
+      {
+        "executionId": "53edb410-560d-45aa-a19e-af92b1cb3031",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794202625254
+      }
+    ],
+    "9. Checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "372fe375-50f8-4fce-a18a-8c8acb73b540",
+        "chatSessionId": "sess_102e08fa-3f46-4d3a-b61d-151ee776a9cc",
+        "timestamp": 1794193753790
+      },
+      {
+        "executionId": "372fe375-50f8-4fce-a18a-8c8acb73b540",
+        "chatSessionId": "sess_102e08fa-3f46-4d3a-b61d-151ee776a9cc",
+        "timestamp": 1794194028400
+      }
+    ],
+    "10.1 Implement `metrics.py`": [
+      {
+        "executionId": "bff7a6f1-c71c-47c6-850d-ab4615af9a45",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794197722328
+      },
+      {
+        "executionId": "bff7a6f1-c71c-47c6-850d-ab4615af9a45",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794197785764
+      }
+    ],
+    "10.2 Write property test for AUC and precision": [
+      {
+        "executionId": "2a32a9ca-e16f-4e7c-b297-d956d8e75000",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794197867818
+      },
+      {
+        "executionId": "b3ce828a-b4dc-42e6-9881-756971bfa7de",
+        "chatSessionId": "sess_6dac53d2-34ac-414d-8ac3-20e5c154b311",
+        "timestamp": 1794197979943
+      },
+      {
+        "executionId": "edef7df6-e6bc-438a-9e1e-9b99a476d7fa",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794198016981
+      },
+      {
+        "executionId": "edef7df6-e6bc-438a-9e1e-9b99a476d7fa",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794198060300
+      }
+    ],
+    "10.3 Implement `validation.py`": [
+      {
+        "executionId": "b3ce828a-b4dc-42e6-9881-756971bfa7de",
+        "chatSessionId": "sess_6dac53d2-34ac-414d-8ac3-20e5c154b311",
+        "timestamp": 1794197980184
+      },
+      {
+        "executionId": "edef7df6-e6bc-438a-9e1e-9b99a476d7fa",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794198061135
+      },
+      {
+        "executionId": "edef7df6-e6bc-438a-9e1e-9b99a476d7fa",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794198198698
+      }
+    ],
+    "10.4 Write property test for tagged-only metrics and minimums": [
+      {
+        "executionId": "b3ce828a-b4dc-42e6-9881-756971bfa7de",
+        "chatSessionId": "sess_6dac53d2-34ac-414d-8ac3-20e5c154b311",
+        "timestamp": 1794197980339
+      },
+      {
+        "executionId": "edef7df6-e6bc-438a-9e1e-9b99a476d7fa",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794198199386
+      },
+      {
+        "executionId": "edef7df6-e6bc-438a-9e1e-9b99a476d7fa",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794198271566
+      }
+    ],
+    "10.5 Write property test for ground-truth accuracy": [
+      {
+        "executionId": "b3ce828a-b4dc-42e6-9881-756971bfa7de",
+        "chatSessionId": "sess_6dac53d2-34ac-414d-8ac3-20e5c154b311",
+        "timestamp": 1794197980499
+      },
+      {
+        "executionId": "edef7df6-e6bc-438a-9e1e-9b99a476d7fa",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794198272468
+      },
+      {
+        "executionId": "edef7df6-e6bc-438a-9e1e-9b99a476d7fa",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794198316927
+      }
+    ],
+    "10.6 Write property test for the ground-truth city guard": [
+      {
+        "executionId": "b3ce828a-b4dc-42e6-9881-756971bfa7de",
+        "chatSessionId": "sess_6dac53d2-34ac-414d-8ac3-20e5c154b311",
+        "timestamp": 1794197980633
+      },
+      {
+        "executionId": "edef7df6-e6bc-438a-9e1e-9b99a476d7fa",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794198317686
+      },
+      {
+        "executionId": "edef7df6-e6bc-438a-9e1e-9b99a476d7fa",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794198360559
+      }
+    ],
+    "10.7 Implement `report.py`": [
+      {
+        "executionId": "b3ce828a-b4dc-42e6-9881-756971bfa7de",
+        "chatSessionId": "sess_6dac53d2-34ac-414d-8ac3-20e5c154b311",
+        "timestamp": 1794197980828
+      },
+      {
+        "executionId": "edef7df6-e6bc-438a-9e1e-9b99a476d7fa",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794198361367
+      },
+      {
+        "executionId": "edef7df6-e6bc-438a-9e1e-9b99a476d7fa",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794198443823
+      }
+    ],
+    "10.8 Write property test for the did-not-beat statement": [
+      {
+        "executionId": "b3ce828a-b4dc-42e6-9881-756971bfa7de",
+        "chatSessionId": "sess_6dac53d2-34ac-414d-8ac3-20e5c154b311",
+        "timestamp": 1794197980952
+      },
+      {
+        "executionId": "edef7df6-e6bc-438a-9e1e-9b99a476d7fa",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794198444516
+      },
+      {
+        "executionId": "edef7df6-e6bc-438a-9e1e-9b99a476d7fa",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794198502996
+      }
+    ],
+    "10.9 Write unit tests for validation and report": [
+      {
+        "executionId": "b3ce828a-b4dc-42e6-9881-756971bfa7de",
+        "chatSessionId": "sess_6dac53d2-34ac-414d-8ac3-20e5c154b311",
+        "timestamp": 1794197981083
+      },
+      {
+        "executionId": "edef7df6-e6bc-438a-9e1e-9b99a476d7fa",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794198504103
+      },
+      {
+        "executionId": "edef7df6-e6bc-438a-9e1e-9b99a476d7fa",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794198581133
+      }
+    ],
+    "11.1 Implement `export.py`": [
+      {
+        "executionId": "b3ce828a-b4dc-42e6-9881-756971bfa7de",
+        "chatSessionId": "sess_6dac53d2-34ac-414d-8ac3-20e5c154b311",
+        "timestamp": 1794197981223
+      }
+    ],
+    "11.2 Write property test for export round trip": [
+      {
+        "executionId": "b3ce828a-b4dc-42e6-9881-756971bfa7de",
+        "chatSessionId": "sess_6dac53d2-34ac-414d-8ac3-20e5c154b311",
+        "timestamp": 1794197981411
+      }
+    ],
+    "11.3 Write property test for export validation": [
+      {
+        "executionId": "b3ce828a-b4dc-42e6-9881-756971bfa7de",
+        "chatSessionId": "sess_6dac53d2-34ac-414d-8ac3-20e5c154b311",
+        "timestamp": 1794197981538
+      }
+    ],
+    "11.4 Write property test for building height": [
+      {
+        "executionId": "b3ce828a-b4dc-42e6-9881-756971bfa7de",
+        "chatSessionId": "sess_6dac53d2-34ac-414d-8ac3-20e5c154b311",
+        "timestamp": 1794197981650
+      }
+    ],
+    "11.5 Write unit tests for export content": [
+      {
+        "executionId": "b3ce828a-b4dc-42e6-9881-756971bfa7de",
+        "chatSessionId": "sess_6dac53d2-34ac-414d-8ac3-20e5c154b311",
+        "timestamp": 1794197981736
+      }
+    ],
+    "12.1 Implement `artifacts.py` and the rest of `io.py`": [
+      {
+        "executionId": "b3ce828a-b4dc-42e6-9881-756971bfa7de",
+        "chatSessionId": "sess_6dac53d2-34ac-414d-8ac3-20e5c154b311",
+        "timestamp": 1794197981819
+      }
+    ],
+    "12.2 Write property test for intermediate file round trip": [
+      {
+        "executionId": "b3ce828a-b4dc-42e6-9881-756971bfa7de",
+        "chatSessionId": "sess_6dac53d2-34ac-414d-8ac3-20e5c154b311",
+        "timestamp": 1794197981930
+      }
+    ],
+    "12.3 Write unit tests for file writes": [
+      {
+        "executionId": "b3ce828a-b4dc-42e6-9881-756971bfa7de",
+        "chatSessionId": "sess_6dac53d2-34ac-414d-8ac3-20e5c154b311",
+        "timestamp": 1794197982006
+      }
+    ],
+    "13.1 Implement `cli.py` and wire all stages": [
+      {
+        "executionId": "b3ce828a-b4dc-42e6-9881-756971bfa7de",
+        "chatSessionId": "sess_6dac53d2-34ac-414d-8ac3-20e5c154b311",
+        "timestamp": 1794197982084
+      }
+    ],
+    "13.2 Write CLI end-to-end tests": [
+      {
+        "executionId": "b3ce828a-b4dc-42e6-9881-756971bfa7de",
+        "chatSessionId": "sess_6dac53d2-34ac-414d-8ac3-20e5c154b311",
+        "timestamp": 1794197982159
+      }
+    ],
+    "13.3 Write wording check test": [
+      {
+        "executionId": "b3ce828a-b4dc-42e6-9881-756971bfa7de",
+        "chatSessionId": "sess_6dac53d2-34ac-414d-8ac3-20e5c154b311",
+        "timestamp": 1794197982279
+      }
+    ],
+    "14. Checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "b3ce828a-b4dc-42e6-9881-756971bfa7de",
+        "chatSessionId": "sess_6dac53d2-34ac-414d-8ac3-20e5c154b311",
+        "timestamp": 1794197982361
+      }
+    ],
+    "15.1 Write `docs/model.md`": [
+      {
+        "executionId": "b3ce828a-b4dc-42e6-9881-756971bfa7de",
+        "chatSessionId": "sess_6dac53d2-34ac-414d-8ac3-20e5c154b311",
+        "timestamp": 1794197982443
+      }
+    ],
+    "15.2 Update `README.md` with data credits and pipeline notes": [
+      {
+        "executionId": "b3ce828a-b4dc-42e6-9881-756971bfa7de",
+        "chatSessionId": "sess_6dac53d2-34ac-414d-8ac3-20e5c154b311",
+        "timestamp": 1794197982519
+      }
+    ],
+    "16. Final checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "b3ce828a-b4dc-42e6-9881-756971bfa7de",
+        "chatSessionId": "sess_6dac53d2-34ac-414d-8ac3-20e5c154b311",
+        "timestamp": 1794197982614
+      }
+    ],
+    "10. Validation and report": [
+      {
+        "executionId": "edef7df6-e6bc-438a-9e1e-9b99a476d7fa",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794198581371
+      },
+      {
+        "executionId": "53edb410-560d-45aa-a19e-af92b1cb3031",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794203554376
+      },
+      {
+        "executionId": "d9e4fc45-274f-428b-867f-9df426503916",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794204212191
+      }
+    ],
+    "5.7 Extract `footway_kind_of` as a pure function used by `raw_features`": [
+      {
+        "executionId": "363ceea9-ecf6-441c-86db-601fb54f7656",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794199413373
+      },
+      {
+        "executionId": "363ceea9-ecf6-441c-86db-601fb54f7656",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794199472864
+      }
+    ],
+    "5.8 Write unit tests for `footway_kind_of`": [
+      {
+        "executionId": "363ceea9-ecf6-441c-86db-601fb54f7656",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794199473747
+      },
+      {
+        "executionId": "363ceea9-ecf6-441c-86db-601fb54f7656",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794199528801
+      }
+    ],
+    "7.4 Implement `learn_pair_rates` and `highway_footway_rate_baseline`": [
+      {
+        "executionId": "363ceea9-ecf6-441c-86db-601fb54f7656",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794199529878
+      },
+      {
+        "executionId": "363ceea9-ecf6-441c-86db-601fb54f7656",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794199658003
+      }
+    ],
+    "7.5 Write property test for pair rates": [
+      {
+        "executionId": "363ceea9-ecf6-441c-86db-601fb54f7656",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794199658217
+      },
+      {
+        "executionId": "363ceea9-ecf6-441c-86db-601fb54f7656",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794199725244
+      }
+    ],
+    "7.6 Write property test for pair baseline fallback": [
+      {
+        "executionId": "363ceea9-ecf6-441c-86db-601fb54f7656",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794199726274
+      },
+      {
+        "executionId": "363ceea9-ecf6-441c-86db-601fb54f7656",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794199796266
+      }
+    ],
+    "7.7 Write property test for pair baseline inputs": [
+      {
+        "executionId": "363ceea9-ecf6-441c-86db-601fb54f7656",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794199797239
+      },
+      {
+        "executionId": "363ceea9-ecf6-441c-86db-601fb54f7656",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794199875413
+      }
+    ],
+    "7.8 Write unit tests for the pair-rate example": [
+      {
+        "executionId": "363ceea9-ecf6-441c-86db-601fb54f7656",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794199876349
+      },
+      {
+        "executionId": "363ceea9-ecf6-441c-86db-601fb54f7656",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794199978749
+      }
+    ],
+    "8.7 Carry footway kind in `TrainingRow` and store `pair_rates` in the model": [
+      {
+        "executionId": "363ceea9-ecf6-441c-86db-601fb54f7656",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794199979906
+      },
+      {
+        "executionId": "53edb410-560d-45aa-a19e-af92b1cb3031",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794202422402
+      },
+      {
+        "executionId": "53edb410-560d-45aa-a19e-af92b1cb3031",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794202548146
+      }
+    ],
+    "8.8 Update the held-out city property test for pair rates": [
+      {
+        "executionId": "53edb410-560d-45aa-a19e-af92b1cb3031",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794202549491
+      },
+      {
+        "executionId": "53edb410-560d-45aa-a19e-af92b1cb3031",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794202625173
+      }
+    ],
+    "10.10 Add the highway-footway-rate baseline to `validation.py`": [
+      {
+        "executionId": "53edb410-560d-45aa-a19e-af92b1cb3031",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794202626014
+      },
+      {
+        "executionId": "53edb410-560d-45aa-a19e-af92b1cb3031",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794202898388
+      }
+    ],
+    "10.11 Add the fourth column and fallback counts to `report.py`": [
+      {
+        "executionId": "53edb410-560d-45aa-a19e-af92b1cb3031",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794202899157
+      },
+      {
+        "executionId": "53edb410-560d-45aa-a19e-af92b1cb3031",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794203005053
+      }
+    ],
+    "10.12 Update the tagged-only metrics property test": [
+      {
+        "executionId": "53edb410-560d-45aa-a19e-af92b1cb3031",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794203005728
+      },
+      {
+        "executionId": "53edb410-560d-45aa-a19e-af92b1cb3031",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794203123214
+      }
+    ],
+    "10.13 Update the ground-truth accuracy property test": [
+      {
+        "executionId": "53edb410-560d-45aa-a19e-af92b1cb3031",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794203123703
+      },
+      {
+        "executionId": "53edb410-560d-45aa-a19e-af92b1cb3031",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794203389660
+      }
+    ],
+    "10.14 Update the did-not-beat property test": [
+      {
+        "executionId": "53edb410-560d-45aa-a19e-af92b1cb3031",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794203391038
+      },
+      {
+        "executionId": "53edb410-560d-45aa-a19e-af92b1cb3031",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794203469020
+      }
+    ],
+    "10.15 Write unit tests for the fourth baseline in validation and report": [
+      {
+        "executionId": "53edb410-560d-45aa-a19e-af92b1cb3031",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794203468376
+      },
+      {
+        "executionId": "53edb410-560d-45aa-a19e-af92b1cb3031",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794203554265
+      }
+    ],
+    "10.16 Name the odd method in the segment-set mismatch error": [
+      {
+        "executionId": "d9e4fc45-274f-428b-867f-9df426503916",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794204067615
+      },
+      {
+        "executionId": "d9e4fc45-274f-428b-867f-9df426503916",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794204154100
+      }
+    ],
+    "10.17 Fix the fallback-count intro wording in the report": [
+      {
+        "executionId": "d9e4fc45-274f-428b-867f-9df426503916",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794204068668
+      },
+      {
+        "executionId": "d9e4fc45-274f-428b-867f-9df426503916",
+        "chatSessionId": "sess_a04db2c0-d5cd-444d-8ed0-05b31d96b7b7",
+        "timestamp": 1794204212140
       }
     ]
   }

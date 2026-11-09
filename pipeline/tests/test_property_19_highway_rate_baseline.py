@@ -7,6 +7,7 @@ from gloam_pipeline.baselines import (
     highway_rate_baseline,
     learn_highway_rates,
 )
+from gloam_pipeline.classify import SEGMENT_HIGHWAYS
 from gloam_pipeline.errors import TrainingError
 
 # Feature: gloam-data-pipeline, Property 19: Highway-rate baseline uses the training rate, with fallback
@@ -33,9 +34,8 @@ def test_rate_or_overall_fallback(training, probe):
     assert highway_rate_baseline(rates, probe) == expected
     assert 0.0 <= highway_rate_baseline(rates, probe) <= 1.0
 
-    seen = {h for h, _ in training}
     with_tags = {h for h, _ in tagged}
-    assert rates.unseen_highway_types == len(seen - with_tags)
+    assert rates.unseen_highway_types == len(SEGMENT_HIGHWAYS) - len(with_tags)
 
 
 @given(training=rows)
@@ -59,4 +59,18 @@ def test_hand_checked_example():
     assert rates.overall_lit_rate == 0.7
     assert highway_rate_baseline(rates, "track") == 0.7
     assert highway_rate_baseline(rates, "path") == 0.7
-    assert rates.unseen_highway_types == 1
+    # 16 walkable types; only residential and primary have tagged rows -> 14 unseen
+    # (track is untagged only, the other 13 never appear).
+    assert rates.unseen_highway_types == 14
+
+
+def test_unseen_counts_against_all_16_types():
+    assert len(SEGMENT_HIGHWAYS) == 16
+    only_residential = [("residential", "tagged_lit"), ("residential", "tagged_unlit")]
+    assert learn_highway_rates(only_residential).unseen_highway_types == 15
+
+
+def test_tagged_type_outside_the_16_gets_a_rate_but_is_not_counted():
+    rates = learn_highway_rates([("motorway", "tagged_lit"), ("residential", "tagged_unlit")])
+    assert highway_rate_baseline(rates, "motorway") == 1.0
+    assert rates.unseen_highway_types == 15  # only residential covers one of the 16
