@@ -3,6 +3,7 @@
 from dataclasses import dataclass
 from typing import Mapping, Sequence
 
+from .classify import SEGMENT_HIGHWAYS
 from .errors import InvalidArgumentError, TrainingError
 
 RULE_LIT_CLASSES = frozenset({"primary", "secondary", "tertiary"})
@@ -18,7 +19,9 @@ class HighwayRates:
 
     rates: Mapping[str, float]
     overall_lit_rate: float
-    # Highway types seen in training with no tagged_lit and no tagged_unlit segment.
+    # How many of the 16 walkable types (SEGMENT_HIGHWAYS) have no tagged_lit or
+    # tagged_unlit training segment, including types absent from training.
+    # Tagged types outside the 16 still get rates but are not counted.
     unseen_highway_types: int
 
 
@@ -41,7 +44,6 @@ def learn_highway_rates(training: Sequence[tuple[str, str]]) -> HighwayRates:
     when there are none.
     """
     counts: dict[str, list[int]] = {}
-    seen_types: set[str] = set()
     for row in training:
         highway, label = row
         _check_highway("training highway", highway)
@@ -49,7 +51,6 @@ def learn_highway_rates(training: Sequence[tuple[str, str]]) -> HighwayRates:
             raise InvalidArgumentError(
                 "training label", label, "tagged_lit, tagged_unlit or untagged"
             )
-        seen_types.add(highway)
         if label == _UNTAGGED:
             continue
         pair = counts.setdefault(highway, [0, 0])
@@ -63,7 +64,7 @@ def learn_highway_rates(training: Sequence[tuple[str, str]]) -> HighwayRates:
     return HighwayRates(
         rates={h: p[0] / (p[0] + p[1]) for h, p in counts.items()},
         overall_lit_rate=total_lit / (total_lit + total_unlit),
-        unseen_highway_types=len(seen_types - counts.keys()),
+        unseen_highway_types=len(SEGMENT_HIGHWAYS - counts.keys()),
     )
 
 
