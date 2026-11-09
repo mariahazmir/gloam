@@ -407,22 +407,22 @@ New dependencies (explained, as the technical rules require):
     - Scan package strings, report templates and docs for the banned words in the product rules and fail if any appear
     - _Requirements: 7.7_
 
-- [~] 14. Checkpoint - Ensure all tests pass
+- [x] 14. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 15. Documentation
-  - [~] 15.1 Write `docs/model.md`
+- [x] 15. Documentation
+  - [x] 15.1 Write `docs/model.md`
     - One paragraph of no more than 150 words describing the model (logistic regression over 31 features, per-city count scaling, untagged treated as low-weight negatives because untagged means unknown), using the design's description
     - Add a test that counts the words and asserts at most 150
     - _Requirements: 5.11_
 
-  - [~] 15.2 Update `README.md` with data credits and pipeline notes
+  - [x] 15.2 Update `README.md` with data credits and pipeline notes
     - Add "© OpenStreetMap contributors" and the ODbL licence name for data credits, the disclaimer text from the product rules, how to run the five commands, and the documented default building height (8.0 m)
     - Honest wording: estimates, not safety claims
     - Append only: do not rewrite, reorder or remove any existing README text. The README already has its own tone; add new sections after the existing content and match that tone.
     - _Requirements: 8.4, 8.5_
 
-- [~] 16. Final checkpoint - Ensure all tests pass
+- [ ] 16. Final checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 ## Notes

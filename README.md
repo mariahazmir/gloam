@@ -57,3 +57,47 @@ Map data © OpenStreetMap contributors, available under the
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+## Pipeline notes
+
+The offline pipeline turns OpenStreetMap extracts into per-street estimates of
+which streets are likely well lit. Run it from the `pipeline/` folder. Each
+command runs one stage and reads the files the earlier stage left in
+`pipeline/data/`.
+
+```
+python -m gloam_pipeline summarise --city-id kl --city-name "Kuala Lumpur" --input roads.geojson places.geojson buildings.geojson
+python -m gloam_pipeline features --city-id kl
+python -m gloam_pipeline train --cities kl london seattle --held-out kl
+python -m gloam_pipeline validate --cities kl london seattle --ground-truth kl_labels.csv --ground-truth-city kl
+python -m gloam_pipeline export --city-id kl
+```
+
+- `summarise` reads 1 to 50 GeoJSON files, removes duplicates, builds street
+  segments and writes `city.json`.
+- `features` builds per-segment features and writes `features.json`.
+- `train` fits the lit-probability model and writes `model.json` and `train.log`.
+- `validate` runs hold-one-out validation and writes `docs/validation.md`. The
+  ground-truth CSV (columns `osm_id,label`) is optional. Its city must match
+  the `--held-out` city used in `train`.
+- `export` scores a city and writes `<city>.segments.geojson` and
+  `<city>.buildings.geojson` to `data/`.
+
+Run any command with `-h` to see every option and its default.
+
+Exit codes: 0 done, 1 data error, 2 missing or invalid argument or file, 3
+validation written with the ground-truth section marked "not run".
+
+Buildings without a usable height tag are drawn at a default height of 8.0 m
+(config field `default_building_height_m`). That height is an assumption, not
+a measurement.
+
+Every score is an estimate from map data, shown with a confidence. The files
+in `data/` are sample data.
+
+Data derived from OpenStreetMap is © OpenStreetMap contributors, available
+under the Open Database License (ODbL).
+
+Gloam estimates which streets are likely well lit from map data. Estimates can
+be wrong, and Gloam can't tell you whether a route is safe. Trust your
+surroundings.
