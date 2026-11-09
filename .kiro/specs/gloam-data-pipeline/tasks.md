@@ -127,64 +127,64 @@ New dependencies (explained, as the technical rules require):
     - Invalid feature distance (NaN, infinite, 5, 2000) names the argument and allowed range
     - _Requirements: 3.1, 3.2, 3.3, 3.6, 3.7_
 
-- [ ] 6. Distribution shift and scoring
-  - [ ] 6.1 Implement `shift.py`
+- [x] 6. Distribution shift and scoring
+  - [x] 6.1 Implement `shift.py`
     - Bin each raw count into {0, 1, 2, 3 to 5, 6 or more}, proportions over non-missing segments, total variation distance per feature, mean as the city shift (0 to 1), pooled training histograms
     - Penalty `g(shift) = 1 - 0.5 * clamp((shift - 0.10) / 0.40, 0, 1)` with `T_LOW = 0.10` and `T_HIGH = 0.50`
     - _Requirements: 6.10_
 
-  - [ ] 6.2 Implement `scoring.py`
+  - [x] 6.2 Implement `scoring.py`
     - `score_segment` returning `Score(lit_probability, confidence, label_source)`: tagged labels use `high_value`, `low_value` and `tagged_confidence`, never read counts, never overwritten by the model; estimated segments use `base = tc * (0.25 + 0.60 * support)`, multiplied by 0.7 when missing and by `g(shift)`
     - `assert_valid_score(segment_id, field, value)` raising `DataError` for NaN, infinite or out-of-range values
     - Reject NaN, infinite or out-of-range inputs naming the argument; no I/O, no hidden state
     - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9, 6.10, 6.11, 6.12, 10.8_
 
-  - [ ] 6.3 Write property test for invalid arguments
+  - [x] 6.3 Write property test for invalid arguments
     - **Property 2: Invalid arguments are rejected and named**
     - Cover config values, loader arguments, feature distance and scoring inputs through a shared invalid-value strategy
     - **Validates: Requirements 1.4, 3.3, 5.5, 6.6, 10.8**
 
-  - [ ] 6.4 Write property test for score range
+  - [x] 6.4 Write property test for score range
     - **Property 12: Scores are finite and in range**
     - **Validates: Requirements 6.1, 10.1**
 
-  - [ ] 6.5 Write property test for label source and tagged values
+  - [x] 6.5 Write property test for label source and tagged values
     - **Property 13: Label source, tagged values and estimated confidence are consistent**
     - **Validates: Requirements 6.2, 6.3, 6.4, 6.5, 6.7, 10.4**
 
-  - [ ] 6.6 Write property test for count monotonicity
+  - [x] 6.6 Write property test for count monotonicity
     - **Property 14: More nearby places never lower confidence**
     - **Validates: Requirements 6.8, 10.6**
 
-  - [ ] 6.7 Write property test for missing features
+  - [x] 6.7 Write property test for missing features
     - **Property 15: Missing features lower confidence**
     - **Validates: Requirements 6.9**
 
-  - [ ] 6.8 Write property test for distribution shift
+  - [x] 6.8 Write property test for distribution shift
     - **Property 16: Distribution shift never raises confidence**
     - **Validates: Requirements 6.10, 10.7**
 
-  - [ ] 6.9 Write property test for scoring determinism
+  - [x] 6.9 Write property test for scoring determinism
     - **Property 17: Scoring is deterministic**
     - **Validates: Requirements 6.11**
 
-  - [ ] 6.10 Write unit tests for scoring and shift
+  - [x] 6.10 Write unit tests for scoring and shift
     - Hand-checked confidence values from the design: 0.457 (rounded from 0.4571875), 0.320 (from 0.32003125) and the minimum 0.083125 with `tc = 0.95`
     - Shift hand check: histograms `[0.5, 0.2, 0.1, 0.1, 0.1]` and `[0.7, 0.1, 0.1, 0.05, 0.05]` give `tvd = 0.2` and `g = 0.875`
     - NaN injected into a computed score raises `DataError` naming the segment and field
     - _Requirements: 6.1, 6.7, 6.9, 6.10, 6.12_
 
-- [ ] 7. Baselines
-  - [ ] 7.1 Implement `baselines.py`
+- [x] 7. Baselines
+  - [x] 7.1 Implement `baselines.py`
     - `rule_baseline` (primary, secondary, tertiary lit, else not), `learn_highway_rates` from training tagged segments only, `highway_rate_baseline` with overall lit rate fallback and a count of unseen highway types; `TrainingError` when no tagged segments exist
     - Both baselines read highway class alone
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
 
-  - [ ] 7.2 Write property test for the rule baseline
+  - [x] 7.2 Write property test for the rule baseline
     - **Property 18: Rule baseline depends on highway class only**
     - **Validates: Requirements 4.1, 4.2**
 
-  - [ ] 7.3 Write property test for the highway-rate baseline
+  - [x] 7.3 Write property test for the highway-rate baseline
     - **Property 19: Highway-rate baseline uses the training rate, with fallback**
     - **Validates: Requirements 4.3, 4.4, 4.5**
 
