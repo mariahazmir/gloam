@@ -422,7 +422,7 @@ New dependencies (explained, as the technical rules require):
     - Append only: do not rewrite, reorder or remove any existing README text. The README already has its own tone; add new sections after the existing content and match that tone.
     - _Requirements: 8.4, 8.5_
 
-- [ ] 16. Final checkpoint - Ensure all tests pass
+- [x] 16. Final checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 ## Notes

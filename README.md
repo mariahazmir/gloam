@@ -52,7 +52,7 @@ Kiro helped build this is in [`docs/kiro-log.md`](docs/kiro-log.md).
 ## Data credits
 
 Map data © OpenStreetMap contributors, available under the
-[ODbL](https://www.openstreetmap.org/copyright).
+[Open Database License (ODbL)](https://www.openstreetmap.org/copyright).
 
 ## License
 
@@ -66,11 +66,26 @@ command runs one stage and reads the files the earlier stage left in
 `pipeline/data/`.
 
 ```
-python -m gloam_pipeline summarise --city-id kl --city-name "Kuala Lumpur" --input roads.geojson places.geojson buildings.geojson
+python -m gloam_pipeline summarise --city-id kl --city-name "Kuala Lumpur" --input data/raw/kl_core.geojson
+python -m gloam_pipeline summarise --city-id london --city-name "London" --input data/raw/london_core_a.geojson data/raw/london_core_b.geojson
+python -m gloam_pipeline summarise --city-id berlin --city-name "Berlin" --input data/raw/berlin_core.geojson
+python -m gloam_pipeline summarise --city-id manchester --city-name "Manchester" --input data/raw/manchester_core.geojson
+python -m gloam_pipeline summarise --city-id seattle --city-name "Seattle" --input data/raw/seattle_core.geojson
+
 python -m gloam_pipeline features --city-id kl
-python -m gloam_pipeline train --cities kl london seattle --held-out kl
-python -m gloam_pipeline validate --cities kl london seattle --ground-truth kl_labels.csv --ground-truth-city kl
-python -m gloam_pipeline export --city-id kl
+python -m gloam_pipeline features --city-id london
+python -m gloam_pipeline features --city-id berlin
+python -m gloam_pipeline features --city-id manchester
+python -m gloam_pipeline features --city-id seattle
+
+python -m gloam_pipeline train --cities kl london berlin manchester seattle --held-out kl
+python -m gloam_pipeline validate --cities kl london berlin manchester seattle
+
+python -m gloam_pipeline export --city-id kl --out-dir ..\data
+python -m gloam_pipeline export --city-id london --out-dir ..\data
+python -m gloam_pipeline export --city-id berlin --out-dir ..\data
+python -m gloam_pipeline export --city-id manchester --out-dir ..\data
+python -m gloam_pipeline export --city-id seattle --out-dir ..\data
 ```
 
 - `summarise` reads 1 to 50 GeoJSON files, removes duplicates, builds street
@@ -94,10 +109,3 @@ a measurement.
 
 Every score is an estimate from map data, shown with a confidence. The files
 in `data/` are sample data.
-
-Data derived from OpenStreetMap is © OpenStreetMap contributors, available
-under the Open Database License (ODbL).
-
-Gloam estimates which streets are likely well lit from map data. Estimates can
-be wrong, and Gloam can't tell you whether a route is safe. Trust your
-surroundings.
