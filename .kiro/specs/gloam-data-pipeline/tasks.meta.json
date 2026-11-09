@@ -1,5 +1,18 @@
 {
-  "pbtResults": {},
+  "pbtResults": {
+    "2.2 Write property test for id parsing": {
+      "status": "passed",
+      "lastRunTimestamp": 1794147341879
+    },
+    "2.4 Write property test for merge accounting": {
+      "status": "passed",
+      "lastRunTimestamp": 1794149062111
+    },
+    "2.5 Write property test for the footprint pass": {
+      "status": "passed",
+      "lastRunTimestamp": 1794149538700
+    }
+  },
   "executionHistory": {
     "1.1 Create the package skeleton and pinned dependencies": [
       {
@@ -42,6 +55,112 @@
         "executionId": "b2e7aaa7-ba2f-424e-ad4a-63fd861fb973",
         "chatSessionId": "sess_9440b34e-058b-42c1-94ed-04f7f0647925",
         "timestamp": 1794146249587
+      }
+    ],
+    "2.1 Implement `classify.py`": [
+      {
+        "executionId": "a4d59425-8421-4842-a5da-9571c6f6c17f",
+        "chatSessionId": "sess_d6809c5f-4725-4104-b29a-f77fc1574970",
+        "timestamp": 1794146749434
+      },
+      {
+        "executionId": "a4d59425-8421-4842-a5da-9571c6f6c17f",
+        "chatSessionId": "sess_d6809c5f-4725-4104-b29a-f77fc1574970",
+        "timestamp": 1794146813856
+      }
+    ],
+    "2.2 Write property test for id parsing": [
+      {
+        "executionId": "24eff058-75e5-4a94-821c-3553bf28da8f",
+        "chatSessionId": "sess_df56f1bf-7269-48a9-8198-92faf688c5e9",
+        "timestamp": 1794147304356
+      },
+      {
+        "executionId": "24eff058-75e5-4a94-821c-3553bf28da8f",
+        "chatSessionId": "sess_df56f1bf-7269-48a9-8198-92faf688c5e9",
+        "timestamp": 1794147352376
+      },
+      {
+        "executionId": "cc31bfbf-2033-4661-a011-7a3ffd252e1d",
+        "chatSessionId": "sess_df56f1bf-7269-48a9-8198-92faf688c5e9",
+        "timestamp": 1794147597743
+      },
+      {
+        "executionId": "cc31bfbf-2033-4661-a011-7a3ffd252e1d",
+        "chatSessionId": "sess_df56f1bf-7269-48a9-8198-92faf688c5e9",
+        "timestamp": 1794147673385
+      }
+    ],
+    "2.3 Implement `loader.py` merge and footprint pass": [
+      {
+        "executionId": "52193b90-fae0-4d32-a68f-b0c7550216a3",
+        "chatSessionId": "sess_83689676-ba7a-430d-8d73-c1dfe2affb47",
+        "timestamp": 1794147949726
+      },
+      {
+        "executionId": "52193b90-fae0-4d32-a68f-b0c7550216a3",
+        "chatSessionId": "sess_83689676-ba7a-430d-8d73-c1dfe2affb47",
+        "timestamp": 1794148036806
+      }
+    ],
+    "2.4 Write property test for merge accounting": [
+      {
+        "executionId": "82242c18-978c-4ae1-b6bc-5012c824b368",
+        "chatSessionId": "sess_5b2d8c62-bddc-4a63-a08b-0f2bab4ff91d",
+        "timestamp": 1794149024810
+      },
+      {
+        "executionId": "82242c18-978c-4ae1-b6bc-5012c824b368",
+        "chatSessionId": "sess_5b2d8c62-bddc-4a63-a08b-0f2bab4ff91d",
+        "timestamp": 1794149072147
+      }
+    ],
+    "2.5 Write property test for the footprint pass": [
+      {
+        "executionId": "4bb757ef-3623-4017-bb13-bc51a09510ab",
+        "chatSessionId": "sess_ce25c022-dcb8-47df-af99-04400b7796ca",
+        "timestamp": 1794149473005
+      },
+      {
+        "executionId": "4bb757ef-3623-4017-bb13-bc51a09510ab",
+        "chatSessionId": "sess_ce25c022-dcb8-47df-af99-04400b7796ca",
+        "timestamp": 1794149564163
+      }
+    ],
+    "2.6 Implement `io.read_geojson` and `summarise` argument checks": [
+      {
+        "executionId": "31081eab-4efd-4f6b-bdda-d682e0788b22",
+        "chatSessionId": "sess_2dca4ca8-cf60-44ee-b6d1-1bb03d134783",
+        "timestamp": 1794185736743
+      },
+      {
+        "executionId": "b1e380b6-7aea-40d4-9716-2042d97f340e",
+        "chatSessionId": "sess_8992d763-2232-4f11-a1a4-16b710a35832",
+        "timestamp": 1794185946076
+      },
+      {
+        "executionId": "b1e380b6-7aea-40d4-9716-2042d97f340e",
+        "chatSessionId": "sess_8992d763-2232-4f11-a1a4-16b710a35832",
+        "timestamp": 1794186005927
+      }
+    ],
+    "2.7 Write unit tests for loading and key parsing": [
+      {
+        "executionId": "6c0cffb1-dcf9-40dd-b799-e3b50c3768e4",
+        "chatSessionId": "sess_6f909521-a572-4f81-a54d-2d85528a7906",
+        "timestamp": 1794186815618
+      },
+      {
+        "executionId": "6c0cffb1-dcf9-40dd-b799-e3b50c3768e4",
+        "chatSessionId": "sess_6f909521-a572-4f81-a54d-2d85528a7906",
+        "timestamp": 1794186866679
+      }
+    ],
+    "2. Load city packs": [
+      {
+        "executionId": "6c0cffb1-dcf9-40dd-b799-e3b50c3768e4",
+        "chatSessionId": "sess_6f909521-a572-4f81-a54d-2d85528a7906",
+        "timestamp": 1794186866881
       }
     ]
   }
