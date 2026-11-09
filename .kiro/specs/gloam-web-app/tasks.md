@@ -25,18 +25,18 @@ Rules for every task:
     - Shared types: `Segment`, `LabelSource`, `Tier`, `ReportType`, `PackMeta`
     - _Requirements: 7.10, 16.3_
 
-- [ ] 2. Geo helpers and pack parsing
-  - [ ] 2.1 Implement `geo/distance.ts`, `geo/project.ts`, `geo/bounds.ts`
+- [x] 2. Geo helpers and pack parsing
+  - [x] 2.1 Implement `geo/distance.ts`, `geo/project.ts`, `geo/bounds.ts`
     - Haversine with R = 6 371 008.8 m, local equirectangular projection, `boundsOf(points)`, pack bounds grown by a margin
     - _Requirements: 1.9, 2.6, 5.1, 6.5, 14.7, 17.7_
-  - [ ] 2.2 Write property test for bounds
+  - [x] 2.2 Write property test for bounds
     - **Property 32: Fitted bounds contain every point**
     - **Validates: Requirements 5.1, 14.7, 17.7**
-  - [ ] 2.3 Implement `pack/parse.ts`
+  - [x] 2.3 Implement `pack/parse.ts`
     - `parseSegmentFile` and `parseBuildingsFile` returning data or a `PackProblem` (file kind plus missing, unreadable or invalid)
     - Supported `schema_version` list `[1]`; reject out-of-range or non-finite values and non-LineString geometry; convert `id` with `String(id)`; skip buildings with bad `height_m` and report `height_m`
     - _Requirements: 1.6, 1.7, 5.8_
-  - [ ] 2.4 Write property test for pack validation
+  - [x] 2.4 Write property test for pack validation
     - **Property 3: Pack validation accepts valid files and rejects every listed defect**
     - **Validates: Requirements 1.6, 1.7, 5.8**
 

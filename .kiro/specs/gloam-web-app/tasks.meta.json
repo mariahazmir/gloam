@@ -1,5 +1,14 @@
 {
-  "pbtResults": {},
+  "pbtResults": {
+    "2.4 Write property test for pack validation": {
+      "status": "passed",
+      "lastRunTimestamp": 1794229091382
+    },
+    "2.2 Write property test for bounds": {
+      "status": "passed",
+      "lastRunTimestamp": 1794229100891
+    }
+  },
   "executionHistory": {
     "1.1 Create the `app/` project": [
       {
@@ -30,6 +39,61 @@
         "executionId": "52afdb58-5e9f-43d1-9278-83e87a5cbb55",
         "chatSessionId": "sess_edc55aad-3b82-4dba-83c9-fa35e60d1c64",
         "timestamp": 1794228393425
+      }
+    ],
+    "2.1 Implement `geo/distance.ts`, `geo/project.ts`, `geo/bounds.ts`": [
+      {
+        "executionId": "38af24c9-6262-4cdb-94e2-9f8b84679050",
+        "chatSessionId": "sess_753a19e4-7677-4f01-a690-94547560c989",
+        "timestamp": 1794228959103
+      },
+      {
+        "executionId": "38af24c9-6262-4cdb-94e2-9f8b84679050",
+        "chatSessionId": "sess_753a19e4-7677-4f01-a690-94547560c989",
+        "timestamp": 1794229045357
+      }
+    ],
+    "2.3 Implement `pack/parse.ts`": [
+      {
+        "executionId": "38af24c9-6262-4cdb-94e2-9f8b84679050",
+        "chatSessionId": "sess_753a19e4-7677-4f01-a690-94547560c989",
+        "timestamp": 1794228960284
+      },
+      {
+        "executionId": "38af24c9-6262-4cdb-94e2-9f8b84679050",
+        "chatSessionId": "sess_753a19e4-7677-4f01-a690-94547560c989",
+        "timestamp": 1794229045527
+      }
+    ],
+    "2.2 Write property test for bounds": [
+      {
+        "executionId": "38af24c9-6262-4cdb-94e2-9f8b84679050",
+        "chatSessionId": "sess_753a19e4-7677-4f01-a690-94547560c989",
+        "timestamp": 1794229046033
+      },
+      {
+        "executionId": "38af24c9-6262-4cdb-94e2-9f8b84679050",
+        "chatSessionId": "sess_753a19e4-7677-4f01-a690-94547560c989",
+        "timestamp": 1794229111165
+      }
+    ],
+    "2.4 Write property test for pack validation": [
+      {
+        "executionId": "38af24c9-6262-4cdb-94e2-9f8b84679050",
+        "chatSessionId": "sess_753a19e4-7677-4f01-a690-94547560c989",
+        "timestamp": 1794229046665
+      },
+      {
+        "executionId": "38af24c9-6262-4cdb-94e2-9f8b84679050",
+        "chatSessionId": "sess_753a19e4-7677-4f01-a690-94547560c989",
+        "timestamp": 1794229111648
+      }
+    ],
+    "2. Geo helpers and pack parsing": [
+      {
+        "executionId": "38af24c9-6262-4cdb-94e2-9f8b84679050",
+        "chatSessionId": "sess_753a19e4-7677-4f01-a690-94547560c989",
+        "timestamp": 1794229111714
       }
     ]
   }
