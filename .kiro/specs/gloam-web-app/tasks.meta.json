@@ -7,6 +7,22 @@
     "2.2 Write property test for bounds": {
       "status": "passed",
       "lastRunTimestamp": 1794229100891
+    },
+    "3.2 Write property test for input-order independence": {
+      "status": "passed",
+      "lastRunTimestamp": 1794229558478
+    },
+    "3.3 Write property test for splitting, attributes and length": {
+      "status": "passed",
+      "lastRunTimestamp": 1794229577069
+    },
+    "3.4 Write property test for per-segment rejection": {
+      "status": "passed",
+      "lastRunTimestamp": 1794229602130
+    },
+    "3.6 Write property test for snapping": {
+      "status": "passed",
+      "lastRunTimestamp": 1794229672106
     }
   },
   "executionHistory": {
@@ -94,6 +110,85 @@
         "executionId": "38af24c9-6262-4cdb-94e2-9f8b84679050",
         "chatSessionId": "sess_753a19e4-7677-4f01-a690-94547560c989",
         "timestamp": 1794229111714
+      }
+    ],
+    "3.1 Implement `graph/build.ts`": [
+      {
+        "executionId": "5f384fc6-3833-47e0-8862-d0fa1e9f0d58",
+        "chatSessionId": "sess_0274671a-ff67-465b-9c5e-c8dd7174f4a0",
+        "timestamp": 1794229431759
+      },
+      {
+        "executionId": "5f384fc6-3833-47e0-8862-d0fa1e9f0d58",
+        "chatSessionId": "sess_0274671a-ff67-465b-9c5e-c8dd7174f4a0",
+        "timestamp": 1794229516966
+      }
+    ],
+    "3.2 Write property test for input-order independence": [
+      {
+        "executionId": "5f384fc6-3833-47e0-8862-d0fa1e9f0d58",
+        "chatSessionId": "sess_0274671a-ff67-465b-9c5e-c8dd7174f4a0",
+        "timestamp": 1794229521424
+      },
+      {
+        "executionId": "5f384fc6-3833-47e0-8862-d0fa1e9f0d58",
+        "chatSessionId": "sess_0274671a-ff67-465b-9c5e-c8dd7174f4a0",
+        "timestamp": 1794229612634
+      }
+    ],
+    "3.3 Write property test for splitting, attributes and length": [
+      {
+        "executionId": "5f384fc6-3833-47e0-8862-d0fa1e9f0d58",
+        "chatSessionId": "sess_0274671a-ff67-465b-9c5e-c8dd7174f4a0",
+        "timestamp": 1794229521725
+      },
+      {
+        "executionId": "5f384fc6-3833-47e0-8862-d0fa1e9f0d58",
+        "chatSessionId": "sess_0274671a-ff67-465b-9c5e-c8dd7174f4a0",
+        "timestamp": 1794229613439
+      }
+    ],
+    "3.4 Write property test for per-segment rejection": [
+      {
+        "executionId": "5f384fc6-3833-47e0-8862-d0fa1e9f0d58",
+        "chatSessionId": "sess_0274671a-ff67-465b-9c5e-c8dd7174f4a0",
+        "timestamp": 1794229522729
+      },
+      {
+        "executionId": "5f384fc6-3833-47e0-8862-d0fa1e9f0d58",
+        "chatSessionId": "sess_0274671a-ff67-465b-9c5e-c8dd7174f4a0",
+        "timestamp": 1794229614532
+      }
+    ],
+    "3.5 Implement `graph/snap.ts`": [
+      {
+        "executionId": "5f384fc6-3833-47e0-8862-d0fa1e9f0d58",
+        "chatSessionId": "sess_0274671a-ff67-465b-9c5e-c8dd7174f4a0",
+        "timestamp": 1794229523575
+      },
+      {
+        "executionId": "5f384fc6-3833-47e0-8862-d0fa1e9f0d58",
+        "chatSessionId": "sess_0274671a-ff67-465b-9c5e-c8dd7174f4a0",
+        "timestamp": 1794229615365
+      }
+    ],
+    "3.6 Write property test for snapping": [
+      {
+        "executionId": "5f384fc6-3833-47e0-8862-d0fa1e9f0d58",
+        "chatSessionId": "sess_0274671a-ff67-465b-9c5e-c8dd7174f4a0",
+        "timestamp": 1794229618609
+      },
+      {
+        "executionId": "5f384fc6-3833-47e0-8862-d0fa1e9f0d58",
+        "chatSessionId": "sess_0274671a-ff67-465b-9c5e-c8dd7174f4a0",
+        "timestamp": 1794229689817
+      }
+    ],
+    "3. Street graph and snapping": [
+      {
+        "executionId": "5f384fc6-3833-47e0-8862-d0fa1e9f0d58",
+        "chatSessionId": "sess_0274671a-ff67-465b-9c5e-c8dd7174f4a0",
+        "timestamp": 1794229689890
       }
     ]
   }

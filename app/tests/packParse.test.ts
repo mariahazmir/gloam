@@ -33,7 +33,7 @@ const segmentFeature = fc.record({
 
 const segmentFile = fc.array(segmentFeature, { minLength: 1, maxLength: 6 }).map((features) => ({
   type: 'FeatureCollection',
-  metadata: { schema_version: 1, attribution: '© OpenStreetMap contributors', city: 'x' },
+  metadata: { schema_version: 1, attribution: 'Â© OpenStreetMap contributors', city: 'x' },
   features,
 }));
 
@@ -67,7 +67,7 @@ describe('Property 3: segment file validation', () => {
         expect(r.segments).toHaveLength(file.features.length);
         r.segments.forEach((s, i) => {
           expect(typeof s.id).toBe('string');
-          expect(s.id).toBe(String(file.features[i].properties.id));
+          expect(s.id).toBe(String(file.features[i]!.properties.id));
         });
       }),
       RUNS,
@@ -79,12 +79,14 @@ describe('Property 3: segment file validation', () => {
       fc.property(segmentFile, defect, fc.nat(), (file, d, n) => {
         const idx = n % file.features.length;
         // Fresh deep copy; structuredClone preserves NaN/Infinity.
-        const bad = structuredClone(file) as typeof file & { metadata: Record<string, unknown> };
-        const props = bad.features[idx].properties as Record<string, unknown>;
+        const bad = structuredClone(file) as unknown as Omit<typeof file, 'metadata'> & {
+          metadata: Record<string, unknown>;
+        };
+        const props = bad.features[idx]!.properties as Record<string, unknown>;
         if (d.k === 'version') bad.metadata.schema_version = d.v;
         else if (d.k === 'lit') props.lit_probability = d.v;
         else if (d.k === 'conf') props.confidence = d.v;
-        else (bad.features[idx].geometry as { type: string }).type = d.v;
+        else (bad.features[idx]!.geometry as { type: string }).type = d.v;
 
         const r = parseSegmentFile(bad);
         expect('kind' in r).toBe(true);
@@ -111,7 +113,7 @@ const badHeight = fc.constantFrom<unknown>(
 
 const ring = fc
   .array(position, { minLength: 3, maxLength: 5 })
-  .map((pts) => [...pts, pts[0]]);
+  .map((pts) => [...pts, pts[0]!]);
 
 const buildingEntry = fc.record({
   ok: fc.boolean(),
@@ -120,7 +122,7 @@ const buildingEntry = fc.record({
   ring,
 });
 
-const buildingsMeta = { schema_version: 1, attribution: '© OpenStreetMap contributors' };
+const buildingsMeta = { schema_version: 1, attribution: 'Â© OpenStreetMap contributors' };
 
 function toFeature(e: { ok: boolean; good: number; bad: unknown; ring: number[][] }) {
   const properties: Record<string, unknown> = {};
