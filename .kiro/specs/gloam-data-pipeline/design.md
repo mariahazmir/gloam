@@ -120,8 +120,8 @@ Frozen dataclasses validated in `__post_init__` (R3.2, R5.4, R6.6, R7.1, R8.3).
 | `tagged_confidence` | 0.95 | 0.5 to 1 inclusive |
 | `min_unlit_city` | 200 | integer >= 1 |
 | `min_unlit_road_type` | 100 | integer >= 1 |
-| `max_city_file_kb` | 5120 | > 0 |
-| `max_buildings_file_kb` | 5120 | > 0 |
+| `max_city_file_kb` | 8192 | > 0 |
+| `max_buildings_file_kb` | 8192 | > 0 |
 | `seed` | 0 | integer |
 | `default_building_height_m` | 8.0 | finite, > 0 |
 
@@ -403,7 +403,7 @@ The property list is an allow-list: `id`, `name`, `highway`, `lit_probability`, 
 
 **Buildings file** (`<out_dir>/<city_id>.buildings.geojson`): same `metadata` block with `"kind": "buildings"` and `"default_building_height_m"`. Each feature is a Polygon (outer ring, 6 decimals) with `properties: {"height_m": <number>}`. Height: parse the `height` tag after stripping an optional trailing `m`; use it if it is finite and `> 0`, otherwise the configured default (8.0 m, documented in `docs/`). The buildings come from the footprint list (every Polygon with a `building` tag, whatever its summary type), so a polygon tagged both `shop` and `building` appears here. Building-tagged features whose geometry is not a Polygon were already left out by the footprint pass and counted as a warning.
 
-**Size handling (R8.3, extended to the buildings file).** The original R8.3 covered only the city segments file. This design extends it to the buildings file, and requirements R8.3 carries the same change (default 5 MB for each file, configured separately by `max_city_file_kb` and `max_buildings_file_kb`). Both files go through the same check. `io.write_geojson_checked(path, doc, limit_kb)` writes to a temporary file in the same folder, measures its size, and:
+**Size handling (R8.3, extended to the buildings file).** The original R8.3 covered only the city segments file. This design extends it to the buildings file, and requirements R8.3 carries the same change (default 8 MB for each file, configured separately by `max_city_file_kb` and `max_buildings_file_kb`). Both files go through the same check. The limit applies to the uncompressed file (measured sizes for the planned cities are 1.8 to 6.7 MB uncompressed and under 1 MB gzipped). `io.write_geojson_checked(path, doc, limit_kb)` writes to a temporary file in the same folder, measures its size, and:
 
 - if size is within the limit, atomically renames it onto the final path and returns the size in kilobytes (reported in the summary, R8.2);
 - if over the limit, deletes the temporary file and raises an error naming the city, the file (segments or buildings), the actual size and the limit. No oversized file is left, and any earlier valid file is untouched.

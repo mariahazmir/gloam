@@ -27,8 +27,8 @@ class PipelineConfig:
     tagged_confidence: float = 0.95
     min_unlit_city: int = 200
     min_unlit_road_type: int = 100
-    max_city_file_kb: float = 5120
-    max_buildings_file_kb: float = 5120
+    max_city_file_kb: float = 8192
+    max_buildings_file_kb: float = 8192
     seed: int = 0
     default_building_height_m: float = 8.0
 
