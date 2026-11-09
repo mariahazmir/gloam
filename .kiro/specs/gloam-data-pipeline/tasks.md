@@ -217,7 +217,7 @@ New dependencies (explained, as the technical rules require):
     - Zero `tagged_lit` rows raises `TrainingError` and leaves the model dict result unwritten; log text contains the unknown-not-unlit statement and the three weights; unknown held-out city and "leaves zero training cities" errors name the city; invalid untagged weight names the argument
     - _Requirements: 5.2, 5.3, 5.5, 5.6, 5.9_
 
-- [ ] 9. Checkpoint - Ensure all tests pass
+- [x] 9. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 10. Validation and report
