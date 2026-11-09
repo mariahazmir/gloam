@@ -1,0 +1,38 @@
+Untagged segments are unknown, not unlit; they are used as low-weight negatives.
+Weights: tagged_lit=1, tagged_unlit=1, untagged=0.2
+Training cities: berlin, london, manchester, seattle
+Held-out city: kl
+Seed: 0
+Rows: tagged_lit=32384, tagged_unlit=1904, untagged=36870
+Feature importance (|coefficient|, highest first):
+  1. highway_path: 2.346316
+  2. food_places: 1.934993
+  3. length: 1.598738
+  4. highway_tertiary: 1.551917
+  5. highway_service: 1.421616
+  6. landuse_industrial: 1.293638
+  7. highway_primary: 1.264699
+  8. highway_steps: 1.161149
+  9. highway_footway: 1.111931
+  10. highway_residential: 1.107214
+  11. highway_living_street: 0.961319
+  12. highway_secondary: 0.909520
+  13. footway_other: 0.869087
+  14. buildings: 0.862917
+  15. highway_unclassified: 0.802606
+  16. landuse_none: 0.699641
+  17. landuse_retail: 0.692905
+  18. footway_crossing: 0.612178
+  19. landuse_residential: 0.559480
+  20. footway_none: 0.546574
+  21. bus_stops: 0.451796
+  22. highway_track: 0.372918
+  23. highway_cycleway: 0.317238
+  24. landuse_commercial: 0.283839
+  25. highway_tertiary_link: 0.256043
+  26. highway_secondary_link: 0.192565
+  27. highway_primary_link: 0.148089
+  28. footway_sidewalk: 0.126180
+  29. landuse_other: 0.118645
+  30. shops: 0.094325
+  31. highway_pedestrian: 0.036408
