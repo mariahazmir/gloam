@@ -198,25 +198,25 @@ Rules for every task:
 - [x] 11. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 12. Shell I/O
-  - [ ] 12.1 Implement `pack/manifest.ts`, `pack/sampleData.ts`, `net/packLoader.ts`, `net/sampleLoader.ts`
+- [x] 12. Shell I/O
+  - [x] 12.1 Implement `pack/manifest.ts`, `pack/sampleData.ts`, `net/packLoader.ts`, `net/sampleLoader.ts`
     - Manifest of five packs (Seattle first-run) using `import.meta.glob` URLs; `sampleWalk` fields hold placeholders until task 12.2
     - `loadPack` fetches segments first, then buildings; one `AbortController` per load with cancel; 15 s deadline; nothing committed on failure; only these modules call `fetch`; Sample_Data loaded only while Demo_Mode is on, `days_ago` converted to dates
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.10, 1.11, 13.5, 14.3, 14.6, 15.7, 15.8, 17.3, 17.16_
-  - [ ] 12.2 Add `app/scripts/pickSampleWalks.ts`, the Sample_Data file and the manifest walks
+  - [x] 12.2 Add `app/scripts/pickSampleWalks.ts`, the Sample_Data file and the manifest walks
     - Script searches each of the five packs for a walk whose Gloam_Route at lambda 3 (toggles off) differs from the Shortest_Route and crosses at least 3 Tiers; write the chosen points into `pack/manifest.ts`; add bundled Sample_Data JSON (`label: "SAMPLE DATA"`, `days_ago`) with ids that exist in the packs
     - _Requirements: 14.7, 14.8, 14.9, 14.10_
-  - [ ] 12.3 Write tests on the real packs
+  - [x] 12.3 Write tests on the real packs
     - For each of the five packs: parse, build graph, each Sample_Walk start and end snaps, a route exists, Gloam_Route differs from Shortest_Route at lambda 3 with toggles off and crosses at least 3 Tiers; every Sample_Data segment id exists in its pack's Segment_File
     - _Requirements: 14.8, 14.9, 14.10_
-  - [ ] 12.4 Write example tests for loading
+  - [x] 12.4 Write example tests for loading
     - Stubbed `fetch`: loading requests exactly two URLs; a later choice cancels an earlier load; failure keeps previous pack; deadline gives a problem; no URL contains a coordinate; City_Picker manifest has five entries and only `kl` has the exact description
     - _Requirements: 1.1, 1.3, 1.4, 1.6, 1.11, 13.5, 13.9, 17.16_
-  - [ ] 12.5 Write property test for no network calls
+  - [x] 12.5 Write property test for no network calls
     - **Property 33: Pure modules make no network calls**
     - Stub `fetch`, `XMLHttpRequest`, `WebSocket`, `navigator.sendBeacon`; run graph, tiers, router, snap, status and CSV over generated input
     - **Validates: Requirements 13.4, 13.6, 13.9, 16.16**
-  - [ ] 12.6 Implement a geolocation wrapper `net/geolocation.ts`
+  - [x] 12.6 Implement a geolocation wrapper `net/geolocation.ts`
     - `getCurrentPosition` with `timeout: 10000` plus a 10 s guard timer; result kept in memory only; denial, unavailability or timeout resolve to a typed failure and send nothing
     - _Requirements: 6.2, 6.3, 13.7, 13.8, 17.14, 17.15_
 

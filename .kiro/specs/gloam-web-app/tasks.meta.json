@@ -127,6 +127,10 @@
     "10.2 Write property test for modes and taps": {
       "status": "passed",
       "lastRunTimestamp": 1794278776912
+    },
+    "12.5 Write property test for no network calls": {
+      "status": "passed",
+      "lastRunTimestamp": 1794300749170
     }
   },
   "executionHistory": {
@@ -880,6 +884,256 @@
         "executionId": "577b2829-6c3a-49b9-8b2c-a7cd14d22643",
         "chatSessionId": "sess_b406197f-e6a4-475e-898a-8924b7a7173d",
         "timestamp": 1794280692223
+      }
+    ],
+    "12.1 Implement `pack/manifest.ts`, `pack/sampleData.ts`, `net/packLoader.ts`, `net/sampleLoader.ts`": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280830618
+      },
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280837655
+      },
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280934340
+      }
+    ],
+    "12.2 Add `app/scripts/pickSampleWalks.ts`, the Sample_Data file and the manifest walks": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280830715
+      },
+      {
+        "executionId": "b7b8101b-d609-443b-bd8c-8292d557c094",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794282568414
+      },
+      {
+        "executionId": "1c2bcf61-1ebf-4067-afcd-1d3297cd0381",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794283111799
+      },
+      {
+        "executionId": "b5fd6250-aa91-4faf-b87b-bb662b651d9d",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794295955188
+      },
+      {
+        "executionId": "1f5640d1-c29f-4f28-bc7b-62ec9c770c04",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794298860278
+      },
+      {
+        "executionId": "1f5640d1-c29f-4f28-bc7b-62ec9c770c04",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794300278515
+      }
+    ],
+    "12.3 Write tests on the real packs": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280830766
+      },
+      {
+        "executionId": "1f5640d1-c29f-4f28-bc7b-62ec9c770c04",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794300287267
+      },
+      {
+        "executionId": "1f5640d1-c29f-4f28-bc7b-62ec9c770c04",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794300541659
+      }
+    ],
+    "12.4 Write example tests for loading": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280830823
+      },
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280946969
+      },
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794281003705
+      }
+    ],
+    "12.5 Write property test for no network calls": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280830875
+      },
+      {
+        "executionId": "1f5640d1-c29f-4f28-bc7b-62ec9c770c04",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794300576578
+      },
+      {
+        "executionId": "1f5640d1-c29f-4f28-bc7b-62ec9c770c04",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794300803848
+      }
+    ],
+    "12.6 Implement a geolocation wrapper `net/geolocation.ts`": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280830936
+      },
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280837723
+      },
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280935584
+      }
+    ],
+    "13.1 Implement `map/style.ts` and `map/mapView.ts`": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280830990
+      }
+    ],
+    "13.2 Implement `map/layers.ts`": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280831041
+      }
+    ],
+    "13.3 Implement `map/tileWatch.ts` and the fps sampler": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280831101
+      }
+    ],
+    "13.4 Write example tests with mocked map events": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280831189
+      }
+    ],
+    "14.1 Create the app shell: `index.html`, `ui/` base, self-hosted fonts and `@font-face`": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280831250
+      }
+    ],
+    "14.2 Implement City_Picker, progress state and error/retry messages": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280831305
+      }
+    ],
+    "14.3 Implement Plan_Mode controls": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280831358
+      }
+    ],
+    "14.4 Implement the route panel and `ui/heartbeatChart.ts`": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280831417
+      }
+    ],
+    "14.5 Implement Report_Mode, corrections and Dark_Spot_List": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280831474
+      }
+    ],
+    "14.6 Implement About, How_Gloam_Guesses_Screen, Legend, Demo_Mode, Reset and Reduced_Effects switch": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280831541
+      }
+    ],
+    "14.7 Wire everything in `main.ts`": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280831591
+      }
+    ],
+    "14.8 Create `docs/app-checks.md` as the checklist and results file for DOM and layout checks": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280831643
+      }
+    ],
+    "15. Checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280831700
+      }
+    ],
+    "16.1 Add Render static-site config and `app/scripts/checkHost.ts`": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280831754
+      }
+    ],
+    "16.2 Record hosting results in `docs/app-checks.md`": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280831806
+      }
+    ],
+    "17.1 Add an app section to `README.md`": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280831858
+      }
+    ],
+    "17.2 Add attribution and font licence files": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280831917
+      }
+    ],
+    "18. Final checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794280831972
+      }
+    ],
+    "12. Shell I/O": [
+      {
+        "executionId": "1f5640d1-c29f-4f28-bc7b-62ec9c770c04",
+        "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
+        "timestamp": 1794300803941
       }
     ]
   }
