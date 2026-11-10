@@ -108,16 +108,16 @@ Rules for every task:
   - [x] 6.8 Write property test for path validity
     - **Property 13: Returned routes are valid paths, and disconnected points give no route**
     - **Validates: Requirements 6.8, 16.7, 16.8**
-  - [ ] 6.9 Implement `routing/tierShares.ts`, `compare.ts`, `format.ts`, `heartbeat.ts`
+  - [x] 6.9 Implement `routing/tierShares.ts`, `compare.ts`, `format.ts`, `heartbeat.ts`
     - Largest-remainder shares summing to 100, `formatDistance`, `walkingMinutes` (integer form), `compareRoutes` on displayed values, `lowConfidenceThreshold`, highest-quarter rule, `heartbeatSeries`, `describeHeartbeat`
     - _Requirements: 6.7, 7.8, 7.9, 9.1, 9.2, 9.3, 9.4, 9.5, 16.22_
-  - [ ] 6.10 Write property test for tier shares and walking time
+  - [x] 6.10 Write property test for tier shares and walking time
     - **Property 16: Tier shares are whole percentages summing to exactly 100**
     - **Validates: Requirements 6.7, 16.22**
-  - [ ] 6.11 Write property test for route comparison
+  - [x] 6.11 Write property test for route comparison
     - **Property 17: Route comparison deltas are signed differences, and equal routes give zero**
     - **Validates: Requirements 7.8, 7.9**
-  - [ ] 6.12 Write property test for heartbeat series and summary
+  - [x] 6.12 Write property test for heartbeat series and summary
     - **Property 18: Heartbeat series and summary match the route**
     - **Validates: Requirements 9.1, 9.2, 9.3, 9.4, 9.5**
 
