@@ -23,6 +23,22 @@
     "3.6 Write property test for snapping": {
       "status": "passed",
       "lastRunTimestamp": 1794229672106
+    },
+    "4.2 Write property test for Dread": {
+      "status": "passed",
+      "lastRunTimestamp": 1794273021309
+    },
+    "4.5 Write property test for rank-only tiers": {
+      "status": "passed",
+      "lastRunTimestamp": 1794273035249
+    },
+    "4.3 Write property test for input rejection in scoring and tiers": {
+      "status": "passed",
+      "lastRunTimestamp": 1794273037064
+    },
+    "4.4 Write property test for tier assignment": {
+      "status": "passed",
+      "lastRunTimestamp": 1794273041824
     }
   },
   "executionHistory": {
@@ -189,6 +205,73 @@
         "executionId": "5f384fc6-3833-47e0-8862-d0fa1e9f0d58",
         "chatSessionId": "sess_0274671a-ff67-465b-9c5e-c8dd7174f4a0",
         "timestamp": 1794229689890
+      }
+    ],
+    "4.1 Implement `scoring/dread.ts`, `scoring/tiers.ts`, `scoring/overrides.ts`": [
+      {
+        "executionId": "1cd44f5d-fc33-471c-baef-348373ad86f9",
+        "chatSessionId": "sess_df879ac3-bb52-452c-9924-c3352398bdf5",
+        "timestamp": 1794272898472
+      },
+      {
+        "executionId": "1cd44f5d-fc33-471c-baef-348373ad86f9",
+        "chatSessionId": "sess_df879ac3-bb52-452c-9924-c3352398bdf5",
+        "timestamp": 1794272974978
+      }
+    ],
+    "4.2 Write property test for Dread": [
+      {
+        "executionId": "1cd44f5d-fc33-471c-baef-348373ad86f9",
+        "chatSessionId": "sess_df879ac3-bb52-452c-9924-c3352398bdf5",
+        "timestamp": 1794272984585
+      },
+      {
+        "executionId": "1cd44f5d-fc33-471c-baef-348373ad86f9",
+        "chatSessionId": "sess_df879ac3-bb52-452c-9924-c3352398bdf5",
+        "timestamp": 1794273053639
+      }
+    ],
+    "4.3 Write property test for input rejection in scoring and tiers": [
+      {
+        "executionId": "1cd44f5d-fc33-471c-baef-348373ad86f9",
+        "chatSessionId": "sess_df879ac3-bb52-452c-9924-c3352398bdf5",
+        "timestamp": 1794272985390
+      },
+      {
+        "executionId": "1cd44f5d-fc33-471c-baef-348373ad86f9",
+        "chatSessionId": "sess_df879ac3-bb52-452c-9924-c3352398bdf5",
+        "timestamp": 1794273053778
+      }
+    ],
+    "4.4 Write property test for tier assignment": [
+      {
+        "executionId": "1cd44f5d-fc33-471c-baef-348373ad86f9",
+        "chatSessionId": "sess_df879ac3-bb52-452c-9924-c3352398bdf5",
+        "timestamp": 1794272986187
+      },
+      {
+        "executionId": "1cd44f5d-fc33-471c-baef-348373ad86f9",
+        "chatSessionId": "sess_df879ac3-bb52-452c-9924-c3352398bdf5",
+        "timestamp": 1794273054759
+      }
+    ],
+    "4.5 Write property test for rank-only tiers": [
+      {
+        "executionId": "1cd44f5d-fc33-471c-baef-348373ad86f9",
+        "chatSessionId": "sess_df879ac3-bb52-452c-9924-c3352398bdf5",
+        "timestamp": 1794272987023
+      },
+      {
+        "executionId": "1cd44f5d-fc33-471c-baef-348373ad86f9",
+        "chatSessionId": "sess_df879ac3-bb52-452c-9924-c3352398bdf5",
+        "timestamp": 1794273055489
+      }
+    ],
+    "4. Scoring and tiers": [
+      {
+        "executionId": "1cd44f5d-fc33-471c-baef-348373ad86f9",
+        "chatSessionId": "sess_df879ac3-bb52-452c-9924-c3352398bdf5",
+        "timestamp": 1794273055575
       }
     ]
   }

@@ -60,21 +60,21 @@ Rules for every task:
     - **Property 15: Snapping finds the nearest point within 150 m or reports none**
     - **Validates: Requirements 1.9, 6.5, 6.6**
 
-- [ ] 4. Scoring and tiers
-  - [ ] 4.1 Implement `scoring/dread.ts`, `scoring/tiers.ts`, `scoring/overrides.ts`
+- [x] 4. Scoring and tiers
+  - [x] 4.1 Implement `scoring/dread.ts`, `scoring/tiers.ts`, `scoring/overrides.ts`
     - `dread` per the formula; `assignTiers` with the integer rank rule (`higher x 5 < total x 2`, `higher x 4 >= total x 3`) and no fixed probability cut-off; `overrideFor`
     - Throw `ArgumentError` naming the argument and the segment id for bad inputs
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.10, 3.11, 7.2, 10.3_
-  - [ ] 4.2 Write property test for Dread
+  - [x] 4.2 Write property test for Dread
     - **Property 1: Dread is bounded, finite and matches the formula**
     - **Validates: Requirements 7.2, 16.1, 16.2**
-  - [ ] 4.3 Write property test for input rejection in scoring and tiers
+  - [x] 4.3 Write property test for input rejection in scoring and tiers
     - **Property 2: Invalid input is rejected with the argument name**
     - **Validates: Requirements 3.10, 7.10, 16.3**
-  - [ ] 4.4 Write property test for tier assignment
+  - [x] 4.4 Write property test for tier assignment
     - **Property 7: Tier assignment is total, rule-correct and rank-monotone**
     - **Validates: Requirements 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.11, 16.11**
-  - [ ] 4.5 Write property test for rank-only tiers
+  - [x] 4.5 Write property test for rank-only tiers
     - **Property 8: Tiers depend on rank only**
     - **Validates: Requirements 3.7, 12.8, 16.20**
 
