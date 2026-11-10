@@ -25,38 +25,38 @@ Rules for every task:
     - Shared types: `Segment`, `LabelSource`, `Tier`, `ReportType`, `PackMeta`
     - _Requirements: 7.10, 16.3_
 
-- [ ] 2. Geo helpers and pack parsing
-  - [ ] 2.1 Implement `geo/distance.ts`, `geo/project.ts`, `geo/bounds.ts`
+- [x] 2. Geo helpers and pack parsing
+  - [x] 2.1 Implement `geo/distance.ts`, `geo/project.ts`, `geo/bounds.ts`
     - Haversine with R = 6 371 008.8 m, local equirectangular projection, `boundsOf(points)`, pack bounds grown by a margin
     - _Requirements: 1.9, 2.6, 5.1, 6.5, 14.7, 17.7_
-  - [ ] 2.2 Write property test for bounds
+  - [x] 2.2 Write property test for bounds
     - **Property 32: Fitted bounds contain every point**
     - **Validates: Requirements 5.1, 14.7, 17.7**
-  - [ ] 2.3 Implement `pack/parse.ts`
+  - [x] 2.3 Implement `pack/parse.ts`
     - `parseSegmentFile` and `parseBuildingsFile` returning data or a `PackProblem` (file kind plus missing, unreadable or invalid)
     - Supported `schema_version` list `[1]`; reject out-of-range or non-finite values and non-LineString geometry; convert `id` with `String(id)`; skip buildings with bad `height_m` and report `height_m`
     - _Requirements: 1.6, 1.7, 5.8_
-  - [ ] 2.4 Write property test for pack validation
+  - [x] 2.4 Write property test for pack validation
     - **Property 3: Pack validation accepts valid files and rejects every listed defect**
     - **Validates: Requirements 1.6, 1.7, 5.8**
 
-- [ ] 3. Street graph and snapping
-  - [ ] 3.1 Implement `graph/build.ts`
+- [x] 3. Street graph and snapping
+  - [x] 3.1 Implement `graph/build.ts`
     - Validate segments (reject with id and field), reject all copies of duplicate ids, drop consecutive duplicate points, split at shared coordinates and segment endpoints, sort nodes, edges and adjacency by value so input order never matters
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.8_
-  - [ ] 3.2 Write property test for input-order independence
+  - [x] 3.2 Write property test for input-order independence
     - **Property 4: Graph construction does not depend on input order**
     - **Validates: Requirements 2.3, 16.9**
-  - [ ] 3.3 Write property test for splitting, attributes and length
+  - [x] 3.3 Write property test for splitting, attributes and length
     - **Property 5: Graph construction splits at shared coordinates and preserves attributes and length**
     - **Validates: Requirements 2.1, 2.2, 2.4, 2.5, 2.6, 16.10**
-  - [ ] 3.4 Write property test for per-segment rejection
+  - [x] 3.4 Write property test for per-segment rejection
     - **Property 6: Invalid Segments are rejected individually**
     - **Validates: Requirements 2.8**
-  - [ ] 3.5 Implement `graph/snap.ts`
+  - [x] 3.5 Implement `graph/snap.ts`
     - 200 m grid index, 3 x 3 cell query, inclusive 150 m limit, deterministic ties, out-of-area test using pack bounds grown by 150 m
     - _Requirements: 1.9, 6.5, 6.6_
-  - [ ] 3.6 Write property test for snapping
+  - [x] 3.6 Write property test for snapping
     - **Property 15: Snapping finds the nearest point within 150 m or reports none**
     - **Validates: Requirements 1.9, 6.5, 6.6**
 
