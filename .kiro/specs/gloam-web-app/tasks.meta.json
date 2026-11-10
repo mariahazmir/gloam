@@ -99,6 +99,22 @@
     "7.4 Write property test for notes versus tiers and routing": {
       "status": "passed",
       "lastRunTimestamp": 1794276447144
+    },
+    "8.3 Write property test for slow brightness change": {
+      "status": "passed",
+      "lastRunTimestamp": 1794276875197
+    },
+    "8.4 Write property test for irregularity": {
+      "status": "passed",
+      "lastRunTimestamp": 1794276888121
+    },
+    "8.2 Write property test for the flicker cap": {
+      "status": "passed",
+      "lastRunTimestamp": 1794276901844
+    },
+    "8.6 Write property test for the effects ladder": {
+      "status": "passed",
+      "lastRunTimestamp": 1794276958539
     }
   },
   "executionHistory": {
@@ -631,6 +647,97 @@
         "executionId": "2ad5320a-2474-41c8-bcd1-e5adcbe90de9",
         "chatSessionId": "sess_3731ab71-e4e8-4148-9631-6a436e381ce4",
         "timestamp": 1794276456753
+      }
+    ],
+    "8.1 Implement `visual/flicker.ts`": [
+      {
+        "executionId": "c7b2f767-bd63-4d45-aa74-f415a87edd4e",
+        "chatSessionId": "sess_ba0e013d-f539-4731-813d-a3681f579fa2",
+        "timestamp": 1794276766222
+      },
+      {
+        "executionId": "c7b2f767-bd63-4d45-aa74-f415a87edd4e",
+        "chatSessionId": "sess_ba0e013d-f539-4731-813d-a3681f579fa2",
+        "timestamp": 1794276822723
+      }
+    ],
+    "8.2 Write property test for the flicker cap": [
+      {
+        "executionId": "c7b2f767-bd63-4d45-aa74-f415a87edd4e",
+        "chatSessionId": "sess_ba0e013d-f539-4731-813d-a3681f579fa2",
+        "timestamp": 1794276837478
+      },
+      {
+        "executionId": "c7b2f767-bd63-4d45-aa74-f415a87edd4e",
+        "chatSessionId": "sess_ba0e013d-f539-4731-813d-a3681f579fa2",
+        "timestamp": 1794276912954
+      }
+    ],
+    "8.3 Write property test for slow brightness change": [
+      {
+        "executionId": "c7b2f767-bd63-4d45-aa74-f415a87edd4e",
+        "chatSessionId": "sess_ba0e013d-f539-4731-813d-a3681f579fa2",
+        "timestamp": 1794276837804
+      },
+      {
+        "executionId": "c7b2f767-bd63-4d45-aa74-f415a87edd4e",
+        "chatSessionId": "sess_ba0e013d-f539-4731-813d-a3681f579fa2",
+        "timestamp": 1794276913803
+      }
+    ],
+    "8.4 Write property test for irregularity": [
+      {
+        "executionId": "c7b2f767-bd63-4d45-aa74-f415a87edd4e",
+        "chatSessionId": "sess_ba0e013d-f539-4731-813d-a3681f579fa2",
+        "timestamp": 1794276838612
+      },
+      {
+        "executionId": "c7b2f767-bd63-4d45-aa74-f415a87edd4e",
+        "chatSessionId": "sess_ba0e013d-f539-4731-813d-a3681f579fa2",
+        "timestamp": 1794276914805
+      }
+    ],
+    "8.5 Implement `visual/effects.ts` and `visual/tierStyles.ts`": [
+      {
+        "executionId": "c7b2f767-bd63-4d45-aa74-f415a87edd4e",
+        "chatSessionId": "sess_ba0e013d-f539-4731-813d-a3681f579fa2",
+        "timestamp": 1794276839766
+      },
+      {
+        "executionId": "c7b2f767-bd63-4d45-aa74-f415a87edd4e",
+        "chatSessionId": "sess_ba0e013d-f539-4731-813d-a3681f579fa2",
+        "timestamp": 1794276915621
+      }
+    ],
+    "8.6 Write property test for the effects ladder": [
+      {
+        "executionId": "c7b2f767-bd63-4d45-aa74-f415a87edd4e",
+        "chatSessionId": "sess_ba0e013d-f539-4731-813d-a3681f579fa2",
+        "timestamp": 1794276919771
+      },
+      {
+        "executionId": "c7b2f767-bd63-4d45-aa74-f415a87edd4e",
+        "chatSessionId": "sess_ba0e013d-f539-4731-813d-a3681f579fa2",
+        "timestamp": 1794276967877
+      }
+    ],
+    "8.7 Write unit test for reduced-effects styles": [
+      {
+        "executionId": "c7b2f767-bd63-4d45-aa74-f415a87edd4e",
+        "chatSessionId": "sess_ba0e013d-f539-4731-813d-a3681f579fa2",
+        "timestamp": 1794276920469
+      },
+      {
+        "executionId": "c7b2f767-bd63-4d45-aa74-f415a87edd4e",
+        "chatSessionId": "sess_ba0e013d-f539-4731-813d-a3681f579fa2",
+        "timestamp": 1794276968577
+      }
+    ],
+    "8. Visual maths": [
+      {
+        "executionId": "c7b2f767-bd63-4d45-aa74-f415a87edd4e",
+        "chatSessionId": "sess_ba0e013d-f539-4731-813d-a3681f579fa2",
+        "timestamp": 1794276968671
       }
     ]
   }

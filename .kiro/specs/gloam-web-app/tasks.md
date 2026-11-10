@@ -147,26 +147,26 @@ Rules for every task:
     - **Property 22: Stored data round-trips and holds only the allowed fields**
     - **Validates: Requirements 8.5, 8.6, 10.2, 10.9, 13.10**
 
-- [ ] 8. Visual maths
-  - [ ] 8.1 Implement `visual/flicker.ts`
+- [x] 8. Visual maths
+  - [x] 8.1 Implement `visual/flicker.ts`
     - `flickerParams`, `irregularity`, `maxFlickerRate`, `flickerBrightness`, constants `FLICKER_CAP`, `FLICKER_DEPTH`, `FLICKER_HALF_WIDTH_S`, `FLICKER_STEP_MS`
     - _Requirements: 4.2, 4.7, 4.8, 16.17, 16.21_
-  - [ ] 8.2 Write property test for the flicker cap
+  - [x] 8.2 Write property test for the flicker cap
     - **Property 27: Flicker never exceeds the cap**
     - **Validates: Requirements 4.7, 16.17**
-  - [ ] 8.3 Write property test for slow brightness change
+  - [x] 8.3 Write property test for slow brightness change
     - **Property 28: Brightness changes slowly**
     - **Validates: Requirements 4.8**
-  - [ ] 8.4 Write property test for irregularity
+  - [x] 8.4 Write property test for irregularity
     - **Property 29: Lower confidence is never less irregular**
     - **Validates: Requirements 4.2, 16.21**
-  - [ ] 8.5 Implement `visual/effects.ts` and `visual/tierStyles.ts`
+  - [x] 8.5 Implement `visual/effects.ts` and `visual/tierStyles.ts`
     - `stepEffects` ladder (flicker, glow, fog, extrusion); normal-mode and Reduced_Effects_Mode style tables (five distinct pattern and width pairs); cohort grouping helper (tier x 3 confidence bands x 3 phases)
     - _Requirements: 4.1, 4.3, 4.4, 4.5, 4.12, 4.13, 5.6_
-  - [ ] 8.6 Write property test for the effects ladder
+  - [x] 8.6 Write property test for the effects ladder
     - **Property 30: The effects ladder removes one effect at a time and stops at none**
     - **Validates: Requirements 5.6**
-  - [ ] 8.7 Write unit test for reduced-effects styles
+  - [x] 8.7 Write unit test for reduced-effects styles
     - Five styles pairwise different by pattern or width; confirmed_lit never flickers; mapped_unlit never flickers
     - _Requirements: 4.1, 4.4, 4.13_
 
