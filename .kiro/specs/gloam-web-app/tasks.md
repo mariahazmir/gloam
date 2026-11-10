@@ -187,15 +187,15 @@ Rules for every task:
     - Every catalogue entry (with sample arguments), the Disclaimer and the bundled `docs/validation.md` pass `findBanned` with a failure report naming the string and entry; lighting strings use only allowed terms; quoted figures equal `docs/validation.md`; "did not beat" cities computed from the parsed file
     - _Requirements: 12.1, 12.2, 12.6, 12.10, 12.11_
 
-- [ ] 10. App state reducer
-  - [ ] 10.1 Implement `state/appState.ts`
+- [x] 10. App state reducer
+  - [x] 10.1 Implement `state/appState.ts`
     - Pure reducer with `tap`, `setStartHere`, `setEndHere`, `useLocation`, `switchMode`, `chooseSettingState`, `clearExample`, `reset`; initial Plan_Mode and Start_Setting_State; Report_Mode taps never move points; Plan_Mode taps never select segments
-    - _Requirements: 6.1, 6.10, 6.11, 10.1, 17.8, 17.13_
-  - [ ] 10.2 Write property test for modes and taps
+    - _Requirements: 6.1, 6.10, 6.11, 10.1, 17.8, 17.13, 17.17_
+  - [x] 10.2 Write property test for modes and taps
     - **Property 31: Modes and taps behave as specified**
-    - **Validates: Requirements 6.1, 6.11, 10.1, 17.13**
+    - **Validates: Requirements 6.1, 6.11, 10.1, 17.13, 17.17**
 
-- [ ] 11. Checkpoint - Ensure all tests pass
+- [x] 11. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 12. Shell I/O

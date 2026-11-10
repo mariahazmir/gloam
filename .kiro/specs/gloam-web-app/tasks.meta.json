@@ -123,6 +123,10 @@
     "9.3 Write property test for the banned-word matcher": {
       "status": "passed",
       "lastRunTimestamp": 1794277923727
+    },
+    "10.2 Write property test for modes and taps": {
+      "status": "passed",
+      "lastRunTimestamp": 1794278776912
     }
   },
   "executionHistory": {
@@ -813,6 +817,69 @@
         "executionId": "da3f8016-3ecf-437e-83eb-c1e258569b76",
         "chatSessionId": "sess_c19fdb21-3d98-40a1-b0ce-93abb4ef4531",
         "timestamp": 1794277965941
+      }
+    ],
+    "10.1 Implement `state/appState.ts`": [
+      {
+        "executionId": "9367859f-8de5-4f02-a123-e3a215509496",
+        "chatSessionId": "sess_e4acecb9-cd91-447f-a836-3ce40833b952",
+        "timestamp": 1794278240938
+      },
+      {
+        "executionId": "9367859f-8de5-4f02-a123-e3a215509496",
+        "chatSessionId": "sess_e4acecb9-cd91-447f-a836-3ce40833b952",
+        "timestamp": 1794278316747
+      }
+    ],
+    "10.2 Write property test for modes and taps": [
+      {
+        "executionId": "9367859f-8de5-4f02-a123-e3a215509496",
+        "chatSessionId": "sess_e4acecb9-cd91-447f-a836-3ce40833b952",
+        "timestamp": 1794278328204
+      },
+      {
+        "executionId": "9367859f-8de5-4f02-a123-e3a215509496",
+        "chatSessionId": "sess_e4acecb9-cd91-447f-a836-3ce40833b952",
+        "timestamp": 1794278399233
+      },
+      {
+        "executionId": "19973401-4cf3-497c-9837-4cc2693ac881",
+        "chatSessionId": "sess_e4acecb9-cd91-447f-a836-3ce40833b952",
+        "timestamp": 1794278679972
+      },
+      {
+        "executionId": "19973401-4cf3-497c-9837-4cc2693ac881",
+        "chatSessionId": "sess_e4acecb9-cd91-447f-a836-3ce40833b952",
+        "timestamp": 1794278795269
+      },
+      {
+        "executionId": "e0cb9bf4-32b9-40b3-a7f9-b90521c31a23",
+        "chatSessionId": "sess_e4acecb9-cd91-447f-a836-3ce40833b952",
+        "timestamp": 1794280277143
+      },
+      {
+        "executionId": "e0cb9bf4-32b9-40b3-a7f9-b90521c31a23",
+        "chatSessionId": "sess_e4acecb9-cd91-447f-a836-3ce40833b952",
+        "timestamp": 1794280565429
+      }
+    ],
+    "10. App state reducer": [
+      {
+        "executionId": "9367859f-8de5-4f02-a123-e3a215509496",
+        "chatSessionId": "sess_e4acecb9-cd91-447f-a836-3ce40833b952",
+        "timestamp": 1794278399330
+      }
+    ],
+    "11. Checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "577b2829-6c3a-49b9-8b2c-a7cd14d22643",
+        "chatSessionId": "sess_b406197f-e6a4-475e-898a-8924b7a7173d",
+        "timestamp": 1794280668841
+      },
+      {
+        "executionId": "577b2829-6c3a-49b9-8b2c-a7cd14d22643",
+        "chatSessionId": "sess_b406197f-e6a4-475e-898a-8924b7a7173d",
+        "timestamp": 1794280692223
       }
     ]
   }
