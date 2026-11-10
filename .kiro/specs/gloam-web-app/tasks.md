@@ -170,20 +170,20 @@ Rules for every task:
     - Five styles pairwise different by pattern or width; confirmed_lit never flickers; mapped_unlit never flickers
     - _Requirements: 4.1, 4.4, 4.13_
 
-- [ ] 9. Content, wording and validation parsing
-  - [ ] 9.1 Implement `content/strings.ts`
+- [x] 9. Content, wording and validation parsing
+  - [x] 9.1 Implement `content/strings.ts`
     - Nested catalogue with `kind` ('lighting' or 'general'), template functions (`tierWording` with `Math.round(confidence x 100)`), `DISCLAIMER` verbatim, all messages named in the design's error table, the exact Kuala Lumpur description, the hint, the legend lines (each 80 characters or fewer), the reset and "SAMPLE DATA" labels
     - _Requirements: 1.3, 3.8, 3.9, 6.9, 12.2, 17.9, 17.10_
-  - [ ] 9.2 Implement `tests/helpers/bannedWords.ts` and `content/validationDoc.ts`
+  - [x] 9.2 Implement `tests/helpers/bannedWords.ts` and `content/validationDoc.ts`
     - `findBanned` token-run matcher using the product.md list; `parseValidation` over `docs/validation.md?raw` returning strings as written, a did-not-beat list, no precision values, skipped-city reasons, unavailable result when no tables
     - _Requirements: 12.1, 12.6, 12.7, 12.9, 12.10, 12.11_
-  - [ ] 9.3 Write property test for the banned-word matcher
+  - [x] 9.3 Write property test for the banned-word matcher
     - **Property 25: The banned-word matcher finds whole words and phrases only**
     - **Validates: Requirements 12.1, 16.15**
-  - [ ] 9.4 Write property test for validation figures
+  - [x] 9.4 Write property test for validation figures
     - **Property 26: Quoted validation figures equal the document's**
     - **Validates: Requirements 12.6, 12.9, 12.11**
-  - [ ] 9.5 Write example tests for wording and the real validation file
+  - [x] 9.5 Write example tests for wording and the real validation file
     - Every catalogue entry (with sample arguments), the Disclaimer and the bundled `docs/validation.md` pass `findBanned` with a failure report naming the string and entry; lighting strings use only allowed terms; quoted figures equal `docs/validation.md`; "did not beat" cities computed from the parsed file
     - _Requirements: 12.1, 12.2, 12.6, 12.10, 12.11_
 
