@@ -81,31 +81,31 @@ Rules for every task:
 - [x] 5. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 6. Routing
-  - [ ] 6.1 Implement `routing/costs.ts`
+- [x] 6. Routing
+  - [x] 6.1 Implement `routing/costs.ts`
     - `DEFAULT_SETTINGS`, `effectiveAttrs`, `penaltyCount`, `adjustedDread`, `routingLength`, `edgeCost`, `medianConfidence`; validate lambda, probabilities, confidence and length
     - _Requirements: 7.2, 8.1, 8.2, 8.3, 8.4, 16.1_
-  - [ ] 6.2 Write property test for settings effects on cost
+  - [x] 6.2 Write property test for settings effects on cost
     - **Property 14: Settings change cost exactly as specified**
     - **Validates: Requirements 8.3, 8.4**
-  - [ ] 6.3 Implement `routing/router.ts`
+  - [x] 6.3 Implement `routing/router.ts`
     - Overlay for snapped points, backward Dijkstra with deterministic heap, forward walk choosing the smallest dart key among cheapest darts, relative tie tolerance `1e-12`, `null` when unreachable, lambda validation
     - _Requirements: 6.8, 7.3, 7.4, 7.5, 7.6, 7.7, 7.10, 16.4, 16.5, 16.6, 16.7, 16.8_
-  - [ ] 6.4 Write property test for cheapest route
+  - [x] 6.4 Write property test for cheapest route
     - **Property 9: The router returns a cheapest route**
     - Brute-force enumeration over small graphs; `{ verbose: true }`
     - **Validates: Requirements 7.3, 7.4**
-  - [ ] 6.5 Write property test for Dark_Exposure monotonicity
+  - [x] 6.5 Write property test for Dark_Exposure monotonicity
     - **Property 10: Raising lambda never raises Dark_Exposure**
     - **Validates: Requirements 7.5, 16.4**
-  - [ ] 6.6 Write property test for Routing_Distance monotonicity
+  - [x] 6.6 Write property test for Routing_Distance monotonicity
     - **Property 11: Raising lambda never shortens Routing_Distance**
     - **Validates: Requirements 7.6, 16.5**
-  - [ ] 6.7 Write property test for tie-breaking
+  - [x] 6.7 Write property test for tie-breaking
     - **Property 12: Ties go to the first route in Canonical_Order, whatever the input order**
     - Generator builds parallel and diamond equal-cost alternatives, then shuffles segment order
     - **Validates: Requirements 7.7, 16.6**
-  - [ ] 6.8 Write property test for path validity
+  - [x] 6.8 Write property test for path validity
     - **Property 13: Returned routes are valid paths, and disconnected points give no route**
     - **Validates: Requirements 6.8, 16.7, 16.8**
   - [ ] 6.9 Implement `routing/tierShares.ts`, `compare.ts`, `format.ts`, `heartbeat.ts`

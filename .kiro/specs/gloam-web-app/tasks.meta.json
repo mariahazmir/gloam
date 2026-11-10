@@ -39,6 +39,30 @@
     "4.4 Write property test for tier assignment": {
       "status": "passed",
       "lastRunTimestamp": 1794273041824
+    },
+    "6.2 Write property test for settings effects on cost": {
+      "status": "passed",
+      "lastRunTimestamp": 1794273974576
+    },
+    "6.6 Write property test for Routing_Distance monotonicity": {
+      "status": "passed",
+      "lastRunTimestamp": 1794274082319
+    },
+    "6.5 Write property test for Dark_Exposure monotonicity": {
+      "status": "passed",
+      "lastRunTimestamp": 1794274089712
+    },
+    "6.8 Write property test for path validity": {
+      "status": "passed",
+      "lastRunTimestamp": 1794274095487
+    },
+    "6.7 Write property test for tie-breaking": {
+      "status": "passed",
+      "lastRunTimestamp": 1794274100536
+    },
+    "6.4 Write property test for cheapest route": {
+      "status": "passed",
+      "lastRunTimestamp": 1794274116570
     }
   },
   "executionHistory": {
@@ -284,6 +308,142 @@
         "executionId": "4a9b594e-2773-4475-8f94-318200c645ee",
         "chatSessionId": "sess_8e1f5f80-a9eb-4416-8f56-4406013f7f00",
         "timestamp": 1794273574315
+      }
+    ],
+    "6.1 Implement `routing/costs.ts`": [
+      {
+        "executionId": "84b36958-ec28-407c-987b-c7cc432e4d14",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794273859968
+      },
+      {
+        "executionId": "84b36958-ec28-407c-987b-c7cc432e4d14",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794273914888
+      }
+    ],
+    "6.2 Write property test for settings effects on cost": [
+      {
+        "executionId": "84b36958-ec28-407c-987b-c7cc432e4d14",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794273920046
+      },
+      {
+        "executionId": "84b36958-ec28-407c-987b-c7cc432e4d14",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794274016448
+      }
+    ],
+    "6.3 Implement `routing/router.ts`": [
+      {
+        "executionId": "84b36958-ec28-407c-987b-c7cc432e4d14",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794273920160
+      },
+      {
+        "executionId": "84b36958-ec28-407c-987b-c7cc432e4d14",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794274017253
+      },
+      {
+        "executionId": "185925e2-ee1c-41bf-b9de-6de8e27fceb8",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794274220937
+      },
+      {
+        "executionId": "185925e2-ee1c-41bf-b9de-6de8e27fceb8",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794274537649
+      },
+      {
+        "executionId": "f558018f-f4c6-4ce8-9c3c-c5c7805b8f1a",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794274847722
+      },
+      {
+        "executionId": "f558018f-f4c6-4ce8-9c3c-c5c7805b8f1a",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794275035059
+      },
+      {
+        "executionId": "f558018f-f4c6-4ce8-9c3c-c5c7805b8f1a",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794275038847
+      },
+      {
+        "executionId": "f558018f-f4c6-4ce8-9c3c-c5c7805b8f1a",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794275149402
+      }
+    ],
+    "6.4 Write property test for cheapest route": [
+      {
+        "executionId": "84b36958-ec28-407c-987b-c7cc432e4d14",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794274022480
+      },
+      {
+        "executionId": "84b36958-ec28-407c-987b-c7cc432e4d14",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794274129233
+      }
+    ],
+    "6.5 Write property test for Dark_Exposure monotonicity": [
+      {
+        "executionId": "84b36958-ec28-407c-987b-c7cc432e4d14",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794274022666
+      },
+      {
+        "executionId": "84b36958-ec28-407c-987b-c7cc432e4d14",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794274129454
+      }
+    ],
+    "6.6 Write property test for Routing_Distance monotonicity": [
+      {
+        "executionId": "84b36958-ec28-407c-987b-c7cc432e4d14",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794274023472
+      },
+      {
+        "executionId": "84b36958-ec28-407c-987b-c7cc432e4d14",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794274129637
+      },
+      {
+        "executionId": "185925e2-ee1c-41bf-b9de-6de8e27fceb8",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794274542751
+      },
+      {
+        "executionId": "185925e2-ee1c-41bf-b9de-6de8e27fceb8",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794274614541
+      }
+    ],
+    "6.7 Write property test for tie-breaking": [
+      {
+        "executionId": "84b36958-ec28-407c-987b-c7cc432e4d14",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794274024278
+      },
+      {
+        "executionId": "84b36958-ec28-407c-987b-c7cc432e4d14",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794274130416
+      }
+    ],
+    "6.8 Write property test for path validity": [
+      {
+        "executionId": "84b36958-ec28-407c-987b-c7cc432e4d14",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794274024870
+      },
+      {
+        "executionId": "84b36958-ec28-407c-987b-c7cc432e4d14",
+        "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
+        "timestamp": 1794274130963
       }
     ]
   }
