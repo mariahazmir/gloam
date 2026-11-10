@@ -26,6 +26,7 @@ inclusion: always
 - **Validate inputs.** Reject NaN, infinite and out-of-range values with a clear error that names the argument.
 - **Examples need checking.** When writing example values in tests or docs, compute them by hand against the formula first.
 - **Dependencies:** keep them minimal, and explain any new one before adding it.
+- **Every task ends clean.** Every task ends with `npx tsc --noEmit` and `npx vitest --run` both clean, with the output shown.
 
 ## Core formulas (current)
 - `raw = 1 - lit_probability`
