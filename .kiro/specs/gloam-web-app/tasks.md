@@ -78,7 +78,7 @@ Rules for every task:
     - **Property 8: Tiers depend on rank only**
     - **Validates: Requirements 3.7, 12.8, 16.20**
 
-- [ ] 5. Checkpoint - Ensure all tests pass
+- [x] 5. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 6. Routing
