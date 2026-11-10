@@ -297,7 +297,7 @@ export function medianConfidence(graph: StreetGraph): number;
 ```ts
 export interface RouteRequest {
   graph: StreetGraph;
-  start: SnapPoint; end: SnapPoint;
+  start: RoutePoint; end: RoutePoint;   // RoutePoint = Pick<SnapPoint, 'edge' | 't'>; the router reads only these
   lambda: number;
   settings: PersonalSettings;
   overrides: ReadonlyMap<string, Override>;
@@ -311,7 +311,7 @@ export interface Route {
 export function findRoute(req: RouteRequest): Route | null;   // null = no connected path
 ```
 
-**Overlay for snapped points.** Start and end usually fall inside an Edge. The router builds a small, local overlay without changing the graph: each snapped Edge is replaced by sub-pieces split at the snapped `t` values (sorted), with lengths scaled by `t` and the same attributes. `t` of 0 or 1 reuses the existing node. If start and end share an Edge, the piece between them is also a candidate. Sub-pieces carry a `sub` ordinal for tie-breaking.
+**Overlay for snapped points.** Start and end usually fall inside an Edge. The router builds a small, local overlay without changing the graph: each snapped Edge is replaced by sub-pieces split at the snapped `t` values (sorted), with lengths scaled by `t` and the same attributes. `t` of 0 or 1 reuses the existing node. If start and end share an Edge, the piece between them is also a candidate. Sub-pieces carry a `sub` ordinal for tie-breaking. **1 mm collapse rule:** before splitting, a snap position within 1 mm of an Edge end (`t * lengthM <= 0.001`, or `(1 - t) * lengthM <= 0.001`) is collapsed onto that end node (`t` becomes 0 or 1), so returned `fromT`/`toT` and piece lengths use the collapsed position. This keeps piece costs above float resolution. The forward walk keeps a visited-node guard so it cannot loop; if float resolution makes the strict progress check find no step, it picks among darts with non-increasing distance (smallest dart key, never revisiting a node), and as a last resort follows the Dijkstra tree, so `findRoute` never returns null once the start node was reached.
 
 **Algorithm.**
 
