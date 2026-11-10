@@ -55,8 +55,8 @@ describe('Property 23: The dark-spot list is ordered, limited and filtered', () 
 
         // ordered: total desc, then id asc
         for (let i = 1; i < out.length; i++) {
-          const a = out[i - 1];
-          const b = out[i];
+          const a = out[i - 1]!;
+          const b = out[i]!;
           const ta = a.actuallyDark + a.lightIsOut;
           const tb = b.actuallyDark + b.lightIsOut;
           expect(ta).toBeGreaterThanOrEqual(tb);
@@ -65,7 +65,7 @@ describe('Property 23: The dark-spot list is ordered, limited and filtered', () 
 
         // top-N: nothing omitted outranks anything kept
         if (out.length > 0 && expected.size > out.length) {
-          const last = out[out.length - 1];
+          const last = out[out.length - 1]!;
           const lastTotal = last.actuallyDark + last.lightIsOut;
           for (const [id, e] of expected) {
             if (seen.has(id)) continue;

@@ -57,7 +57,7 @@ describe('Property 20', () => {
         const it2 = rnd[Symbol.iterator]();
         for (let i = shuffled.length - 1; i > 0; i--) {
           const j = (it2.next().value as number) % (i + 1);
-          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+          [shuffled[i], shuffled[j]] = [shuffled[j]!, shuffled[i]!];
         }
         expect(communityStatus(shuffled, TODAY)).toEqual(result);
         expect(communityStatus([...cs].reverse(), TODAY)).toEqual(result);

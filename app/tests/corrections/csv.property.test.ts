@@ -80,14 +80,14 @@ describe('toCsv properties', () => {
         expect(rows).toHaveLength(spots.length);
 
         spots.forEach((s, k) => {
-          const r = rows[k];
+          const r = rows[k]!;
           expect(r).toHaveLength(5);
           const expected = [s.name ?? '', s.highway, s.segmentId, String(s.actuallyDark), String(s.lightIsOut)];
           for (let c = 0; c < 5; c++) {
             // No unquoted field starts with a formula character.
-            expect(FORMULA.test(r[c])).toBe(false);
+            expect(FORMULA.test(r[c]!)).toBe(false);
             // Round trip, apart from the guard prefix.
-            expect(r[c]).toBe(FORMULA.test(expected[c]) ? `'${expected[c]}` : expected[c]);
+            expect(r[c]).toBe(FORMULA.test(expected[c]!) ? `'${expected[c]}` : expected[c]);
           }
           if (s.name === null) expect(r[0]).toBe('');
         });
