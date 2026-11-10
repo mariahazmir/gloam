@@ -381,7 +381,7 @@ export function toCsv(rows: ReadonlyArray<DarkSpot>): string;
 - `communityStatus` splits Corrections into the lit side (`actually_lit`) and the dark side (`actually_dark` plus `light_is_out`), sums canonical-order weights per side, and returns the side whose sum is at least the threshold (default 3) and strictly greater than the other. A single Correction can never reach the threshold, so it never creates or changes a status (Requirements 10.6, 16.12).
 - Worked examples (today = the same day): three lit reports dated today give lit sum 3, dark sum 0, so lit, 3 people. Three lit plus one dark gives 3 against 1, lit, 3 people. Three lit and three dark gives a tie, so no status. Three lit reports each 30 days old give 3 x 0.5 = 1.5, below 3, so no status.
 - `darkSpots` keeps segments with at least one `actually_dark` or `light_is_out` report, sorts by total count descending then segment id ascending, and keeps 20 (Requirement 11.1).
-- `toCsv` writes the header `name,highway,segment_id,actually_dark,light_is_out`. Every field is wrapped in double quotes with embedded quotes doubled. A field whose first character is `=`, `+`, `-`, `@`, tab or carriage return gets a single quote prefix before quoting. An unnamed segment has an empty name field (Requirements 11.3, 11.5). No coordinates, dates or user data are written.
+- `toCsv` writes the header `name,highway,segment_id,actually_dark,light_is_out`. Every field is wrapped in double quotes with embedded quotes doubled. A field whose first character is `=`, `+`, `-`, `@`, tab or carriage return gets a single quote prefix before quoting. An unnamed segment has an empty name field (Requirements 11.3, 11.5). The header row is written unquoted: its names are plain words with underscores, so quoting adds nothing. Only data fields are quoted. No coordinates, dates or user data are written.
 - `storage/localCorrectionStore.ts` implements `CorrectionStore` over `localStorage` key `gloam.corrections.v1` as an array of `[segmentId, type, date]`. A failed read or write throws `StoreError`, leaves earlier data untouched, and the UI shows the error and carries on (Requirement 10.9). All app code uses the interface only (Requirement 10.8).
 
 ### settings/
@@ -612,7 +612,7 @@ Reflection: the prework produced about 60 testable criteria. Redundant ones were
 
 ### Property 19: Report weight halves every 30 days and never grows
 
-*For any* Correction date and `today`, `reportWeight` is greater than 0 and at most 1, equals 1 when the date is today or later, and equals `0.5 ^ (days / 30)` otherwise. *For any* Correction and two times `t1 <= t2`, the weight at `t2` is at most the weight at `t1`.
+*For any* Correction date and `today`, `reportWeight` is at least 0 and at most 1 (and greater than 0 for ages up to 50 years), equals 1 when the date is today or later, and equals `0.5 ^ (days / 30)` otherwise. *For any* Correction and two times `t1 <= t2`, the weight at `t2` is at most the weight at `t1`.
 
 **Validates: Requirements 10.4, 16.14**
 
