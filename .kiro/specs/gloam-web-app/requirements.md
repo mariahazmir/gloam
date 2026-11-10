@@ -168,7 +168,7 @@ Items marked "(decide, measure)" in the source requirements are targets. They ar
 
 #### Acceptance Criteria
 
-1. WHILE the Web_App is in Plan_Mode, WHEN the user taps the map, THE Web_App SHALL set the start point at the tapped position if the Web_App is in Start_Setting_State or the end point at the tapped position if it is in End_Setting_State, and SHALL replace any earlier point of the same kind. The Web_App begins in Plan_Mode and Start_Setting_State, and enters End_Setting_State when a start point is set (suggested, to be confirmed in the design).
+1. WHILE the Web_App is in Plan_Mode, WHEN the user taps the map, THE Web_App SHALL set the start point at the tapped position if the Web_App is in Start_Setting_State or the end point at the tapped position if it is in End_Setting_State, and SHALL replace any earlier point of the same kind. The Web_App begins in Plan_Mode and Start_Setting_State. WHEN a start or end point has been set (by a tap, by "use my location", by "Set start here" or by "Set end here"), THE Web_App SHALL, if exactly one of the start and end points is unset, enter the state of the unset point (Start_Setting_State if the start is unset, End_Setting_State if the end is unset), and SHALL otherwise leave the state unchanged. WHEN the user chooses a state with the "tap sets" control, THE Web_App SHALL enter that state. Report_Mode taps never move points and never change the state.
 2. WHEN the user chooses "use my location", THE Web_App SHALL request the device position through the browser geolocation interface and use it as the start point.
 3. IF the device position is denied, unavailable or not returned within 10 seconds, THEN THE Web_App SHALL show a message indicating that the location could not be found, SHALL keep any existing start point unchanged and SHALL NOT send the position over the network.
 4. THE Web_App SHALL offer no place-name search.
@@ -378,6 +378,7 @@ Items marked "(decide, measure)" in the source requirements are targets. They ar
 14. WHEN the user taps "use my location", THE Web_App SHALL request location permission from the browser and, if granted, use the returned position as the start point without sending it over the network.
 15. IF the location permission is denied, or the position is unavailable or not returned within 10 seconds, THEN THE Web_App SHALL show a message indicating location is unavailable, keep the current map state unchanged, and allow the user to set the start by tapping the map.
 16. IF the City_Pack fails to load or is not complete within 15 seconds, THEN THE Web_App SHALL replace the progress indicator with a message indicating the City_Pack could not be loaded and provide a retry control.
+17. WHILE the Sample_Walk is showing, WHEN the user sets a point by tapping the map in Plan_Mode, by "Set start here", by "Set end here" or by "use my location", THE Web_App SHALL first clear the Sample_Walk (both example points and the example label) and then apply the new point alone, so that the other point is unset. THE Web_App SHALL then enter the state of the unset point as described in Requirement 6, criterion 1 (the new point is the only one set, so a start leaves End_Setting_State and an end leaves Start_Setting_State). Report_Mode taps never move points and SHALL NOT clear the Sample_Walk.
 
 ## Targets to measure and open questions
 
