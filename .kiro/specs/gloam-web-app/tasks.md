@@ -13,13 +13,13 @@ Rules for every task:
 
 ## Tasks
 
-- [ ] 1. Scaffold the app and shared validation
-  - [ ] 1.1 Create the `app/` project
+- [x] 1. Scaffold the app and shared validation
+  - [x] 1.1 Create the `app/` project
     - Add `package.json` (exact pinned versions; runtime dependency `maplibre-gl` only; dev dependencies `vite`, `typescript`, `vitest`, `fast-check`), `tsconfig.json`, `vite.config.ts` (with `VITE_GLOAM_HOSTED` flag and `?raw` import support), `index.html` stub, `src/main.ts` stub
     - Add `tests/setup.ts` calling `fc.configureGlobal({ numRuns: 100 })` and a meta-test that fails if any configured `numRuns` is below 100
     - Add `app/.gitignore` for `node_modules` and `dist` only; never ignore `.kiro/`
     - _Requirements: 16.18, 16.19_
-  - [ ] 1.2 Add `types.ts` and `validation/` (`errors.ts`, `guards.ts`)
+  - [x] 1.2 Add `types.ts` and `validation/` (`errors.ts`, `guards.ts`)
     - `ArgumentError` with the argument name first in the message
     - `requireUnit`, `requireFinite`, `requireLambda`, `requireLatLon`
     - Shared types: `Segment`, `LabelSource`, `Tier`, `ReportType`, `PackMeta`

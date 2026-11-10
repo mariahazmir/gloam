@@ -1,0 +1,36 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1.1 Create the `app/` project": [
+      {
+        "executionId": "52afdb58-5e9f-43d1-9278-83e87a5cbb55",
+        "chatSessionId": "sess_edc55aad-3b82-4dba-83c9-fa35e60d1c64",
+        "timestamp": 1794228088285
+      },
+      {
+        "executionId": "52afdb58-5e9f-43d1-9278-83e87a5cbb55",
+        "chatSessionId": "sess_edc55aad-3b82-4dba-83c9-fa35e60d1c64",
+        "timestamp": 1794228330257
+      }
+    ],
+    "1.2 Add `types.ts` and `validation/` (`errors.ts`, `guards.ts`)": [
+      {
+        "executionId": "52afdb58-5e9f-43d1-9278-83e87a5cbb55",
+        "chatSessionId": "sess_edc55aad-3b82-4dba-83c9-fa35e60d1c64",
+        "timestamp": 1794228334326
+      },
+      {
+        "executionId": "52afdb58-5e9f-43d1-9278-83e87a5cbb55",
+        "chatSessionId": "sess_edc55aad-3b82-4dba-83c9-fa35e60d1c64",
+        "timestamp": 1794228393305
+      }
+    ],
+    "1. Scaffold the app and shared validation": [
+      {
+        "executionId": "52afdb58-5e9f-43d1-9278-83e87a5cbb55",
+        "chatSessionId": "sess_edc55aad-3b82-4dba-83c9-fa35e60d1c64",
+        "timestamp": 1794228393425
+      }
+    ]
+  }
+}
