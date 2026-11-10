@@ -75,6 +75,30 @@
     "6.12 Write property test for heartbeat series and summary": {
       "status": "passed",
       "lastRunTimestamp": 1794275690532
+    },
+    "7.6 Write property test for CSV output": {
+      "status": "passed",
+      "lastRunTimestamp": 1794276352704
+    },
+    "7.5 Write property test for the dark-spot list": {
+      "status": "passed",
+      "lastRunTimestamp": 1794276358937
+    },
+    "7.2 Write property test for report weight": {
+      "status": "passed",
+      "lastRunTimestamp": 1794276364789
+    },
+    "7.8 Write property test for storage round trips": {
+      "status": "passed",
+      "lastRunTimestamp": 1794276365461
+    },
+    "7.3 Write property test for the status rule": {
+      "status": "passed",
+      "lastRunTimestamp": 1794276368914
+    },
+    "7.4 Write property test for notes versus tiers and routing": {
+      "status": "passed",
+      "lastRunTimestamp": 1794276447144
     }
   },
   "executionHistory": {
@@ -504,6 +528,109 @@
         "executionId": "08ed7fa1-e42e-4ba7-95f3-e830a098b552",
         "chatSessionId": "sess_429aba63-325c-4cb4-a952-32b3624aa7e3",
         "timestamp": 1794275704875
+      }
+    ],
+    "7.1 Implement `corrections/status.ts`, `darkSpots.ts`, `csv.ts`, `store.ts`": [
+      {
+        "executionId": "2ad5320a-2474-41c8-bcd1-e5adcbe90de9",
+        "chatSessionId": "sess_3731ab71-e4e8-4148-9631-6a436e381ce4",
+        "timestamp": 1794276185962
+      },
+      {
+        "executionId": "2ad5320a-2474-41c8-bcd1-e5adcbe90de9",
+        "chatSessionId": "sess_3731ab71-e4e8-4148-9631-6a436e381ce4",
+        "timestamp": 1794276294308
+      }
+    ],
+    "7.7 Implement `settings/settings.ts`, `storage/localCorrectionStore.ts`, `storage/localSettingsStore.ts`": [
+      {
+        "executionId": "2ad5320a-2474-41c8-bcd1-e5adcbe90de9",
+        "chatSessionId": "sess_3731ab71-e4e8-4148-9631-6a436e381ce4",
+        "timestamp": 1794276186095
+      },
+      {
+        "executionId": "2ad5320a-2474-41c8-bcd1-e5adcbe90de9",
+        "chatSessionId": "sess_3731ab71-e4e8-4148-9631-6a436e381ce4",
+        "timestamp": 1794276295218
+      }
+    ],
+    "7.2 Write property test for report weight": [
+      {
+        "executionId": "2ad5320a-2474-41c8-bcd1-e5adcbe90de9",
+        "chatSessionId": "sess_3731ab71-e4e8-4148-9631-6a436e381ce4",
+        "timestamp": 1794276310031
+      },
+      {
+        "executionId": "2ad5320a-2474-41c8-bcd1-e5adcbe90de9",
+        "chatSessionId": "sess_3731ab71-e4e8-4148-9631-6a436e381ce4",
+        "timestamp": 1794276380664
+      }
+    ],
+    "7.3 Write property test for the status rule": [
+      {
+        "executionId": "2ad5320a-2474-41c8-bcd1-e5adcbe90de9",
+        "chatSessionId": "sess_3731ab71-e4e8-4148-9631-6a436e381ce4",
+        "timestamp": 1794276310185
+      },
+      {
+        "executionId": "2ad5320a-2474-41c8-bcd1-e5adcbe90de9",
+        "chatSessionId": "sess_3731ab71-e4e8-4148-9631-6a436e381ce4",
+        "timestamp": 1794276380898
+      }
+    ],
+    "7.5 Write property test for the dark-spot list": [
+      {
+        "executionId": "2ad5320a-2474-41c8-bcd1-e5adcbe90de9",
+        "chatSessionId": "sess_3731ab71-e4e8-4148-9631-6a436e381ce4",
+        "timestamp": 1794276310948
+      },
+      {
+        "executionId": "2ad5320a-2474-41c8-bcd1-e5adcbe90de9",
+        "chatSessionId": "sess_3731ab71-e4e8-4148-9631-6a436e381ce4",
+        "timestamp": 1794276381666
+      }
+    ],
+    "7.6 Write property test for CSV output": [
+      {
+        "executionId": "2ad5320a-2474-41c8-bcd1-e5adcbe90de9",
+        "chatSessionId": "sess_3731ab71-e4e8-4148-9631-6a436e381ce4",
+        "timestamp": 1794276311874
+      },
+      {
+        "executionId": "2ad5320a-2474-41c8-bcd1-e5adcbe90de9",
+        "chatSessionId": "sess_3731ab71-e4e8-4148-9631-6a436e381ce4",
+        "timestamp": 1794276382694
+      }
+    ],
+    "7.8 Write property test for storage round trips": [
+      {
+        "executionId": "2ad5320a-2474-41c8-bcd1-e5adcbe90de9",
+        "chatSessionId": "sess_3731ab71-e4e8-4148-9631-6a436e381ce4",
+        "timestamp": 1794276312814
+      },
+      {
+        "executionId": "2ad5320a-2474-41c8-bcd1-e5adcbe90de9",
+        "chatSessionId": "sess_3731ab71-e4e8-4148-9631-6a436e381ce4",
+        "timestamp": 1794276383501
+      }
+    ],
+    "7.4 Write property test for notes versus tiers and routing": [
+      {
+        "executionId": "2ad5320a-2474-41c8-bcd1-e5adcbe90de9",
+        "chatSessionId": "sess_3731ab71-e4e8-4148-9631-6a436e381ce4",
+        "timestamp": 1794276313584
+      },
+      {
+        "executionId": "2ad5320a-2474-41c8-bcd1-e5adcbe90de9",
+        "chatSessionId": "sess_3731ab71-e4e8-4148-9631-6a436e381ce4",
+        "timestamp": 1794276456662
+      }
+    ],
+    "7. Corrections and settings": [
+      {
+        "executionId": "2ad5320a-2474-41c8-bcd1-e5adcbe90de9",
+        "chatSessionId": "sess_3731ab71-e4e8-4148-9631-6a436e381ce4",
+        "timestamp": 1794276456753
       }
     ]
   }

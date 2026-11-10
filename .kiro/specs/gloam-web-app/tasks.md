@@ -121,29 +121,29 @@ Rules for every task:
     - **Property 18: Heartbeat series and summary match the route**
     - **Validates: Requirements 9.1, 9.2, 9.3, 9.4, 9.5**
 
-- [ ] 7. Corrections and settings
-  - [ ] 7.1 Implement `corrections/status.ts`, `darkSpots.ts`, `csv.ts`, `store.ts`
+- [x] 7. Corrections and settings
+  - [x] 7.1 Implement `corrections/status.ts`, `darkSpots.ts`, `csv.ts`, `store.ts`
     - `reportWeight` (UTC day numbers, clamped), `communityStatus` with canonical-order summing, `darkSpots` (limit 20), `toCsv` with quoting and formula guard, `CorrectionStore` interface and `StoreError`
     - _Requirements: 10.2, 10.4, 10.5, 10.6, 10.7, 10.8, 11.1, 11.3, 11.5_
-  - [ ] 7.2 Write property test for report weight
+  - [x] 7.2 Write property test for report weight
     - **Property 19: Report weight halves every 30 days and never grows**
     - **Validates: Requirements 10.4, 16.14**
-  - [ ] 7.3 Write property test for the status rule
+  - [x] 7.3 Write property test for the status rule
     - **Property 20: The status rule follows the sides, ignores order and ignores single reports**
     - **Validates: Requirements 10.5, 10.6, 10.7, 16.12, 16.13**
-  - [ ] 7.4 Write property test for notes versus tiers and routing
+  - [x] 7.4 Write property test for notes versus tiers and routing
     - **Property 21: Notes change per-user values only, never Tiers or status-driven routing**
     - **Validates: Requirements 10.3, 10.11, 10.12**
-  - [ ] 7.5 Write property test for the dark-spot list
+  - [x] 7.5 Write property test for the dark-spot list
     - **Property 23: The dark-spot list is ordered, limited and filtered**
     - **Validates: Requirements 11.1**
-  - [ ] 7.6 Write property test for CSV output
+  - [x] 7.6 Write property test for CSV output
     - **Property 24: CSV output is quoted, guarded and complete**
     - **Validates: Requirements 11.3, 11.5**
-  - [ ] 7.7 Implement `settings/settings.ts`, `storage/localCorrectionStore.ts`, `storage/localSettingsStore.ts`
+  - [x] 7.7 Implement `settings/settings.ts`, `storage/localCorrectionStore.ts`, `storage/localSettingsStore.ts`
     - Keys `gloam.settings.v1` and `gloam.corrections.v1` only; `put` replaces an earlier note for the same segment; failures throw `StoreError` and leave earlier data unchanged; missing `localStorage` counts as failed read and write; stores take an injected storage object so tests need no DOM
     - _Requirements: 8.5, 8.6, 8.7, 10.2, 10.8, 10.9, 13.3, 13.10_
-  - [ ] 7.8 Write property test for storage round trips
+  - [x] 7.8 Write property test for storage round trips
     - **Property 22: Stored data round-trips and holds only the allowed fields**
     - **Validates: Requirements 8.5, 8.6, 10.2, 10.9, 13.10**
 
