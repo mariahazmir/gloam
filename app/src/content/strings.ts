@@ -1,5 +1,6 @@
 // Every user-visible string in the app lives here. No other module holds a literal UI string.
 // `kind` is 'lighting' for text that describes a segment's lighting, otherwise 'general'.
+import type { PackFileKind, PackProblem } from '../pack/parse';
 import type { Tier } from '../types';
 import { requireUnit } from '../validation/guards';
 
@@ -44,7 +45,27 @@ export function confirmedBy(n: number): string {
   return `confirmed by ${n} ${n === 1 ? 'person' : 'people'}`;
 }
 
+/**
+ * Message for a City_Pack file that is missing, unreadable or invalid. Names the
+ * file (e.g. "seattle.segments.geojson") and says which of the three it is.
+ */
+export function packProblem(city: string, packId: string, file: PackFileKind, kind: PackProblem['kind']): string {
+  return `${city} could not be loaded: ${packId}.${file}.geojson is ${kind}.`;
+}
+
 export const STRINGS = {
+  app: {
+    name: g('Gloam'),
+  },
+  shell: {
+    cityPicker: g('Choose a city'),
+    map: g('Street lighting map'),
+    panel: g('Route and settings'),
+    cityNote: g('About the city data on this map'),
+  },
+  sampleWalk: {
+    label: g('Example walk, picked to show the difference. Yours may differ.'),
+  },
   city: {
     kualaLumpurDescription: l('the case where lighting records are missing'),
   },
@@ -63,6 +84,7 @@ export const STRINGS = {
   },
   errors: {
     packFile: g('A city file could not be loaded. Your previous city and route are unchanged.'),
+    previousKept: g('Your previous city and route are unchanged.'),
     packTimeout: g('Loading took too long. Check your connection and try again.'),
     retry: g('Retry'),
     outsideArea: g('There is no street data there.'),
@@ -82,6 +104,8 @@ export const STRINGS = {
     noReports: g('No reports exist yet.'),
   },
   templates: {
+    loadingCity: { kind: 'general', text: (city: string) => `Loading ${city}…` } as Tpl<[string]>,
+    packProblem: { kind: 'general', text: packProblem } as Tpl<[string, string, PackFileKind, PackProblem['kind']]>,
     tierWording: { kind: 'lighting', text: tierWording } as Tpl<[Tier, number]>,
     confirmedBy: { kind: 'lighting', text: confirmedBy } as Tpl<[number]>,
   },

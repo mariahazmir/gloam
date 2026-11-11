@@ -1008,6 +1008,21 @@
         "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
         "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
         "timestamp": 1794280830990
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794302583959
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794302593929
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794302836042
       }
     ],
     "13.2 Implement `map/layers.ts`": [
@@ -1015,6 +1030,21 @@
         "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
         "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
         "timestamp": 1794280831041
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794302584082
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794302840931
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794303332653
       }
     ],
     "13.3 Implement `map/tileWatch.ts` and the fps sampler": [
@@ -1022,6 +1052,21 @@
         "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
         "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
         "timestamp": 1794280831101
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794302584175
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794303332754
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794303416553
       }
     ],
     "13.4 Write example tests with mocked map events": [
@@ -1029,6 +1074,21 @@
         "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
         "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
         "timestamp": 1794280831189
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794302584292
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794303422392
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794303526904
       }
     ],
     "14.1 Create the app shell: `index.html`, `ui/` base, self-hosted fonts and `@font-face`": [
@@ -1036,6 +1096,11 @@
         "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
         "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
         "timestamp": 1794280831250
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794302584388
       }
     ],
     "14.2 Implement City_Picker, progress state and error/retry messages": [
@@ -1043,6 +1108,11 @@
         "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
         "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
         "timestamp": 1794280831305
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794302584498
       }
     ],
     "14.3 Implement Plan_Mode controls": [
@@ -1050,6 +1120,11 @@
         "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
         "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
         "timestamp": 1794280831358
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794302584587
       }
     ],
     "14.4 Implement the route panel and `ui/heartbeatChart.ts`": [
@@ -1057,6 +1132,11 @@
         "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
         "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
         "timestamp": 1794280831417
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794302584669
       }
     ],
     "14.5 Implement Report_Mode, corrections and Dark_Spot_List": [
@@ -1064,6 +1144,11 @@
         "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
         "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
         "timestamp": 1794280831474
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794302584752
       }
     ],
     "14.6 Implement About, How_Gloam_Guesses_Screen, Legend, Demo_Mode, Reset and Reduced_Effects switch": [
@@ -1071,6 +1156,11 @@
         "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
         "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
         "timestamp": 1794280831541
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794302584834
       }
     ],
     "14.7 Wire everything in `main.ts`": [
@@ -1078,6 +1168,11 @@
         "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
         "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
         "timestamp": 1794280831591
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794302584909
       }
     ],
     "14.8 Create `docs/app-checks.md` as the checklist and results file for DOM and layout checks": [
@@ -1085,6 +1180,11 @@
         "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
         "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
         "timestamp": 1794280831643
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794302584991
       }
     ],
     "15. Checkpoint - Ensure all tests pass": [
@@ -1092,6 +1192,11 @@
         "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
         "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
         "timestamp": 1794280831700
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794302585059
       }
     ],
     "16.1 Add Render static-site config and `app/scripts/checkHost.ts`": [
@@ -1099,6 +1204,11 @@
         "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
         "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
         "timestamp": 1794280831754
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794302585134
       }
     ],
     "16.2 Record hosting results in `docs/app-checks.md`": [
@@ -1106,6 +1216,11 @@
         "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
         "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
         "timestamp": 1794280831806
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794302585218
       }
     ],
     "17.1 Add an app section to `README.md`": [
@@ -1113,6 +1228,11 @@
         "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
         "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
         "timestamp": 1794280831858
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794302585324
       }
     ],
     "17.2 Add attribution and font licence files": [
@@ -1120,6 +1240,11 @@
         "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
         "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
         "timestamp": 1794280831917
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794302585404
       }
     ],
     "18. Final checkpoint - Ensure all tests pass": [
@@ -1127,6 +1252,11 @@
         "executionId": "ff93b810-4779-4595-b652-f73fb4c433bd",
         "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
         "timestamp": 1794280831972
+      },
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794302585487
       }
     ],
     "12. Shell I/O": [
@@ -1134,6 +1264,13 @@
         "executionId": "1f5640d1-c29f-4f28-bc7b-62ec9c770c04",
         "chatSessionId": "sess_22ab801e-d17a-464f-9cad-e69bba04e42a",
         "timestamp": 1794300803941
+      }
+    ],
+    "13. Map and visuals": [
+      {
+        "executionId": "4f77d59e-2169-4dd8-87bf-4156946de0f8",
+        "chatSessionId": "sess_4d1ced78-bdcf-4537-baae-0e879e9b3fe7",
+        "timestamp": 1794303526975
       }
     ]
   }

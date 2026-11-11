@@ -1,0 +1,331 @@
+/* Gloam base styles. Colours come from custom properties that ui/shell.ts sets from
+   visual/palette.ts; this file holds no hex values. Mobile first (390 x 844). */
+
+@font-face {
+  font-family: 'Caprasimo';
+  src: url('../assets/fonts/caprasimo-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  src: url('../assets/fonts/dm-sans-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  src: url('../assets/fonts/dm-sans-latin-700-normal.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: white;
+  background: linear-gradient(var(--night-top), var(--night-bottom));
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Caprasimo', Georgia, serif;
+  font-weight: 400;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+/* Visible focus on every interactive control (Requirement 15.4). */
+:focus-visible {
+  outline: 3px solid var(--lantern);
+  outline-offset: 2px;
+}
+
+/* Frosted glass card. */
+.glass {
+  background: var(--glass-fill);
+  border: var(--glass-border-width) solid var(--glass-border);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-radius: 0.75rem;
+}
+
+/* ---- Layout ---------------------------------------------------------------- */
+
+.shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* Compact header: one row (wordmark + city chips) and a small caption line.
+   On a phone it is 4 + 44 + ~14 + 4 = about 66 px, under the 72 px limit. */
+.topbar {
+  min-width: 0;
+  padding: 0.25rem 0.75rem;
+}
+
+.topbar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.brand {
+  flex: none;
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.1;
+}
+
+/* The chips scroll sideways inside this box; the page itself never does. */
+.picker-host {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+.picker-host::-webkit-scrollbar {
+  display: none;
+}
+
+.caption-host {
+  min-width: 0;
+}
+
+.caption-host:empty {
+  display: none;
+}
+
+/* The map owns its cell. Panels are siblings, never overlays, so the attribution
+   control inside the map is never covered. */
+.map-wrap {
+  position: relative;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.map {
+  position: absolute;
+  inset: 0;
+}
+
+.corner-host {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  max-width: calc(100% - 1rem);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.corner-host > * {
+  pointer-events: auto;
+}
+
+.panel {
+  min-width: 0;
+  max-height: 40vh;
+  max-height: 40dvh;
+  padding: 0.5rem 0.75rem;
+  overflow-y: auto;
+}
+
+.panel:empty {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .shell {
+    grid-template-columns: 22rem minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .topbar {
+    grid-column: 1 / -1;
+    padding: 0.35rem 1rem;
+  }
+
+  .map-wrap {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .panel {
+    grid-column: 1;
+    grid-row: 2;
+    max-height: none;
+    padding: 0.75rem 1rem;
+  }
+
+  /* With nothing in the panel yet, give the map the full width. */
+  .shell:has(.panel:empty) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .shell:has(.panel:empty) .map-wrap {
+    grid-column: 1;
+  }
+}
+
+/* ---- City picker ----------------------------------------------------------- */
+
+.city-list {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  width: max-content;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.city-item {
+  flex: none;
+}
+
+.city-button {
+  min-height: 2.75rem;
+  padding: 0.4rem 0.9rem;
+  white-space: nowrap;
+  cursor: pointer;
+  background: var(--glass-fill);
+  border: var(--glass-border-width) solid var(--glass-border);
+  border-radius: 999px;
+}
+
+.city-button[aria-current='true'] {
+  border-color: var(--lantern);
+  background: var(--night-bottom);
+}
+
+/* The focus ring sits inside the chip so the scroll box does not clip it. */
+.city-button:focus-visible {
+  outline-offset: -3px;
+}
+
+.city-description {
+  margin: 0;
+  overflow: hidden;
+  font-size: 0.7rem;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: 0.85;
+}
+
+.picker-status {
+  margin-top: 0.5rem;
+}
+
+.picker-status:empty {
+  display: none;
+}
+
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.progress-ring {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--glass-border);
+  border-top-color: var(--lantern);
+  border-radius: 50%;
+  animation: gloam-spin 0.9s linear infinite;
+}
+
+@keyframes gloam-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.problem {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-left: 4px solid var(--pumpkin);
+}
+
+.problem-text {
+  flex: 1 1 12rem;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.retry-button {
+  min-height: 2.75rem;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  background: var(--pumpkin);
+  border: 0;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+/* ---- Map corner note ------------------------------------------------------- */
+
+.corner-note {
+  padding: 0.35rem 0.6rem;
+  font-size: 0.75rem;
+  line-height: 1.3;
+}
+
+.corner-note p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.corner-note p + p {
+  margin-top: 0.2rem;
+}
+
+/* ---- Reduced effects ------------------------------------------------------- */
+
+.reduced-effects .progress-ring {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progress-ring {
+    animation: none;
+  }
+}
+
+[hidden] {
+  display: none !important;
+}

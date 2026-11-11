@@ -1,8 +1,6 @@
 import type { Tier } from '../types';
 import { requireUnit } from '../validation/guards';
-
-/** Design palette. */
-export const PALETTE = { pumpkin: '#ff7100', lantern: '#fd9702', glow: '#e102ff', dusk: '#ae03ff' } as const;
+import { PALETTE } from './palette';
 
 export const TIERS: ReadonlyArray<Tier> = [
   'confirmed_lit',

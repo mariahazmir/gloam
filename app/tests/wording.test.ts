@@ -36,6 +36,12 @@ function collect(): Entry[] {
             out.push({ path: `${path}(${tier}, ${c})`, kind: t.kind, text: f(tier, c) });
       } else if (path.endsWith("confirmedBy")) {
         for (const c of COUNTS) out.push({ path: `${path}(${c})`, kind: t.kind, text: f(c) });
+      } else if (path.endsWith("loadingCity")) {
+        for (const city of ["Seattle", "Kuala Lumpur"]) out.push({ path: `${path}(${city})`, kind: t.kind, text: f(city) });
+      } else if (path.endsWith("packProblem")) {
+        for (const file of ["segments", "buildings"])
+          for (const kind of ["missing", "unreadable", "invalid"])
+            out.push({ path: `${path}(${file}, ${kind})`, kind: t.kind, text: f("Seattle", "seattle", file, kind) });
       } else {
         throw new Error(`${path}: template has no sample arguments in wording.test.ts`);
       }

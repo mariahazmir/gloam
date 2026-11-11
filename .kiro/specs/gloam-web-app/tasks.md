@@ -220,25 +220,25 @@ Rules for every task:
     - `getCurrentPosition` with `timeout: 10000` plus a 10 s guard timer; result kept in memory only; denial, unavailability or timeout resolve to a typed failure and send nothing
     - _Requirements: 6.2, 6.3, 13.7, 13.8, 17.14, 17.15_
 
-- [ ] 13. Map and visuals
-  - [ ] 13.1 Implement `map/style.ts` and `map/mapView.ts`
-    - Bundled dark style (OpenFreeMap vector source and glyphs copied from its published style, no sprite, no base building layer); `maxPitch: 60`; always-open attribution for OpenStreetMap contributors, OpenFreeMap and OpenMapTiles
+- [x] 13. Map and visuals
+  - [x] 13.1 Implement `map/style.ts` and `map/mapView.ts`
+    - Bundled dark style (`openmaptiles` vector source via TileJSON `https://tiles.openfreemap.org/planet`; layers from water, waterway, landcover, landuse, park, transportation only; no glyphs, no sprite, no symbol layers, no base building layer); `maxPitch: 60`; always-open attribution for OpenStreetMap contributors, OpenFreeMap and OpenMapTiles
     - _Requirements: 5.1, 5.3, 5.4, 13.5_
-  - [ ] 13.2 Implement `map/layers.ts`
+  - [x] 13.2 Implement `map/layers.ts`
     - Segments source with `promoteId: 'id'` and `tier` and `conf` properties; steady glow, fog and static layers; 27 flicker cohort layers updated every 33 ms; "your note" marker layer driven by feature-state; building `fill-extrusion` from `height_m`; route layer last; reduced-effects switch applies within 500 ms
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.9, 4.11, 4.12, 5.2, 10.3_
-  - [ ] 13.3 Implement `map/tileWatch.ts` and the fps sampler
-    - 3 s tile rule hides base layers and shows the message while segments stay on a plain background; `requestAnimationFrame` frame counter feeds `stepEffects` once per second
+  - [x] 13.3 Implement `map/tileWatch.ts` and the fps sampler
+    - 5 s tile rule hides base layers and shows the message while segments stay on a plain background; `requestAnimationFrame` frame counter feeds `stepEffects` once per second
     - _Requirements: 5.5, 5.6, 5.7, 17.12_
-  - [ ] 13.4 Write example tests with mocked map events
+  - [x] 13.4 Write example tests with mocked map events
     - Tile timeout and source error behaviour; route layer is last; fps sampler feeds the ladder
     - _Requirements: 4.6, 5.6, 5.7_
 
 - [ ] 14. UI
-  - [ ] 14.1 Create the app shell: `index.html`, `ui/` base, self-hosted fonts and `@font-face`
+  - [x] 14.1 Create the app shell: `index.html`, `ui/` base, self-hosted fonts and `@font-face`
     - Caprasimo and DM Sans woff2 in `assets/fonts/`; layout without horizontal scroll at 390 x 844; centred or two-panel at 768 px and wider; visible focus style; panels reserve space for attribution
     - _Requirements: 5.3, 15.2, 15.3, 15.4_
-  - [ ] 14.2 Implement City_Picker, progress state and error/retry messages
+  - [x] 14.2 Implement City_Picker, progress state and error/retry messages
     - Five entries, progress removed within 500 ms of outcome, messages naming the file, retry control, attribution and estimates note shown in a map corner
     - _Requirements: 1.1, 1.3, 1.5, 1.6, 1.8, 15.6, 17.4, 17.16_
   - [ ] 14.3 Implement Plan_Mode controls
