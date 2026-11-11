@@ -139,6 +139,56 @@ export const STRINGS = {
     flicker: l('Flicker: estimated, faster and less regular when less sure'),
     fog: l('Fog: likely dark, mapped as unlit or estimated darker'),
   },
+  tools: {
+    heading: g('Legend and settings'),
+    legendHeading: g('Legend'),
+    demoSwitch: g('Demo mode'),
+    effectsSwitch: g('Reduced effects'),
+    openAbout: g('About'),
+    openGuess: g('How Gloam guesses'),
+    resetHint: g('Reset returns to the example walk. Your notes stay on this device.'),
+  },
+  about: {
+    title: g('About Gloam'),
+    close: g('Close'),
+    what: g(
+      'Gloam is a haunted-map walking app for people walking at night. It estimates which streets are likely well lit from map data, and plans routes that trade distance against dread.',
+    ),
+    tiles: g(
+      'The map tile provider can see the area you are viewing, but it cannot see your routes. Start points, end points and routes stay on your device.',
+    ),
+    noAccounts: g('There are no accounts and no sign-in. Notes you add are stored on this device only.'),
+    mapCredit: g('Map data © OpenStreetMap contributors. Tiles from OpenFreeMap, schema from OpenMapTiles.'),
+    cityHeading: g('About the loaded city'),
+    noCity: g('No city is loaded yet.'),
+  },
+  guess: {
+    title: g('How Gloam guesses'),
+    fromMapData: g(
+      'Gloam estimates which streets are likely well lit from map data, not from lighting records or sensors.',
+    ),
+    signal: g(
+      'Most of the signal is road type and path kind. Nearby places such as shops and bus stops add little on tagged walking paths.',
+    ),
+    canBeWrong: g('Estimates can be wrong, and lighting records are missing in many cities.'),
+    numbersHeading: g('How the guesses held up'),
+    aucNote: g('AUC shows how well the model ranks lit streets above unlit ones. 0.5 is a coin flip, 1 is perfect.'),
+    figure: {
+      kind: 'general',
+      text: (city: string, kind: string, model: string, baseline: string) =>
+        `${city}, ${kind}: model AUC ${model}, highway-footway-rate baseline AUC ${baseline}`,
+    } as Tpl<[string, string, string, string]>,
+    didNotBeat: {
+      kind: 'general',
+      text: (cities: string) => `The model did not beat the highway-footway-rate baseline in: ${cities}.`,
+    } as Tpl<[string]>,
+    beatEverywhere: g('The model beat the highway-footway-rate baseline in every city that was tested.'),
+    skipped: {
+      kind: 'general',
+      text: (cities: string) => `Not tested, because too few streets were mapped as unlit to check against: ${cities}.`,
+    } as Tpl<[string]>,
+    rawLink: g('Read the full validation text'),
+  },
   labels: {
     reset: g('Reset'),
     sampleData: g(SAMPLE_DATA_LABEL),

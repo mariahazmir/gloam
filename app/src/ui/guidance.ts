@@ -19,7 +19,8 @@ export function createGuidance(host: HTMLElement, controller: PlanController): v
   const hint = el('p', { className: 'hint', text: STRINGS.hint.setPoints.text, attrs: { role: 'status' } });
 
   const render = ({ state }: PlanSnapshot): void => {
-    if (state.exampleActive) host.replaceChildren(banner);
+    // The example is not the user's own walk, so the hint stays up beside it (Requirements 17.10, 17.13).
+    if (state.exampleActive) host.replaceChildren(banner, hint);
     else if (state.start === null || state.end === null) host.replaceChildren(hint);
     else host.replaceChildren();
   };

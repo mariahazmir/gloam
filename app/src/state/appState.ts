@@ -45,6 +45,8 @@ export type AppAction =
   | { type: 'showExample'; start: LonLat; end: LonLat }
   | { type: 'setLambda'; lambda: number }
   | { type: 'setSettings'; settings: PersonalSettings }
+  | { type: 'setDemo'; demo: boolean }
+  | { type: 'setReducedEffects'; reducedEffects: boolean }
   | ({ type: 'reset' } & InitialOptions);
 
 /** First-run state: Plan_Mode, Start_Setting_State (Requirement 6.1). */
@@ -151,6 +153,10 @@ export function reduce(state: AppState, action: AppAction): AppState {
       return { ...state, lambda: requireLambda(action.lambda) };
     case 'setSettings':
       return { ...state, settings: { ...action.settings } };
+    case 'setDemo':
+      return { ...state, demo: action.demo };
+    case 'setReducedEffects':
+      return { ...state, reducedEffects: action.reducedEffects };
     case 'reset': {
       const { type: _type, ...opts } = action;
       return createInitialState(opts);

@@ -663,6 +663,121 @@ button {
   border-radius: 0.75rem;
 }
 
+/* ---- Legend, switches and dialogs ------------------------------------------ */
+
+.tools {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+}
+
+.tools-heading {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.legend-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin: 0.3rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+}
+
+/* Each swatch differs by line pattern as well as colour. */
+.legend-swatch {
+  flex: none;
+  width: 2rem;
+  height: 0;
+  border-top: 4px solid var(--lantern);
+}
+
+.legend-glow {
+  box-shadow: 0 0 8px 2px var(--lantern);
+}
+
+.legend-flicker {
+  border-top-style: dashed;
+}
+
+.legend-fog {
+  border-top: 4px dotted var(--dusk);
+  filter: blur(1px);
+}
+
+.tool-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* A switch shows "on" or "off" in its text; the tick and border mark the on state too. */
+.tool-switch[aria-checked='true'] {
+  background: var(--night-bottom);
+  border: 3px solid var(--lantern);
+  font-weight: 700;
+}
+
+.tool-note {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.sample-badge {
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--night-bottom);
+  background: var(--lantern);
+  border: 2px dashed var(--night-bottom);
+  border-radius: 999px;
+}
+
+.info-dialog {
+  width: min(32rem, calc(100vw - 1.5rem));
+  max-height: calc(100dvh - 2rem);
+  padding: 1rem;
+  overflow-y: auto;
+  color: white;
+  background: var(--night-bottom);
+}
+
+.info-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.dialog-title {
+  margin: 0 0 0.5rem;
+}
+
+.dialog-body p {
+  margin: 0 0 0.6rem;
+}
+
+.figure-list {
+  margin: 0 0 0.6rem;
+  padding-left: 1.2rem;
+}
+
+.raw-link {
+  color: var(--lantern);
+}
+
+.dialog-actions {
+  margin-top: 0.75rem;
+}
+
 /* ---- Reduced effects ------------------------------------------------------- */
 
 .reduced-effects .progress-ring,

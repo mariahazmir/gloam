@@ -250,7 +250,7 @@ Rules for every task:
   - [ ] 14.5 Implement Report_Mode, corrections and Dark_Spot_List
     - Segment selection, three one-tap report buttons, override applied within 1 s, "your note" marker, "confirmed by N people" labels, store error message, Dark_Spot_List with empty state, "SAMPLE DATA" labels, CSV download with export-failed message
     - _Requirements: 10.1, 10.3, 10.5, 10.8, 10.9, 10.10, 11.1, 11.2, 11.4, 11.6, 11.7_
-  - [ ] 14.6 Implement About, How_Gloam_Guesses_Screen, Legend, Demo_Mode, Reset and Reduced_Effects switch
+  - [x] 14.6 Implement About, How_Gloam_Guesses_Screen, Legend, Demo_Mode, Reset and Reduced_Effects switch
     - About states that the tile provider sees the area viewed but not routes; guess screen shows required statements and parsed validation numbers, names cities that did not beat the baseline, links to the bundled raw text; Legend with glow, flicker and fog lines; Demo_Mode control with state, "SAMPLE DATA" badges, hosted default via `VITE_GLOAM_HOSTED`; Reset_Control; switch reflecting `prefers-reduced-motion` at load
     - _Requirements: 4.9, 4.10, 12.3, 12.4, 12.5, 12.6, 12.7, 12.9, 13.11, 14.1, 14.2, 14.3, 14.4, 14.5, 14.6, 17.9, 17.11, 17.13_
   - [ ] 14.7 Wire everything in `main.ts`

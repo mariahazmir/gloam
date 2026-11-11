@@ -4,8 +4,14 @@ import {
   type LayerMap,
   type LayerSegment,
   type Timers,
+  END_MARKER_LAYER_ID,
+  MARKERS_SOURCE_ID,
   NOTE_LAYER_ID,
+  ROUTE_CASING_LAYER_ID,
   ROUTE_LAYER_ID,
+  START_MARKER_LAYER_ID,
+  buildMarkersGeoJSON,
+  setMarkers,
   SEGMENTS_SOURCE_ID,
   addGloamLayers,
   applyEffects,
@@ -143,6 +149,48 @@ describe('map layers', () => {
     setRoute(map, [[0, 0], [1, 1]]);
     expect((sources.get('gloam-route')!.data as { features: unknown[] }).features).toHaveLength(1);
     expect(featureId('abc')).toBe('abc');
+  });
+
+  it('draws markers above the segments and note layer, below the route, with different shapes', () => {
+    const { map, layers } = mockMap();
+    addGloamLayers(map, segs);
+    const idx = (id: string) => layers.findIndex((l) => l.id === id);
+    const lastSegment = Math.max(...layers.filter((l) => /^gloam-(fog|glow|static|flicker)-/.test(l.id)).map((l) => idx(l.id)));
+    for (const id of [START_MARKER_LAYER_ID, END_MARKER_LAYER_ID]) {
+      expect(layers[idx(id)]!.type).toBe('circle');
+      expect(idx(id)).toBeGreaterThan(lastSegment);
+      expect(idx(id)).toBeLessThan(idx(ROUTE_CASING_LAYER_ID));
+      expect(idx(id)).toBeLessThan(idx(ROUTE_LAYER_ID));
+    }
+    const start = layers[idx(START_MARKER_LAYER_ID)]!.paint!;
+    const end = layers[idx(END_MARKER_LAYER_ID)]!.paint!;
+    expect(start['circle-radius']).not.toBe(end['circle-radius']);
+    expect(start['circle-stroke-width']).not.toBe(end['circle-stroke-width']);
+    expect(end['circle-opacity']).toBeLessThan(1); // the end ring is hollow-looking, the start disc is solid
+    expect(start['circle-opacity']).toBeUndefined();
+  });
+
+  it('builds marker data: tapped position until a snap exists, then the snapped one', () => {
+    const tapped = { lon: 10, lat: 20 };
+    const other = { lon: 11, lat: 21 };
+    expect(buildMarkersGeoJSON(null, null).features).toEqual([]);
+    const before = buildMarkersGeoJSON(tapped, null);
+    expect(before.features).toEqual([
+      { type: 'Feature', properties: { role: 'start' }, geometry: { type: 'Point', coordinates: [10, 20] } },
+    ]);
+    const snapped = buildMarkersGeoJSON(tapped, other, (p) => (p === tapped ? { lon: 10.5, lat: 20.5 } : null));
+    expect(snapped.features).toEqual([
+      { type: 'Feature', properties: { role: 'start' }, geometry: { type: 'Point', coordinates: [10.5, 20.5] } },
+      { type: 'Feature', properties: { role: 'end' }, geometry: { type: 'Point', coordinates: [11, 21] } },
+    ]);
+    expect(() => buildMarkersGeoJSON({ lon: Number.NaN, lat: 0 }, null)).toThrow(/start longitude/);
+  });
+
+  it('setMarkers updates the markers source', () => {
+    const { map, sources } = mockMap();
+    addGloamLayers(map, segs);
+    setMarkers(map, { lon: 1, lat: 2 }, null);
+    expect((sources.get(MARKERS_SOURCE_ID)!.data as { features: unknown[] }).features).toHaveLength(1);
   });
 
   it('rejects a bad confidence naming the argument', () => {

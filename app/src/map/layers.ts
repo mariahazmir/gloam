@@ -28,6 +28,9 @@ export const BUILDINGS_LAYER_ID = 'gloam-buildings-extrusion';
 /** Buildings are drawn from this zoom up. */
 export const BUILDINGS_MIN_ZOOM = 14;
 export const NOTE_LAYER_ID = 'gloam-note';
+export const MARKERS_SOURCE_ID = 'gloam-markers';
+export const START_MARKER_LAYER_ID = 'gloam-marker-start';
+export const END_MARKER_LAYER_ID = 'gloam-marker-end';
 export const ROUTE_CASING_LAYER_ID = 'gloam-route-casing';
 /** The route layer. Always the last layer in the style (Requirement 4.6). */
 export const ROUTE_LAYER_ID = 'gloam-route-line';
@@ -129,6 +132,72 @@ function routeGeoJSON(coords: ReadonlyArray<Position> | null): FeatureCollection
       { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: coords.map((p) => [p[0], p[1]]) } },
     ],
   };
+}
+
+// ---- Start and end markers -------------------------------------------------
+
+export interface MarkerPoint {
+  lon: number;
+  lat: number;
+}
+
+/**
+ * One Point feature per set point, with `role` 'start' or 'end'. A point is drawn at its
+ * Snap position when `snapTo` returns one, otherwise where it was tapped, so a marker
+ * shows as soon as the point is set (Requirement 6.12). Pure.
+ */
+export function buildMarkersGeoJSON(
+  start: MarkerPoint | null,
+  end: MarkerPoint | null,
+  snapTo: (p: MarkerPoint) => MarkerPoint | null = () => null,
+): FeatureCollection {
+  const features: unknown[] = [];
+  const add = (role: 'start' | 'end', p: MarkerPoint | null): void => {
+    if (p === null) return;
+    requireFinite(`${role} longitude`, p.lon);
+    requireFinite(`${role} latitude`, p.lat);
+    const at = snapTo(p) ?? p;
+    features.push({
+      type: 'Feature',
+      properties: { role },
+      geometry: { type: 'Point', coordinates: [at.lon, at.lat] },
+    });
+  };
+  add('start', start);
+  add('end', end);
+  return { type: 'FeatureCollection', features };
+}
+
+function markerLayerSpecs(): LayerSpecification[] {
+  return [
+    {
+      // Start: a filled disc.
+      id: START_MARKER_LAYER_ID,
+      type: 'circle',
+      source: MARKERS_SOURCE_ID,
+      filter: ['==', ['get', 'role'], 'start'],
+      paint: {
+        'circle-radius': 7,
+        'circle-color': PALETTE.lantern,
+        'circle-stroke-width': 2,
+        'circle-stroke-color': NIGHT.bottom,
+      },
+    },
+    {
+      // End: a larger hollow ring, so it differs from the start by shape and not colour alone.
+      id: END_MARKER_LAYER_ID,
+      type: 'circle',
+      source: MARKERS_SOURCE_ID,
+      filter: ['==', ['get', 'role'], 'end'],
+      paint: {
+        'circle-radius': 9,
+        'circle-color': NIGHT.bottom,
+        'circle-opacity': 0.35,
+        'circle-stroke-width': 4,
+        'circle-stroke-color': PALETTE.pumpkin,
+      },
+    },
+  ] as unknown as LayerSpecification[];
 }
 
 // ---- Flicker cohorts -------------------------------------------------------
@@ -303,8 +372,10 @@ export function addGloamLayers(
 ): void {
   map.addSource(SEGMENTS_SOURCE_ID, geojson(buildSegmentsGeoJSON(segments), { promoteId: 'id' }));
   map.addSource(ROUTE_SOURCE_ID, geojson(routeGeoJSON(null)));
+  map.addSource(MARKERS_SOURCE_ID, geojson(buildMarkersGeoJSON(null, null)));
   for (const spec of segmentLayerSpecs(effects.reduced)) map.addLayer(spec);
   map.addLayer(noteLayerSpec());
+  for (const spec of markerLayerSpecs()) map.addLayer(spec);
   for (const spec of routeLayerSpecs()) map.addLayer(spec);
   if (buildings !== null) setBuildings(map, buildings, effects);
   applyEffects(map, effects);
@@ -332,6 +403,8 @@ export function removeGloamLayers(map: LayerMap): void {
   const ids = [
     ROUTE_LAYER_ID,
     ROUTE_CASING_LAYER_ID,
+    END_MARKER_LAYER_ID,
+    START_MARKER_LAYER_ID,
     NOTE_LAYER_ID,
     ...cohorts().map((c) => c.layerId).reverse(),
     ...STATIC_TIERS.map(staticLayerId),
@@ -340,7 +413,7 @@ export function removeGloamLayers(map: LayerMap): void {
     BUILDINGS_LAYER_ID,
   ];
   for (const id of ids) if (map.getLayer(id)) map.removeLayer(id);
-  for (const id of [ROUTE_SOURCE_ID, BUILDINGS_SOURCE_ID, SEGMENTS_SOURCE_ID]) {
+  for (const id of [MARKERS_SOURCE_ID, ROUTE_SOURCE_ID, BUILDINGS_SOURCE_ID, SEGMENTS_SOURCE_ID]) {
     if (map.getSource(id)) map.removeSource(id);
   }
 }
@@ -410,6 +483,18 @@ export function startFlicker(
 /** Marks a segment as carrying the user's note (Requirement 10.3). No data is rebuilt. */
 export function setNoted(map: LayerMap, id: string, noted: boolean): void {
   map.setFeatureState({ source: SEGMENTS_SOURCE_ID, id: featureId(id) }, { noted });
+}
+
+/** Draws the start and end markers; a null point has no marker. */
+export function setMarkers(
+  map: LayerMap,
+  start: MarkerPoint | null,
+  end: MarkerPoint | null,
+  snapTo?: (p: MarkerPoint) => MarkerPoint | null,
+): void {
+  const src = map.getSource(MARKERS_SOURCE_ID) as DataSourceLike | undefined;
+  if (!src) throw new ArgumentError('map', `has no source ${MARKERS_SOURCE_ID}; call addGloamLayers first`);
+  src.setData(buildMarkersGeoJSON(start, end, snapTo));
 }
 
 /** Shows the Gloam_Route, or clears it with null. */

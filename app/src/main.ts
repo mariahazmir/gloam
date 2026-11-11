@@ -2,11 +2,13 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { STRINGS } from './content/strings';
 import { boundsOf } from './geo/bounds';
 import { buildGraph, type StreetGraph } from './graph/build';
-import { buildSnapIndex, packBounds } from './graph/snap';
+import { buildSnapIndex, packBounds, snap } from './graph/snap';
 import {
   addGloamLayers,
+  applyEffects,
   removeGloamLayers,
   setBuildings,
+  setMarkers,
   setRoute,
   startFlicker,
   type LayerEffects,
@@ -14,7 +16,9 @@ import {
 } from './map/layers';
 import { createMapView } from './map/mapView';
 import { loadPack } from './net/packLoader';
-import { FIRST_RUN_PACK, MANIFEST, type ManifestEntry, type PackId } from './pack/manifest';
+import { loadSampleData } from './net/sampleLoader';
+import { FIRST_RUN_PACK, MANIFEST, SAMPLE_DATA_URL, type ManifestEntry, type PackId } from './pack/manifest';
+import type { SampleCorrection } from './pack/sampleData';
 import { medianConfidence } from './routing/costs';
 import { heartbeatSeries, lowConfidenceThreshold } from './routing/heartbeat';
 import type { PlanPack } from './routing/planner';
@@ -33,14 +37,18 @@ import { createMapCorner } from './ui/mapCorner';
 import { createPlanControls } from './ui/planControls';
 import { createRoutePanel } from './ui/routePanel';
 import { createShell } from './ui/shell';
+import { createAboutDialog, createGuessDialog } from './ui/infoDialogs';
+import { createTools } from './ui/tools';
 import { el } from './ui/dom';
+import { hostedDefault, prefersReducedMotion } from './state/firstRun';
+import validationRaw from '../../docs/validation.md?raw';
 import { EFFECT_LADDER } from './visual/effects';
 
 // Wiring (task 14.7), for what exists so far: the map, the first-run Seattle pack drawn from
 // its Segment_File, the flicker cohorts, then the Street_Graph built after first paint, the
 // Sample_Walk and the buildings. Plan_Mode controls, taps, the route panel and the lantern
-// route layer follow the plan controller's state. Report_Mode, About, Legend, Demo_Mode and
-// the Reduced_Effects switch come with tasks 14.5 and 14.6.
+// route layer follow the plan controller's state. About, the guess screen, Legend, Demo_Mode,
+// Reset and the Reduced_Effects switch are task 14.6. Report_Mode comes with task 14.5.
 
 /** Camera when a pack is fitted. maxPitch (60) stays in mapView.ts. */
 const FIT_PITCH = 45;
@@ -51,9 +59,12 @@ if (!root) throw new Error('app: missing #app element');
 
 const shell = createShell(root);
 
-// Reduced_Effects_Mode follows the system setting until the switch exists (task 14.6).
-const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+// First-run values: Reduced_Effects_Mode follows the system setting at load (Requirement 4.9) and
+// Demo_Mode is on only in the hosted build (14.2, 17.11). The Reset_Control returns to these.
+const reduced = prefersReducedMotion(window);
+const hostedDemo = hostedDefault(import.meta.env.VITE_GLOAM_HOSTED);
 document.documentElement.classList.toggle('reduced-effects', reduced);
+/** Mutated by the Reduced_Effects switch; the flicker timer and layer calls read it each time. */
 const effects: LayerEffects = { reduced, active: EFFECT_LADDER };
 /** Reported while no street layers exist, so the flicker timer does nothing. */
 const NO_LAYERS: LayerEffects = { reduced: true, active: [] };
@@ -101,7 +112,7 @@ let anyPackCompleted = false;
 
 const EMPTY_OVERRIDES: ReadonlyMap<string, Override> = new Map<string, Override>();
 const controller = createPlanController({
-  initial: createInitialState({ reducedEffects: reduced }),
+  initial: createInitialState({ reducedEffects: reduced, demo: hostedDemo }),
   getPack: () => shown?.plan ?? null,
   getOverrides: () => EMPTY_OVERRIDES,
   getMapCenter: () => {
@@ -120,6 +131,66 @@ createGuidance(guidanceHost, controller);
 createPlanControls({ host: shell.panel, crosshairHost: shell.crosshairHost, controller });
 const routePanel = createRoutePanel(routeHost);
 
+// ---- Legend, Demo_Mode, Reduced_Effects switch, About, guess screen, Reset ------
+
+const about = createAboutDialog();
+const guess = createGuessDialog(validationRaw);
+
+/** Reset_Control (Requirement 17.13): synchronous, so it finishes well inside 1 second. */
+function resetToFirstRun(): void {
+  const walk = (shown !== null ? entryOf(shown.id) : firstEntry).sampleWalk;
+  controller.dispatch({
+    type: 'showExample',
+    start: { lon: walk.start[0], lat: walk.start[1] },
+    end: { lon: walk.end[0], lat: walk.end[1] },
+  });
+  controller.dispatch({ type: 'setDemo', demo: hostedDemo });
+  controller.dispatch({ type: 'setReducedEffects', reducedEffects: reduced });
+}
+
+const tools = createTools({
+  host: shell.panel,
+  controller,
+  onAbout: () => about.open(),
+  onGuess: () => guess.open(),
+  onReset: resetToFirstRun,
+});
+
+/** Sample_Data held while Demo_Mode is on. The Dark_Spot_List and overlays (task 14.5) read it. */
+let sampleCorrections: ReadonlyArray<SampleCorrection> = [];
+let demoApplied = false;
+let demoRequest = 0;
+
+controller.subscribe(({ state }) => {
+  // Reduced_Effects switch: applied at once, with no reload (Requirement 4.11).
+  if (state.reducedEffects !== effects.reduced) {
+    effects.reduced = state.reducedEffects;
+    document.documentElement.classList.toggle('reduced-effects', state.reducedEffects);
+    if (layersReady) applyEffects(map, effects);
+  }
+  // Demo_Mode: load Sample_Data when it turns on, drop it when it turns off (Requirements 14.3 to 14.6).
+  if (state.demo === demoApplied) return;
+  demoApplied = state.demo;
+  const mine = ++demoRequest;
+  if (!state.demo) {
+    sampleCorrections = [];
+    tools.showDemoError(false);
+    return;
+  }
+  void loadSampleData(true, SAMPLE_DATA_URL, window.fetch.bind(window)).then((loaded) => {
+    if (mine !== demoRequest) return; // switched again while loading
+    // The loader gives an empty list when the file is missing or invalid, and a real file is never empty.
+    if (loaded.length === 0) {
+      tools.showDemoError(true);
+      demoApplied = false;
+      controller.dispatch({ type: 'setDemo', demo: false }); // keep Demo_Mode off (Requirement 14.6)
+      return;
+    }
+    sampleCorrections = loaded;
+    tools.showDemoError(false);
+  });
+});
+
 // A tap on the map sets a point in Plan_Mode; the reducer ignores it for points in Report_Mode.
 map.on('click', (e) => {
   const p = e.lngLat.wrap();
@@ -131,6 +202,11 @@ let fittedFor: object | null = null;
 
 controller.subscribe(({ state, outcome }) => {
   const pack = shown;
+  // Markers appear as soon as a point is set: snapped when the graph is ready, else where tapped.
+  if (layersReady) {
+    const index = pack?.plan?.index ?? null;
+    setMarkers(map, state.start, state.end, index === null ? undefined : (p) => snap(index, p.lon, p.lat));
+  }
   if (outcome.kind === 'route' && pack !== null && pack.graph !== null && pack.plan !== null) {
     const graph = pack.graph;
     const tierOf = (edge: number): Tier => pack.tiers.get(graph.edges[edge]!.segmentId) ?? 'typical';
@@ -184,6 +260,7 @@ async function drawStreets(id: PackId, meta: PackMeta, segments: Segment[]): Pro
   const bounds = boundsOf(segments.flatMap((s) => s.coordinates));
   map.fitBounds([bounds.sw, bounds.ne], { padding: 24, maxZoom: 17, duration: 0, pitch: FIT_PITCH, bearing: FIT_BEARING });
   corner.show(meta);
+  about.setCity(meta);
   picker.setActive(id);
   if (!flickerStarted) {
     flickerStarted = true;
@@ -251,6 +328,7 @@ function discardPartial(): void {
   shown = null;
   controller.refresh();
   corner.clear();
+  about.setCity(null);
   picker.setActive(null);
 }
 
