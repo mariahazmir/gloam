@@ -38,6 +38,12 @@ function collect(): Entry[] {
         for (const c of COUNTS) out.push({ path: `${path}(${c})`, kind: t.kind, text: f(c) });
       } else if (path.endsWith("loadingCity")) {
         for (const city of ["Seattle", "Kuala Lumpur"]) out.push({ path: `${path}(${city})`, kind: t.kind, text: f(city) });
+      } else if (path.endsWith("heartbeat.routeLength")) {
+        for (const d of ["0 m", "850 m", "2.1 km"]) out.push({ path: `${path}(${d})`, kind: t.kind, text: f(d) });
+      } else if (path.endsWith("heartbeat.highStretches") || path.endsWith("heartbeat.lowStretches")) {
+        for (const s of ["0 m to 100 m", "0 m to 100 m; 300 m to 450 m"]) out.push({ path: `${path}(${s})`, kind: t.kind, text: f(s) });
+      } else if (path.endsWith("heartbeat.span")) {
+        out.push({ path: `${path}(0, 100)`, kind: t.kind, text: f(0, 100) });
       } else if (path.endsWith("packProblem")) {
         for (const file of ["segments", "buildings"])
           for (const kind of ["missing", "unreadable", "invalid"])

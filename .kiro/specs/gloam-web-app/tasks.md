@@ -241,10 +241,10 @@ Rules for every task:
   - [x] 14.2 Implement City_Picker, progress state and error/retry messages
     - Five entries, progress removed within 500 ms of outcome, messages naming the file, retry control, attribution and estimates note shown in a map corner
     - _Requirements: 1.1, 1.3, 1.5, 1.6, 1.8, 15.6, 17.4, 17.16_
-  - [ ] 14.3 Implement Plan_Mode controls
+  - [x] 14.3 Implement Plan_Mode controls
     - Mode_Switch, Crosshair, "Set start here" and "Set end here", "tap sets: start / end" control, "use my location", no place search, lambda slider (0 to 10, step 0.5, default 3, labelled "shortest" and "prefer better-lit streets"), four settings toggles with save and restore, out-of-area / too-far / same-place / no-route messages, snapping and routing triggered from state changes
     - _Requirements: 1.9, 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.8, 6.10, 6.11, 7.1, 7.10, 8.1, 8.2, 8.5, 8.6, 8.7, 8.8_
-  - [ ] 14.4 Implement the route panel and `ui/heartbeatChart.ts`
+  - [x] 14.4 Implement the route panel and `ui/heartbeatChart.ts`
     - Distance, minutes, Tier shares, Gloam_Route versus Shortest_Route with signed deltas, Disclaimer on every route screen, chart with shape-differing low-confidence markers, screen-reader text summary, no animation in Reduced_Effects_Mode, update within 1 s
     - _Requirements: 6.7, 6.9, 7.8, 7.9, 9.1, 9.2, 9.3, 9.4, 9.5, 9.6, 9.7_
   - [ ] 14.5 Implement Report_Mode, corrections and Dark_Spot_List

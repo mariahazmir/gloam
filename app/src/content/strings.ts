@@ -39,6 +39,11 @@ export function tierWording(tier: Tier, confidence: number): string {
   return `${base} (confidence ${Math.round(confidence * 100)}%)`;
 }
 
+/** The Tier wording without a confidence figure, for row labels. */
+export function tierLabel(tier: Tier): string {
+  return TIER_WORDING[tier];
+}
+
 /** "confirmed by N people"; N must be a whole number of 1 or more. */
 export function confirmedBy(n: number): string {
   if (!Number.isInteger(n) || n < 1) throw new RangeError('n: must be a whole number of 1 or more');
@@ -65,12 +70,69 @@ export const STRINGS = {
   },
   sampleWalk: {
     label: g('Example walk, picked to show the difference. Yours may differ.'),
+    clear: g('Clear example'),
+  },
+  route: {
+    panel: g('Route summary'),
+    gloamRoute: g('Gloam route'),
+    shortestRoute: g('Shortest route'),
+    distance: g('Distance'),
+    walkingTime: g('Walking time'),
+    shares: g('Share of route length by lighting'),
+    difference: g('Gloam route compared with shortest route'),
+    extraDistance: g('Extra distance'),
+    extraTime: g('Extra walking time'),
+    darkerChange: l('Change through estimated streets darker than most streets here'),
+    unitMetres: g('m'),
+    unitMinutes: g('min'),
+  },
+  chart: {
+    title: g('Dread along the route'),
+    xAxis: g('Distance along the route'),
+    yAxis: g('Dread, 0 to 1'),
+    lowConfidenceKey: g('Diamond and dashed band: estimate is least certain here'),
+  },
+  heartbeat: {
+    routeLength: { kind: 'general', text: (distance: string) => `Route length ${distance}.` } as Tpl<[string]>,
+    highStretches: {
+      kind: 'general',
+      text: (spans: string) => `Highest-dread stretches, the darkest quarter of this route: ${spans}.`,
+    } as Tpl<[string]>,
+    noHighStretches: g('No highest-dread stretches found.'),
+    lowStretches: {
+      kind: 'general',
+      text: (spans: string) => `Low-confidence stretches, where the estimate is least certain: ${spans}.`,
+    } as Tpl<[string]>,
+    noLowStretches: g('No low-confidence stretches were found.'),
+    span: { kind: 'general', text: (from: number, to: number) => `${from} m to ${to} m` } as Tpl<[number, number]>,
   },
   city: {
     kualaLumpurDescription: l('the case where lighting records are missing'),
   },
   hint: {
     setPoints: g("Tap the map to set where you start and where you're going"),
+  },
+  plan: {
+    modeSwitch: g('Mode'),
+    planMode: g('Plan'),
+    reportMode: g('Report'),
+    tapSets: g('tap sets:'),
+    tapSetsStart: g('start'),
+    tapSetsEnd: g('end'),
+    setStartHere: g('Set start here'),
+    setEndHere: g('Set end here'),
+    useMyLocation: g('Use my location'),
+    crosshair: g('Map centre'),
+    lambdaLabel: g('Route preference'),
+    lambdaMin: g('shortest'),
+    lambdaMax: g('prefer better-lit streets'),
+    settingsLegend: g('Routing settings'),
+    avoidSteps: g('Avoid steps'),
+    avoidService: g('Avoid service roads and back lanes'),
+    preferMain: g('Prefer main roads'),
+    lowConfidenceDarker: g('Treat low-confidence guesses as darker'),
+    on: g('on'),
+    off: g('off'),
   },
   legend: {
     glow: l('Steady glow: confirmed lit in OpenStreetMap'),

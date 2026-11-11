@@ -1,5 +1,6 @@
 import { adjustedDread, DEFAULT_SETTINGS } from './costs';
 import type { PersonalSettings } from './costs';
+import { STRINGS } from '../content/strings';
 import { formatDistance } from './format';
 import type { Route } from './router';
 import { ArgumentError } from '../validation/errors';
@@ -93,23 +94,23 @@ function mergedSpans(segments: ReadonlyArray<HeartbeatSegment>, flag: (s: Heartb
 }
 
 function listSpans(spans: Span[]): string {
-  return spans.map((s) => `${Math.round(s.from)} m to ${Math.round(s.to)} m`).join('; ');
+  return spans.map((s) => STRINGS.heartbeat.span.text(Math.round(s.from), Math.round(s.to))).join('; ');
 }
 
 /** Plain-text summary for screen readers. Adjacent flagged pieces are merged into one stretch. */
 export function describeHeartbeat(series: HeartbeatSeries): string {
-  const parts = [`Route length ${formatDistance(series.totalM)}.`];
+  const parts = [STRINGS.heartbeat.routeLength.text(formatDistance(series.totalM))];
   const high = mergedSpans(series.segments, (s) => s.highDread);
   parts.push(
     high.length > 0
-      ? `Highest-dread stretches, the darkest quarter of this route: ${listSpans(high)}.`
-      : 'No highest-dread stretches found.',
+      ? STRINGS.heartbeat.highStretches.text(listSpans(high))
+      : STRINGS.heartbeat.noHighStretches.text,
   );
   const low = mergedSpans(series.segments, (s) => s.lowConfidence);
   parts.push(
     low.length > 0
-      ? `Low-confidence stretches, where the estimate is least certain: ${listSpans(low)}.`
-      : 'No low-confidence stretches were found.',
+      ? STRINGS.heartbeat.lowStretches.text(listSpans(low))
+      : STRINGS.heartbeat.noLowStretches.text,
   );
   return parts.join(' ');
 }

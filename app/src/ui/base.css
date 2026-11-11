@@ -314,9 +314,359 @@ button {
   margin-top: 0.2rem;
 }
 
+/* ---- Plan_Mode controls ---------------------------------------------------- */
+
+/* The Crosshair marks the map centre; it never takes pointer input. */
+.crosshair-host {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.crosshair {
+  position: relative;
+  width: 2rem;
+  height: 2rem;
+}
+
+.crosshair::before,
+.crosshair::after {
+  content: '';
+  position: absolute;
+  background: var(--lantern);
+  box-shadow: 0 0 0 1px var(--night-bottom);
+}
+
+.crosshair::before {
+  top: 0;
+  bottom: 0;
+  left: calc(50% - 1px);
+  width: 2px;
+}
+
+.crosshair::after {
+  left: 0;
+  right: 0;
+  top: calc(50% - 1px);
+  height: 2px;
+}
+
+.plan-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.plan-only {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.mode-switch,
+.tap-sets,
+.point-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.plan-button {
+  min-height: 2.75rem;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  background: var(--glass-fill);
+  border: var(--glass-border-width) solid var(--glass-border);
+  border-radius: 999px;
+}
+
+/* The pressed state shows in the border width and a tick as well as in colour. */
+.plan-button[aria-pressed='true'] {
+  background: var(--night-bottom);
+  border: 3px solid var(--lantern);
+  font-weight: 700;
+}
+
+.plan-button[aria-pressed='true']::before {
+  content: '\2713\00a0';
+}
+
+.lambda-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.lambda-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.lambda-slider {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 2.75rem;
+  accent-color: var(--lantern);
+}
+
+.lambda-readout {
+  flex: none;
+  min-width: 2.5rem;
+  text-align: right;
+  font-family: 'Caprasimo', Georgia, serif;
+}
+
+.lambda-ends {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.settings-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border: var(--glass-border-width) solid var(--glass-border);
+  border-radius: 0.75rem;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.75rem;
+  cursor: pointer;
+}
+
+.toggle input {
+  flex: none;
+  width: 1.4rem;
+  height: 1.4rem;
+  accent-color: var(--lantern);
+}
+
+.toggle-label {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.toggle-state {
+  flex: none;
+  font-weight: 700;
+}
+
+.plan-messages:empty {
+  display: none;
+}
+
+.plan-message {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  background: var(--glass-fill);
+  border: var(--glass-border-width) solid var(--glass-border);
+  border-left: 4px solid var(--pumpkin);
+  border-radius: 0.75rem;
+}
+
+.plan-message + .plan-message {
+  margin-top: 0.4rem;
+}
+
+/* ---- Route panel ----------------------------------------------------------- */
+
+/* Text for screen readers only; still in the page and the accessibility tree. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.guidance:empty {
+  display: none;
+}
+
+.guidance {
+  margin-bottom: 0.6rem;
+}
+
+.example-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.4rem 0.75rem;
+  text-align: left;
+  cursor: pointer;
+  background: var(--glass-fill);
+  border: var(--glass-border-width) dashed var(--glass-border);
+  border-radius: 0.75rem;
+}
+
+.example-clear {
+  flex: none;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.hint {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  background: var(--glass-fill);
+  border: var(--glass-border-width) solid var(--glass-border);
+  border-radius: 0.75rem;
+}
+
+.route-host:empty {
+  display: none;
+}
+
+.route-host {
+  margin-bottom: 0.75rem;
+}
+
+.route-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.route-headline,
+.route-subhead {
+  margin: 0;
+}
+
+.route-headline {
+  font-size: 1.5rem;
+  line-height: 1.15;
+}
+
+.route-subhead {
+  font-size: 1rem;
+}
+
+.route-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  table-layout: fixed;
+}
+
+.route-table th,
+.route-table td {
+  padding: 0.25rem 0.35rem;
+  text-align: right;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.route-table th[scope='row'],
+.route-table th[scope='colgroup'] {
+  text-align: left;
+  font-weight: 400;
+}
+
+.route-table th[scope='col'] {
+  font-weight: 700;
+}
+
+.route-table th[scope='colgroup'] {
+  padding-top: 0.5rem;
+  font-weight: 700;
+}
+
+.route-table th[scope='row'] {
+  width: 44%;
+}
+
+.route-delta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin: 0;
+}
+
+.delta-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.delta-item dt {
+  min-width: 0;
+}
+
+.delta-item dd {
+  flex: none;
+  margin: 0;
+  font-weight: 700;
+}
+
+.heartbeat {
+  margin: 0;
+}
+
+.heartbeat-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.heartbeat-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.heartbeat-key {
+  margin: 0.2rem 0 0;
+  font-size: 0.75rem;
+}
+
+/* A slow pulse, well under 3 flashes a second. Off in Reduced_Effects_Mode. */
+.heartbeat-line {
+  animation: gloam-beat 1.6s ease-in-out infinite;
+}
+
+@keyframes gloam-beat {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.disclaimer {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  border: var(--glass-border-width) solid var(--glass-border);
+  border-radius: 0.75rem;
+}
+
 /* ---- Reduced effects ------------------------------------------------------- */
 
-.reduced-effects .progress-ring {
+.reduced-effects .progress-ring,
+.reduced-effects .heartbeat-line {
   animation: none;
 }
 

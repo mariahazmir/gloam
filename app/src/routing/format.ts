@@ -22,3 +22,11 @@ export function walkingMinutes(displayedMeters: number): number {
   const m = Math.round(requireNonNegative('displayedMeters', displayedMeters));
   return Math.ceil((m * 3) / 250);
 }
+
+/** A whole number with an explicit sign: "+200", "-3", "0". */
+export function formatSigned(n: number): string {
+  requireFinite('n', n);
+  const r = Math.round(n);
+  if (r === 0) return '0';
+  return r > 0 ? `+${r}` : `-${Math.abs(r)}`;
+}

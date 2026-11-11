@@ -1,7 +1,7 @@
 import { DEFAULT_SETTINGS } from '../routing/costs';
 import type { PersonalSettings } from '../routing/costs';
 import { ArgumentError } from '../validation/errors';
-import { requireLatLon } from '../validation/guards';
+import { requireLambda, requireLatLon } from '../validation/guards';
 
 export type Mode = 'plan' | 'report';
 export type SettingState = 'start' | 'end';
@@ -42,6 +42,9 @@ export type AppAction =
   | { type: 'switchMode'; mode: Mode }
   | { type: 'chooseSettingState'; settingState: SettingState }
   | { type: 'clearExample' }
+  | { type: 'showExample'; start: LonLat; end: LonLat }
+  | { type: 'setLambda'; lambda: number }
+  | { type: 'setSettings'; settings: PersonalSettings }
   | ({ type: 'reset' } & InitialOptions);
 
 /** First-run state: Plan_Mode, Start_Setting_State (Requirement 6.1). */
@@ -130,6 +133,24 @@ export function reduce(state: AppState, action: AppAction): AppState {
         exampleActive: false,
         selectedSegmentId: null,
       };
+    case 'showExample':
+      // A pack finished loading: show its Sample_Walk. Lambda, settings and the other switches stay.
+      requireLatLon('example start', action.start.lon, action.start.lat);
+      requireLatLon('example end', action.end.lon, action.end.lat);
+      return {
+        ...state,
+        mode: 'plan',
+        settingState: 'start',
+        start: { ...action.start },
+        end: { ...action.end },
+        exampleActive: true,
+        selectedSegmentId: null,
+      };
+    case 'setLambda':
+      // Rejects NaN, infinite and out-of-range values; the state is then unchanged (Requirement 7.10).
+      return { ...state, lambda: requireLambda(action.lambda) };
+    case 'setSettings':
+      return { ...state, settings: { ...action.settings } };
     case 'reset': {
       const { type: _type, ...opts } = action;
       return createInitialState(opts);

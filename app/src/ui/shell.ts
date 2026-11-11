@@ -16,7 +16,9 @@ export interface Shell {
   mapContainer: HTMLElement;
   /** Positioned over the map's top-left corner; holds the pack attribution and estimates note. */
   cornerHost: HTMLElement;
-  /** Empty for now; later tasks put the route panel and controls here. */
+  /** Centred over the map; holds the Crosshair. Ignores pointer input so map taps pass through. */
+  crosshairHost: HTMLElement;
+  /** Holds the Plan_Mode controls; later tasks add the route panel here. */
   panel: HTMLElement;
 }
 
@@ -36,10 +38,11 @@ export function createShell(root: HTMLElement): Shell {
 
   const mapContainer = el('div', { className: 'map', attrs: { role: 'region', 'aria-label': STRINGS.shell.map.text } });
   const cornerHost = el('div', { className: 'corner-host' });
-  const mapWrap = el('main', { className: 'map-wrap' }, mapContainer, cornerHost);
+  const crosshairHost = el('div', { className: 'crosshair-host' });
+  const mapWrap = el('main', { className: 'map-wrap' }, mapContainer, crosshairHost, cornerHost);
 
   const panel = el('aside', { className: 'panel', attrs: { 'aria-label': STRINGS.shell.panel.text } });
 
   root.replaceChildren(el('div', { className: 'shell' }, header, mapWrap, panel));
-  return { pickerHost, captionHost, mapContainer, cornerHost, panel };
+  return { pickerHost, captionHost, mapContainer, crosshairHost, cornerHost, panel };
 }
