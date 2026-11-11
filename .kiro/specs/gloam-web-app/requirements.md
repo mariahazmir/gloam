@@ -155,11 +155,11 @@ Items marked "(decide, measure)" in the source requirements are targets. They ar
 
 1. WHEN a City_Pack finishes loading, THE Web_App SHALL show a dark MapLibre GL JS map using OpenFreeMap tiles, with the map centre within 100 metres of the centre of the City_Pack bounding box, except that on first run the view is fitted to the Sample_Walk as described in Requirement 17, criterion 7.
 2. WHEN the map has loaded, THE Web_App SHALL draw each building from the Buildings_File as an extruded footprint whose height equals `height_m` metres.
-3. WHILE the map is shown, THE Web_App SHALL keep the text "© OpenStreetMap contributors" and the attribution of OpenFreeMap and OpenMapTiles visible and not covered by any other on-screen element.
+3. WHILE the map is shown, THE Web_App SHALL keep the attribution "OpenFreeMap © OpenMapTiles Data from OpenStreetMap" (with links to OpenFreeMap, OpenMapTiles and the OpenStreetMap copyright page) and the text "© OpenStreetMap contributors" always visible, expanded and not collapsed, and not covered by any other on-screen element.
 4. WHEN the user touches the map, THE Web_App SHALL pan on a one-finger drag, zoom on a two-finger pinch, and tilt on a two-finger vertical drag, with tilt limited to 0 to 60 degrees.
 5. WHILE effects are on, THE Web_App SHALL keep the map at 30 frames per second or higher, measured over 10 seconds of continuous pan, zoom and tilt on a mid-range phone (target, to be measured; the reference device is recorded in `docs/app-checks.md`).
 6. IF the measured frame rate stays below 30 frames per second for 2 consecutive seconds, THEN THE Web_App SHALL turn off active effects one at a time, until the frame rate is 30 frames per second or higher or no effects remain, and SHALL keep the map, routes and attribution visible (target, to be measured).
-7. IF a map tile request has not completed within 3 seconds or returns an error, THEN THE Web_App SHALL draw the Segments from the City_Pack on a plain background, SHALL show a message indicating the base map is unavailable, SHALL keep the map attributions visible, and SHALL keep route planning available.
+7. IF a map tile request has not completed within 5 seconds or returns an error, THEN THE Web_App SHALL draw the Segments from the City_Pack on a plain background, SHALL show a message indicating the base map is unavailable, SHALL keep the map attributions visible, and SHALL keep route planning available.
 8. IF a building's `height_m` is missing, not a finite number, or less than 0, THEN THE Web_App SHALL skip extrusion for that building, SHALL still draw all other buildings, and SHALL report an error naming `height_m` in the developer console.
 
 ### Requirement 6: Route planning
@@ -287,7 +287,7 @@ Items marked "(decide, measure)" in the source requirements are targets. They ar
 2. THE Web_App SHALL include no analytics, telemetry or usage-tracking code that sends data to any server.
 3. THE Web_App SHALL set zero cookies and SHALL write to browser local storage only for Personal_Settings and Corrections.
 4. THE Router, THE Graph_Builder and THE Tier_Assigner SHALL make zero network requests.
-5. THE Web_App SHALL limit network requests to: the app files, the map's TileJSON request, map tiles, glyphs and sprites from OpenFreeMap, one request for each of the two data files of the chosen City_Pack, and one request for the Sample_Data file while Demo_Mode is on, and the map style is bundled with the app.
+5. THE Web_App SHALL limit network requests to: exactly these: the app files, the TileJSON at `https://tiles.openfreemap.org/planet` and the vector tiles it lists, one request for each of the two data files of the chosen City_Pack, and one request for the Sample_Data file while Demo_Mode is on. The map style is bundled with the app and has no glyphs and no sprite, so no glyph or sprite request is made.
 6. Route planning SHALL make zero network requests, and every map tile request made while the map is viewed SHALL carry only the tile address of the viewed area, with no start point, end point, route coordinate or coordinate derived from them in its URL, query string, headers or body.
 7. WHEN the user requests their current position, THE Web_App SHALL read the position from browser geolocation, keep it in memory on the device only, and include it in no network request.
 8. IF browser geolocation is denied or unavailable, THEN THE Web_App SHALL show a message stating that the current position cannot be used, keep any start point already set, and make zero network requests as a result.
