@@ -11,3 +11,12 @@ export function overrideFor(type: ReportType): Override {
     ? { litProbability: 1, confidence: 1 }
     : { litProbability: 0, confidence: 1 };
 }
+
+/** One override per segment id from this device's notes. A later row for the same id wins. Pure. */
+export function overridesFromNotes(
+  notes: ReadonlyArray<{ segmentId: string; type: ReportType }>,
+): Map<string, Override> {
+  const out = new Map<string, Override>();
+  for (const n of notes) out.set(n.segmentId, overrideFor(n.type));
+  return out;
+}

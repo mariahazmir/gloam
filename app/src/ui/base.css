@@ -778,6 +778,66 @@ button {
   margin-top: 0.75rem;
 }
 
+/* ---- Report card and Dark_Spot_List ---------------------------------------- */
+
+.report-card,
+.dark-spots {
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--glass-fill);
+  border: var(--glass-border-width) solid var(--glass-border);
+  border-radius: 0.75rem;
+}
+
+.report-card p,
+.dark-spots p {
+  margin: 0 0 0.4rem;
+}
+
+.card-name {
+  font-family: 'Caprasimo', Georgia, serif;
+  font-size: 1.15rem;
+}
+
+.card-detail {
+  font-size: 0.85rem;
+}
+
+/* "your note" is words plus a dashed outline, not colour alone. */
+.card-note {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  font-weight: 700;
+  border: 2px dashed var(--pumpkin);
+  border-radius: 999px;
+}
+
+.dark-spots > summary {
+  cursor: pointer;
+}
+
+.spot-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0.4rem 0;
+  padding-left: 1.4rem;
+}
+
+.spot-row {
+  font-size: 0.85rem;
+}
+
+.spot-name {
+  font-weight: 700;
+  margin-right: 0.5rem;
+  overflow-wrap: anywhere;
+}
+
+.spot-detail {
+  margin-right: 0.5rem;
+}
+
 /* ---- Reduced effects ------------------------------------------------------- */
 
 .reduced-effects .progress-ring,

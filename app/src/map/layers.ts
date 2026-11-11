@@ -45,6 +45,14 @@ export const fogLayerId = (t: Tier) => `gloam-fog-${t}`;
 export const staticLayerId = (t: Tier) => `gloam-static-${t}`;
 export const cohortLayerId = (t: Tier, band: number, phase: number) => `gloam-flicker-${cohortKey(t, band, phase)}`;
 
+/**
+ * Every layer that draws a street line (not the glow or fog underlays, not the markers). A tap in
+ * Report_Mode asks the map which Segment is under the finger from these layers.
+ */
+export function segmentLayerIds(): string[] {
+  return [...STATIC_TIERS.map(staticLayerId), ...cohorts().map((c) => c.layerId)];
+}
+
 /** Narrow view of the MapLibre map, so tests can pass a plain object. */
 export interface LayerMap {
   addSource(id: string, source: SourceSpecification): unknown;

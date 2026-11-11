@@ -247,7 +247,7 @@ Rules for every task:
   - [x] 14.4 Implement the route panel and `ui/heartbeatChart.ts`
     - Distance, minutes, Tier shares, Gloam_Route versus Shortest_Route with signed deltas, Disclaimer on every route screen, chart with shape-differing low-confidence markers, screen-reader text summary, no animation in Reduced_Effects_Mode, update within 1 s
     - _Requirements: 6.7, 6.9, 7.8, 7.9, 9.1, 9.2, 9.3, 9.4, 9.5, 9.6, 9.7_
-  - [ ] 14.5 Implement Report_Mode, corrections and Dark_Spot_List
+  - [x] 14.5 Implement Report_Mode, corrections and Dark_Spot_List
     - Segment selection, three one-tap report buttons, override applied within 1 s, "your note" marker, "confirmed by N people" labels, store error message, Dark_Spot_List with empty state, "SAMPLE DATA" labels, CSV download with export-failed message
     - _Requirements: 10.1, 10.3, 10.5, 10.8, 10.9, 10.10, 11.1, 11.2, 11.4, 11.6, 11.7_
   - [x] 14.6 Implement About, How_Gloam_Guesses_Screen, Legend, Demo_Mode, Reset and Reduced_Effects switch

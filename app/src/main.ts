@@ -7,8 +7,10 @@ import {
   addGloamLayers,
   applyEffects,
   removeGloamLayers,
+  segmentLayerIds,
   setBuildings,
   setMarkers,
+  setNoted,
   setRoute,
   startFlicker,
   type LayerEffects,
@@ -24,7 +26,15 @@ import { heartbeatSeries, lowConfidenceThreshold } from './routing/heartbeat';
 import type { PlanPack } from './routing/planner';
 import { routeCoordinates } from './routing/routeGeometry';
 import { compareStats } from './routing/summary';
-import type { Override } from './scoring/overrides';
+import { combineCorrections, dayString } from './corrections/combine';
+import { toCsv } from './corrections/csv';
+import { darkSpots, type DarkSpot } from './corrections/darkSpots';
+import { createCorrectionSession } from './corrections/session';
+import { buildSegmentCard } from './corrections/segmentCard';
+import { createLocalCorrectionStore } from './storage/localCorrectionStore';
+import { createReportPanel } from './ui/reportPanel';
+import { downloadText } from './ui/download';
+import type { ReportType } from './types';
 import { assignTiers } from './scoring/tiers';
 import { createInitialState } from './state/appState';
 import { createPlanController } from './state/planController';
@@ -90,6 +100,7 @@ const picker = createCityPicker(shell.pickerHost, {
 interface Shown {
   id: PackId;
   segments: Segment[];
+  byId: ReadonlyMap<string, Segment>;
   tiers: ReadonlyMap<string, Tier>;
   graph: StreetGraph | null;
   /** Routing data; null until the graph is built (or when the pack has no usable street). */
@@ -110,11 +121,13 @@ let anyPackCompleted = false;
 
 // ---- Plan_Mode: state, controls, route panel ---------------------------------
 
-const EMPTY_OVERRIDES: ReadonlyMap<string, Override> = new Map<string, Override>();
+// This device's notes, read once from the Correction_Store (Requirement 10.8). They become the
+// routing overrides; Tiers are computed from the pack alone and never see them (10.12).
+const session = createCorrectionSession(createLocalCorrectionStore(browserStorage()));
 const controller = createPlanController({
   initial: createInitialState({ reducedEffects: reduced, demo: hostedDemo }),
   getPack: () => shown?.plan ?? null,
-  getOverrides: () => EMPTY_OVERRIDES,
+  getOverrides: () => session.overrides(),
   getMapCenter: () => {
     const c = map.getCenter().wrap();
     return { lon: c.lng, lat: c.lat };
@@ -188,13 +201,86 @@ controller.subscribe(({ state }) => {
     }
     sampleCorrections = loaded;
     tools.showDemoError(false);
+    renderReport(); // the Sample_Data arrived after the state change, so draw it now
   });
 });
 
-// A tap on the map sets a point in Plan_Mode; the reducer ignores it for points in Report_Mode.
+// ---- Report_Mode card and Dark_Spot_List (task 14.5) --------------------------------
+
+/** The rows currently listed, so the CSV matches what is on screen (Requirement 11.2). */
+let listedSpots: DarkSpot[] = [];
+
+function onReport(type: ReportType): void {
+  const id = controller.getSnapshot().state.selectedSegmentId;
+  if (id === null || shown === null || !shown.byId.has(id)) return;
+  // One tap saves the note; the store keeps one per segment (Requirements 10.1, 10.2).
+  const saved = session.submit({ segmentId: id, type, date: dayString(new Date()) });
+  if (saved) setNoted(map, id, true);
+  controller.refresh(); // plans again with the new override, and redraws the card
+}
+
+const reportPanel = createReportPanel({
+  host: shell.panel,
+  onReport,
+  makeCsv: () => toCsv(listedSpots),
+  download: downloadText,
+});
+
+/** Draws the card and the list from the current pack, notes and (while Demo_Mode is on) Sample_Data. */
+function renderReport(): void {
+  const { state } = controller.getSnapshot();
+  if (state.mode !== 'report') nothingThere = false;
+  const pack = shown;
+  const combined =
+    pack === null
+      ? []
+      : combineCorrections(session.corrections(), sampleCorrections, pack.id, (id) => pack.byId.has(id));
+  const selected = pack !== null && state.selectedSegmentId !== null ? pack.byId.get(state.selectedSegmentId) : undefined;
+  const card =
+    pack !== null && selected !== undefined
+      ? buildSegmentCard(selected, pack.tiers.get(selected.id) ?? 'typical', combined, dayString(new Date()))
+      : null;
+  listedSpots = darkSpots(combined, (id) => {
+    const s = pack?.byId.get(id);
+    return { name: s?.name ?? null, highway: s?.highway ?? '' };
+  });
+  reportPanel.show({
+    inReportMode: state.mode === 'report',
+    card,
+    nothingThere: nothingThere && state.mode === 'report' && card === null,
+    storeError: session.storeError(),
+    spots: listedSpots,
+  });
+}
+
+// Registered after the Demo_Mode listener, so Sample_Data is already dropped when this runs.
+controller.subscribe(renderReport);
+
+/** True when the last Report_Mode tap found no street. */
+let nothingThere = false;
+
+/** The id of the Segment drawn under a screen point (a few pixels of slack for a finger), or null. */
+function segmentAt(point: { x: number; y: number }): string | null {
+  if (!layersReady) return null;
+  const R = 10;
+  const hits = map.queryRenderedFeatures(
+    [
+      [point.x - R, point.y - R],
+      [point.x + R, point.y + R],
+    ],
+    { layers: segmentLayerIds() },
+  );
+  const id = hits[0]?.properties?.id;
+  return id === undefined || id === null ? null : String(id);
+}
+
+// A tap sets a point in Plan_Mode and selects a Segment in Report_Mode; the reducer ignores the other one.
 map.on('click', (e) => {
   const p = e.lngLat.wrap();
-  controller.dispatch({ type: 'tap', lon: p.lng, lat: p.lat });
+  const reporting = controller.getSnapshot().state.mode === 'report';
+  const segmentId = reporting ? segmentAt(e.point) : null;
+  nothingThere = reporting && segmentId === null;
+  controller.dispatch({ type: 'tap', lon: p.lng, lat: p.lat, segmentId });
 });
 
 /** The Sample_Walk is fitted once per showing (Requirement 17.7). */
@@ -254,7 +340,10 @@ async function drawStreets(id: PackId, meta: PackMeta, segments: Segment[]): Pro
   }));
   addGloamLayers(map, layerSegments, effects);
   layersReady = true;
-  const next: Shown = { id, segments, tiers, graph: null, plan: null, lowConfThreshold: null, complete: false };
+  const byId = new Map(segments.map((s) => [s.id, s] as const));
+  // Mark this device's notes on the new layers ("your note"); feature-state does not survive a pack change.
+  for (const n of session.corrections()) if (byId.has(n.segmentId)) setNoted(map, n.segmentId, true);
+  const next: Shown = { id, segments, byId, tiers, graph: null, plan: null, lowConfThreshold: null, complete: false };
   shown = next; // the previous pack's data is released here
   controller.refresh(); // drops the old pack from the planner and clears the route
   const bounds = boundsOf(segments.flatMap((s) => s.coordinates));
