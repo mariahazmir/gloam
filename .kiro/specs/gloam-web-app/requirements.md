@@ -179,6 +179,7 @@ Items marked "(decide, measure)" in the source requirements are targets. They ar
 9. WHILE a route is shown, THE Web_App SHALL show the Disclaimer verbatim on the same screen.
 10. WHILE the Web_App is in Plan_Mode, THE Web_App SHALL show the Crosshair at the centre of the map and two buttons labelled "Set start here" and "Set end here", operable by keyboard and by touch, that set the start point or the end point, respectively, at the map centre and replace any earlier point of the same kind. These buttons are in addition to tapping the map.
 11. THE Web_App SHALL provide a Mode_Switch, operable by keyboard and by touch, that shows the current mode and starts in Plan_Mode.
+12. WHEN a start or end point is set, THE Web_App SHALL draw a marker for it on the map at once, before any route exists: at the Snap position when the point has snapped, otherwise at the tapped position. The start marker is a filled disc and the end marker is a hollow ring, so the two differ by shape and not by colour alone. Markers are drawn above the Segment layers and below the Gloam_Route, and are removed when the point is cleared.
 
 ### Requirement 7: Dread trade-off
 
