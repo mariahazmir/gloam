@@ -234,7 +234,7 @@ Rules for every task:
     - Tile timeout and source error behaviour; route layer is last; fps sampler feeds the ladder
     - _Requirements: 4.6, 5.6, 5.7_
 
-- [ ] 14. UI
+- [x] 14. UI
   - [x] 14.1 Create the app shell: `index.html`, `ui/` base, self-hosted fonts and `@font-face`
     - Caprasimo and DM Sans woff2 in `assets/fonts/`; layout without horizontal scroll at 390 x 844; centred or two-panel at 768 px and wider; visible focus style; panels reserve space for attribution
     - _Requirements: 5.3, 15.2, 15.3, 15.4_
@@ -253,19 +253,19 @@ Rules for every task:
   - [x] 14.6 Implement About, How_Gloam_Guesses_Screen, Legend, Demo_Mode, Reset and Reduced_Effects switch
     - About states that the tile provider sees the area viewed but not routes; guess screen shows required statements and parsed validation numbers, names cities that did not beat the baseline, links to the bundled raw text; Legend with glow, flicker and fog lines; Demo_Mode control with state, "SAMPLE DATA" badges, hosted default via `VITE_GLOAM_HOSTED`; Reset_Control; switch reflecting `prefers-reduced-motion` at load
     - _Requirements: 4.9, 4.10, 12.3, 12.4, 12.5, 12.6, 12.7, 12.9, 13.11, 14.1, 14.2, 14.3, 14.4, 14.5, 14.6, 17.9, 17.11, 17.13_
-  - [ ] 14.7 Wire everything in `main.ts`
+  - [x] 14.7 Wire everything in `main.ts`
     - First run: load Seattle segments, draw street layer, build graph after first paint via `setTimeout(0)`, then buildings; show the Sample_Walk with example label, clear control and fitted view (`padding`, `maxZoom: 17`, `duration: 0`); hint while start or end missing; no permission request on load; one pack in memory
     - _Requirements: 1.2, 1.10, 5.1, 14.7, 15.7, 15.8, 17.1, 17.2, 17.3, 17.5, 17.7, 17.8, 17.10_
-  - [ ] 14.8 Create `docs/app-checks.md` as the checklist and results file for DOM and layout checks
+  - [x] 14.8 Create `docs/app-checks.md` as the checklist and results file for DOM and layout checks
     - Record results in `docs/app-checks.md`, never in `docs/validation.md`
     - Focus order and visible focus, attribution not covered, 390 x 844 layout, 768 px layout, Chrome laptop and phone, Safari on iPhone where available, fps measurement on the reference phone, graph build time for 22 000 segments, keyboard use of the Mode_Switch, Reduced_Effects switch and report buttons
     - _Requirements: 2.7, 4.10, 5.3, 5.5, 15.1, 15.2, 15.3, 15.4_
 
-- [ ] 15. Checkpoint - Ensure all tests pass
+- [x] 15. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 16. Hosting on Render
-  - [ ] 16.1 Add Render static-site config and `app/scripts/checkHost.ts`
+- [~] 16. Hosting on Render
+  - [x] 16.1 Add Render static-site config and `app/scripts/checkHost.ts`
     - `render.yaml` builds with `cd app && npm ci && npm run build`, publishes `app/dist`, and sets `NODE_VERSION` and `VITE_GLOAM_HOSTED=true`; a GitHub Pages fallback build script with `/gloam/` base path; `checkHost.ts` takes a URL and reports HTTPS, `Content-Encoding` of each pack file (gzip or Brotli), and that the page and pack files are reachable
     - _Requirements: 14.2, 17.1, 17.6_
   - [ ] 16.2 Record hosting results in `docs/app-checks.md`
