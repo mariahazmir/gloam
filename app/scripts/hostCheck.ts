@@ -50,11 +50,16 @@ export function judgeFile(p: FileProbe): FileVerdict {
   };
 }
 
-/** Finds same-site asset paths ending in .geojson inside page or script text. */
+/**
+ * Finds built pack files: whole quoted string literals that are a path through
+ * an `assets/` folder ending in `-<hash>.json`. Source paths (`/data/x.geojson`,
+ * `../../../data/x.json`) and map-library strings (".json", "geojsonvt_...") do
+ * not match, because they are not quoted /assets/ paths.
+ */
 export function findPackPaths(text: string): string[] {
   const found = new Set<string>();
-  for (const m of text.matchAll(/[A-Za-z0-9_./-]*[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.geojson|[A-Za-z0-9_./-]*assets\/[A-Za-z0-9_.-]+\.geojson/g)) {
-    found.add(m[0]);
+  for (const m of text.matchAll(/["'`]((?:\/|[A-Za-z0-9_.-]+\/)*assets\/[A-Za-z0-9_.]+-[A-Za-z0-9_-]+\.json)["'`]/g)) {
+    if (m[1] !== undefined) found.add(m[1]);
   }
   return [...found].sort();
 }

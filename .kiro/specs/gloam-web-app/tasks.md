@@ -264,13 +264,16 @@ Rules for every task:
 - [x] 15. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [~] 16. Hosting on Render
+- [x] 16. Hosting on Render
   - [x] 16.1 Add Render static-site config and `app/scripts/checkHost.ts`
     - `render.yaml` builds with `cd app && npm ci && npm run build`, publishes `app/dist`, and sets `NODE_VERSION` and `VITE_GLOAM_HOSTED=true`; a GitHub Pages fallback build script with `/gloam/` base path; `checkHost.ts` takes a URL and reports HTTPS, `Content-Encoding` of each pack file (gzip or Brotli), and that the page and pack files are reachable
     - _Requirements: 14.2, 17.1, 17.6_
-  - [ ] 16.2 Record hosting results in `docs/app-checks.md`
+  - [x] 16.2 Record hosting results in `docs/app-checks.md`
     - Run `checkHost.ts` against the deployed Render URL and record in `docs/app-checks.md` (never `docs/validation.md`, which the pipeline generates and the app parses): pack files compressed (Content-Encoding), HTTPS, URL stable and up 16 Dec to 29 Jan (recheck before submitting), load from the US, China and Malaysia within 10 s on 10 Mbit/s, and the reference phone used for fps and graph-time checks
     - _Requirements: 15.5, 17.3, 17.5, 17.6_
+  - [x] 16.3 Serve pack files with a compressible type and tighten checkHost path matching
+    - In `app/vite.config.ts`, make built `.geojson` pack assets emit as `assets/[name]-[hash].json` (via `assetFileNames`), because Render serves `.geojson` as `binary/octet-stream` with no Content-Encoding; source files in `data/` stay `.geojson` and app imports keep working; no new dependency. In `checkHost` path finding, report only pack files under `/assets/` that the app's own code requests, and ignore `/data/*.geojson` source paths and strings from map library code; add a test with those false cases as inputs
+    - _Requirements: 17.6_
 
 - [ ] 17. Docs
   - [ ] 17.1 Add an app section to `README.md`
@@ -305,7 +308,8 @@ Rules for every task:
     { "id": 7, "tasks": ["6.10", "6.11", "6.12", "13.4", "14.2", "14.3", "14.4", "14.5", "14.6"] },
     { "id": 8, "tasks": ["14.7", "12.2", "16.1"] },
     { "id": 9, "tasks": ["14.8", "12.3", "17.1", "17.2"] },
-    { "id": 10, "tasks": ["16.2"] }
+    { "id": 10, "tasks": ["16.2"] },
+    { "id": 11, "tasks": ["16.3"] }
   ]
 }
 ```

@@ -27,10 +27,29 @@ describe('hostCheck', () => {
   });
 
   it('finds hashed pack paths and rejects bad URLs by naming the argument', () => {
-    const js = 'a="/assets/kl.segments-DuqRM6vd.geojson";b="assets/x.js"';
-    expect(findPackPaths(js)).toEqual(['/assets/kl.segments-DuqRM6vd.geojson']);
+    const js = 'a="/assets/kl.segments-DuqRM6vd.json";b="assets/x.js"';
+    expect(findPackPaths(js)).toEqual(['/assets/kl.segments-DuqRM6vd.json']);
     expect(() => parseUrl('nope')).toThrow(/url/);
     expect(isHttps(parseUrl('http://a.test/'))).toBe(false);
+  });
+
+  it('reports only real /assets/ packs, not source paths or map-library strings', () => {
+    const js = [
+      '"../../../data/kl.segments.geojson"',
+      '"/data/seattle.segments.geojson"',
+      '"../../../data/sample-data.json"',
+      '`${t}.${n}.geojson`',
+      '"/data/seattle.buildings.geojson"',
+      '?r.json():r.text(',
+      'n.json()}}catch{',
+      'this.workerOptions.geojsonVtOptions.',
+      '"/assets/london.segments-CQkqWw-o.json"',
+      '"/gloam/assets/kl.buildings-BBl4d63W.json"',
+    ].join(';');
+    expect(findPackPaths(js)).toEqual([
+      '/assets/london.segments-CQkqWw-o.json',
+      '/gloam/assets/kl.buildings-BBl4d63W.json',
+    ]);
   });
 
   it('report is ok only when every check passes', () => {

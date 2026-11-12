@@ -7,6 +7,18 @@ import { defineConfig } from "vitest/config";
 // GLOAM_BASE lets the GitHub Pages fallback build use the /gloam/ base path.
 export default defineConfig(({ mode }) => ({
   base: loadEnv(mode, ".", "GLOAM_").GLOAM_BASE ?? "/",
+  build: {
+    rollupOptions: {
+      output: {
+        // Hosts serve unknown extensions as binary/octet-stream, uncompressed.
+        // Built packs get .json so they are served as compressible application/json.
+        assetFileNames: (info) => {
+          const name = (info as { names?: string[]; name?: string }).names?.[0] ?? (info as { name?: string }).name ?? "";
+          return name.endsWith(".geojson") ? "assets/[name]-[hash].json" : "assets/[name]-[hash][extname]";
+        },
+      },
+    },
+  },
   server: {
     // Allow `?raw` imports of docs/validation.md and the pack files in ../data.
     fs: { allow: [".."] },
