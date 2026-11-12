@@ -1,0 +1,11 @@
+services:
+  - type: web
+    runtime: static
+    name: gloam
+    buildCommand: cd app && npm ci && npm run build
+    staticPublishPath: app/dist
+    envVars:
+      - key: NODE_VERSION
+        value: 22.12.0
+      - key: VITE_GLOAM_HOSTED
+        value: "true"

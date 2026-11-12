@@ -1,0 +1,856 @@
+/* Gloam base styles. Colours come from custom properties that ui/shell.ts sets from
+   visual/palette.ts; this file holds no hex values. Mobile first (390 x 844). */
+
+@font-face {
+  font-family: 'Caprasimo';
+  src: url('../assets/fonts/caprasimo-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  src: url('../assets/fonts/dm-sans-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  src: url('../assets/fonts/dm-sans-latin-700-normal.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: white;
+  background: linear-gradient(var(--night-top), var(--night-bottom));
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Caprasimo', Georgia, serif;
+  font-weight: 400;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+/* Visible focus on every interactive control (Requirement 15.4). */
+:focus-visible {
+  outline: 3px solid var(--lantern);
+  outline-offset: 2px;
+}
+
+/* Frosted glass card. */
+.glass {
+  background: var(--glass-fill);
+  border: var(--glass-border-width) solid var(--glass-border);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-radius: 0.75rem;
+}
+
+/* ---- Layout ---------------------------------------------------------------- */
+
+.shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* Compact header: one row (wordmark + city chips) and a small caption line.
+   On a phone it is 4 + 44 + ~14 + 4 = about 66 px, under the 72 px limit. */
+.topbar {
+  min-width: 0;
+  padding: 0.25rem 0.75rem;
+}
+
+.topbar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.brand {
+  flex: none;
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.1;
+}
+
+/* The chips scroll sideways inside this box; the page itself never does. */
+.picker-host {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+.picker-host::-webkit-scrollbar {
+  display: none;
+}
+
+.caption-host {
+  min-width: 0;
+}
+
+.caption-host:empty {
+  display: none;
+}
+
+/* The map owns its cell. Panels are siblings, never overlays, so the attribution
+   control inside the map is never covered. */
+.map-wrap {
+  position: relative;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.map {
+  position: absolute;
+  inset: 0;
+}
+
+.corner-host {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  max-width: calc(100% - 1rem);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.corner-host > * {
+  pointer-events: auto;
+}
+
+.panel {
+  min-width: 0;
+  max-height: 40vh;
+  max-height: 40dvh;
+  padding: 0.5rem 0.75rem;
+  overflow-y: auto;
+}
+
+.panel:empty {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .shell {
+    grid-template-columns: 22rem minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .topbar {
+    grid-column: 1 / -1;
+    padding: 0.35rem 1rem;
+  }
+
+  .map-wrap {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .panel {
+    grid-column: 1;
+    grid-row: 2;
+    max-height: none;
+    padding: 0.75rem 1rem;
+  }
+
+  /* With nothing in the panel yet, give the map the full width. */
+  .shell:has(.panel:empty) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .shell:has(.panel:empty) .map-wrap {
+    grid-column: 1;
+  }
+}
+
+/* ---- City picker ----------------------------------------------------------- */
+
+.city-list {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  width: max-content;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.city-item {
+  flex: none;
+}
+
+.city-button {
+  min-height: 2.75rem;
+  padding: 0.4rem 0.9rem;
+  white-space: nowrap;
+  cursor: pointer;
+  background: var(--glass-fill);
+  border: var(--glass-border-width) solid var(--glass-border);
+  border-radius: 999px;
+}
+
+.city-button[aria-current='true'] {
+  border-color: var(--lantern);
+  background: var(--night-bottom);
+}
+
+/* The focus ring sits inside the chip so the scroll box does not clip it. */
+.city-button:focus-visible {
+  outline-offset: -3px;
+}
+
+.city-description {
+  margin: 0;
+  overflow: hidden;
+  font-size: 0.7rem;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: 0.85;
+}
+
+.picker-status {
+  margin-top: 0.5rem;
+}
+
+.picker-status:empty {
+  display: none;
+}
+
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.progress-ring {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--glass-border);
+  border-top-color: var(--lantern);
+  border-radius: 50%;
+  animation: gloam-spin 0.9s linear infinite;
+}
+
+@keyframes gloam-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.problem {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-left: 4px solid var(--pumpkin);
+}
+
+.problem-text {
+  flex: 1 1 12rem;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.retry-button {
+  min-height: 2.75rem;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  background: var(--pumpkin);
+  border: 0;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+/* ---- Map corner note ------------------------------------------------------- */
+
+.corner-note {
+  padding: 0.35rem 0.6rem;
+  font-size: 0.75rem;
+  line-height: 1.3;
+}
+
+.corner-note p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.corner-note p + p {
+  margin-top: 0.2rem;
+}
+
+/* ---- Plan_Mode controls ---------------------------------------------------- */
+
+/* The Crosshair marks the map centre; it never takes pointer input. */
+.crosshair-host {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.crosshair {
+  position: relative;
+  width: 2rem;
+  height: 2rem;
+}
+
+.crosshair::before,
+.crosshair::after {
+  content: '';
+  position: absolute;
+  background: var(--lantern);
+  box-shadow: 0 0 0 1px var(--night-bottom);
+}
+
+.crosshair::before {
+  top: 0;
+  bottom: 0;
+  left: calc(50% - 1px);
+  width: 2px;
+}
+
+.crosshair::after {
+  left: 0;
+  right: 0;
+  top: calc(50% - 1px);
+  height: 2px;
+}
+
+.plan-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.plan-only {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.mode-switch,
+.tap-sets,
+.point-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.plan-button {
+  min-height: 2.75rem;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  background: var(--glass-fill);
+  border: var(--glass-border-width) solid var(--glass-border);
+  border-radius: 999px;
+}
+
+/* The pressed state shows in the border width and a tick as well as in colour. */
+.plan-button[aria-pressed='true'] {
+  background: var(--night-bottom);
+  border: 3px solid var(--lantern);
+  font-weight: 700;
+}
+
+.plan-button[aria-pressed='true']::before {
+  content: '\2713\00a0';
+}
+
+.lambda-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.lambda-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.lambda-slider {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 2.75rem;
+  accent-color: var(--lantern);
+}
+
+.lambda-readout {
+  flex: none;
+  min-width: 2.5rem;
+  text-align: right;
+  font-family: 'Caprasimo', Georgia, serif;
+}
+
+.lambda-ends {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.settings-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border: var(--glass-border-width) solid var(--glass-border);
+  border-radius: 0.75rem;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.75rem;
+  cursor: pointer;
+}
+
+.toggle input {
+  flex: none;
+  width: 1.4rem;
+  height: 1.4rem;
+  accent-color: var(--lantern);
+}
+
+.toggle-label {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.toggle-state {
+  flex: none;
+  font-weight: 700;
+}
+
+.plan-messages:empty {
+  display: none;
+}
+
+.plan-message {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  background: var(--glass-fill);
+  border: var(--glass-border-width) solid var(--glass-border);
+  border-left: 4px solid var(--pumpkin);
+  border-radius: 0.75rem;
+}
+
+.plan-message + .plan-message {
+  margin-top: 0.4rem;
+}
+
+/* ---- Route panel ----------------------------------------------------------- */
+
+/* Text for screen readers only; still in the page and the accessibility tree. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.guidance:empty {
+  display: none;
+}
+
+.guidance {
+  margin-bottom: 0.6rem;
+}
+
+.example-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.4rem 0.75rem;
+  text-align: left;
+  cursor: pointer;
+  background: var(--glass-fill);
+  border: var(--glass-border-width) dashed var(--glass-border);
+  border-radius: 0.75rem;
+}
+
+.example-clear {
+  flex: none;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.hint {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  background: var(--glass-fill);
+  border: var(--glass-border-width) solid var(--glass-border);
+  border-radius: 0.75rem;
+}
+
+.route-host:empty {
+  display: none;
+}
+
+.route-host {
+  margin-bottom: 0.75rem;
+}
+
+.route-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.route-headline,
+.route-subhead {
+  margin: 0;
+}
+
+.route-headline {
+  font-size: 1.5rem;
+  line-height: 1.15;
+}
+
+.route-subhead {
+  font-size: 1rem;
+}
+
+.route-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  table-layout: fixed;
+}
+
+.route-table th,
+.route-table td {
+  padding: 0.25rem 0.35rem;
+  text-align: right;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.route-table th[scope='row'],
+.route-table th[scope='colgroup'] {
+  text-align: left;
+  font-weight: 400;
+}
+
+.route-table th[scope='col'] {
+  font-weight: 700;
+}
+
+.route-table th[scope='colgroup'] {
+  padding-top: 0.5rem;
+  font-weight: 700;
+}
+
+.route-table th[scope='row'] {
+  width: 44%;
+}
+
+.route-delta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin: 0;
+}
+
+.delta-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.delta-item dt {
+  min-width: 0;
+}
+
+.delta-item dd {
+  flex: none;
+  margin: 0;
+  font-weight: 700;
+}
+
+.heartbeat {
+  margin: 0;
+}
+
+.heartbeat-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.heartbeat-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.heartbeat-key {
+  margin: 0.2rem 0 0;
+  font-size: 0.75rem;
+}
+
+/* A slow pulse, well under 3 flashes a second. Off in Reduced_Effects_Mode. */
+.heartbeat-line {
+  animation: gloam-beat 1.6s ease-in-out infinite;
+}
+
+@keyframes gloam-beat {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.disclaimer {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  border: var(--glass-border-width) solid var(--glass-border);
+  border-radius: 0.75rem;
+}
+
+/* ---- Legend, switches and dialogs ------------------------------------------ */
+
+.tools {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+}
+
+.tools-heading {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.legend-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin: 0.3rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+}
+
+/* Each swatch differs by line pattern as well as colour. */
+.legend-swatch {
+  flex: none;
+  width: 2rem;
+  height: 0;
+  border-top: 4px solid var(--lantern);
+}
+
+.legend-glow {
+  box-shadow: 0 0 8px 2px var(--lantern);
+}
+
+.legend-flicker {
+  border-top-style: dashed;
+}
+
+.legend-fog {
+  border-top: 4px dotted var(--dusk);
+  filter: blur(1px);
+}
+
+.tool-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* A switch shows "on" or "off" in its text; the tick and border mark the on state too. */
+.tool-switch[aria-checked='true'] {
+  background: var(--night-bottom);
+  border: 3px solid var(--lantern);
+  font-weight: 700;
+}
+
+.tool-note {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.sample-badge {
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--night-bottom);
+  background: var(--lantern);
+  border: 2px dashed var(--night-bottom);
+  border-radius: 999px;
+}
+
+.info-dialog {
+  width: min(32rem, calc(100vw - 1.5rem));
+  max-height: calc(100dvh - 2rem);
+  padding: 1rem;
+  overflow-y: auto;
+  color: white;
+  background: var(--night-bottom);
+}
+
+.info-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.dialog-title {
+  margin: 0 0 0.5rem;
+}
+
+.dialog-body p {
+  margin: 0 0 0.6rem;
+}
+
+.figure-list {
+  margin: 0 0 0.6rem;
+  padding-left: 1.2rem;
+}
+
+.raw-link {
+  color: var(--lantern);
+}
+
+.dialog-actions {
+  margin-top: 0.75rem;
+}
+
+/* ---- Report card and Dark_Spot_List ---------------------------------------- */
+
+.report-card,
+.dark-spots {
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--glass-fill);
+  border: var(--glass-border-width) solid var(--glass-border);
+  border-radius: 0.75rem;
+}
+
+.report-card p,
+.dark-spots p {
+  margin: 0 0 0.4rem;
+}
+
+.card-name {
+  font-family: 'Caprasimo', Georgia, serif;
+  font-size: 1.15rem;
+}
+
+.card-detail {
+  font-size: 0.85rem;
+}
+
+/* "your note" is words plus a dashed outline, not colour alone. */
+.card-note {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  font-weight: 700;
+  border: 2px dashed var(--pumpkin);
+  border-radius: 999px;
+}
+
+.dark-spots > summary {
+  cursor: pointer;
+}
+
+.spot-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0.4rem 0;
+  padding-left: 1.4rem;
+}
+
+.spot-row {
+  font-size: 0.85rem;
+}
+
+.spot-name {
+  font-weight: 700;
+  margin-right: 0.5rem;
+  overflow-wrap: anywhere;
+}
+
+.spot-detail {
+  margin-right: 0.5rem;
+}
+
+/* ---- Reduced effects ------------------------------------------------------- */
+
+.reduced-effects .progress-ring,
+.reduced-effects .heartbeat-line {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progress-ring {
+    animation: none;
+  }
+}
+
+[hidden] {
+  display: none !important;
+}

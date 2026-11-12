@@ -1,0 +1,426 @@
+{
+  "schema_version": 1,
+  "label": "SAMPLE DATA",
+  "corrections": [
+    {
+      "city": "seattle",
+      "segment_id": "876004723",
+      "type": "actually_dark",
+      "days_ago": 1,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "seattle",
+      "segment_id": "876004723",
+      "type": "actually_dark",
+      "days_ago": 4,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "seattle",
+      "segment_id": "876004723",
+      "type": "light_is_out",
+      "days_ago": 10,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "seattle",
+      "segment_id": "876004723",
+      "type": "actually_dark",
+      "days_ago": 18,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "seattle",
+      "segment_id": "876026663",
+      "type": "actually_dark",
+      "days_ago": 1,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "seattle",
+      "segment_id": "876026663",
+      "type": "actually_dark",
+      "days_ago": 4,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "seattle",
+      "segment_id": "876026663",
+      "type": "light_is_out",
+      "days_ago": 10,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "seattle",
+      "segment_id": "876026663",
+      "type": "actually_dark",
+      "days_ago": 18,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "seattle",
+      "segment_id": "876005345",
+      "type": "actually_lit",
+      "days_ago": 2,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "seattle",
+      "segment_id": "876005345",
+      "type": "actually_lit",
+      "days_ago": 6,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "seattle",
+      "segment_id": "876005345",
+      "type": "actually_lit",
+      "days_ago": 12,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "seattle",
+      "segment_id": "876005345",
+      "type": "actually_lit",
+      "days_ago": 20,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "kl",
+      "segment_id": "1509439985",
+      "type": "actually_dark",
+      "days_ago": 1,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "kl",
+      "segment_id": "1509439985",
+      "type": "actually_dark",
+      "days_ago": 4,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "kl",
+      "segment_id": "1509439985",
+      "type": "light_is_out",
+      "days_ago": 10,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "kl",
+      "segment_id": "1509439985",
+      "type": "actually_dark",
+      "days_ago": 18,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "kl",
+      "segment_id": "771702812",
+      "type": "actually_dark",
+      "days_ago": 1,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "kl",
+      "segment_id": "771702812",
+      "type": "actually_dark",
+      "days_ago": 4,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "kl",
+      "segment_id": "771702812",
+      "type": "light_is_out",
+      "days_ago": 10,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "kl",
+      "segment_id": "771702812",
+      "type": "actually_dark",
+      "days_ago": 18,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "kl",
+      "segment_id": "1254736482",
+      "type": "actually_lit",
+      "days_ago": 2,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "kl",
+      "segment_id": "1254736482",
+      "type": "actually_lit",
+      "days_ago": 6,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "kl",
+      "segment_id": "1254736482",
+      "type": "actually_lit",
+      "days_ago": 12,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "kl",
+      "segment_id": "1254736482",
+      "type": "actually_lit",
+      "days_ago": 20,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "london",
+      "segment_id": "137342144",
+      "type": "actually_dark",
+      "days_ago": 1,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "london",
+      "segment_id": "137342144",
+      "type": "actually_dark",
+      "days_ago": 4,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "london",
+      "segment_id": "137342144",
+      "type": "light_is_out",
+      "days_ago": 10,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "london",
+      "segment_id": "137342144",
+      "type": "actually_dark",
+      "days_ago": 18,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "london",
+      "segment_id": "1330784250",
+      "type": "actually_dark",
+      "days_ago": 1,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "london",
+      "segment_id": "1330784250",
+      "type": "actually_dark",
+      "days_ago": 4,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "london",
+      "segment_id": "1330784250",
+      "type": "light_is_out",
+      "days_ago": 10,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "london",
+      "segment_id": "1330784250",
+      "type": "actually_dark",
+      "days_ago": 18,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "london",
+      "segment_id": "780665503",
+      "type": "actually_lit",
+      "days_ago": 2,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "london",
+      "segment_id": "780665503",
+      "type": "actually_lit",
+      "days_ago": 6,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "london",
+      "segment_id": "780665503",
+      "type": "actually_lit",
+      "days_ago": 12,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "london",
+      "segment_id": "780665503",
+      "type": "actually_lit",
+      "days_ago": 20,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "berlin",
+      "segment_id": "780281655",
+      "type": "actually_dark",
+      "days_ago": 1,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "berlin",
+      "segment_id": "780281655",
+      "type": "actually_dark",
+      "days_ago": 4,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "berlin",
+      "segment_id": "780281655",
+      "type": "light_is_out",
+      "days_ago": 10,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "berlin",
+      "segment_id": "780281655",
+      "type": "actually_dark",
+      "days_ago": 18,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "berlin",
+      "segment_id": "368947010",
+      "type": "actually_dark",
+      "days_ago": 1,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "berlin",
+      "segment_id": "368947010",
+      "type": "actually_dark",
+      "days_ago": 4,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "berlin",
+      "segment_id": "368947010",
+      "type": "light_is_out",
+      "days_ago": 10,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "berlin",
+      "segment_id": "368947010",
+      "type": "actually_dark",
+      "days_ago": 18,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "berlin",
+      "segment_id": "940515189",
+      "type": "actually_lit",
+      "days_ago": 2,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "berlin",
+      "segment_id": "940515189",
+      "type": "actually_lit",
+      "days_ago": 6,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "berlin",
+      "segment_id": "940515189",
+      "type": "actually_lit",
+      "days_ago": 12,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "berlin",
+      "segment_id": "940515189",
+      "type": "actually_lit",
+      "days_ago": 20,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "manchester",
+      "segment_id": "1079840531",
+      "type": "actually_dark",
+      "days_ago": 1,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "manchester",
+      "segment_id": "1079840531",
+      "type": "actually_dark",
+      "days_ago": 4,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "manchester",
+      "segment_id": "1079840531",
+      "type": "light_is_out",
+      "days_ago": 10,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "manchester",
+      "segment_id": "1079840531",
+      "type": "actually_dark",
+      "days_ago": 18,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "manchester",
+      "segment_id": "1078573000",
+      "type": "actually_dark",
+      "days_ago": 1,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "manchester",
+      "segment_id": "1078573000",
+      "type": "actually_dark",
+      "days_ago": 4,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "manchester",
+      "segment_id": "1078573000",
+      "type": "light_is_out",
+      "days_ago": 10,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "manchester",
+      "segment_id": "1078573000",
+      "type": "actually_dark",
+      "days_ago": 18,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "manchester",
+      "segment_id": "27928173",
+      "type": "actually_lit",
+      "days_ago": 2,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "manchester",
+      "segment_id": "27928173",
+      "type": "actually_lit",
+      "days_ago": 6,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "manchester",
+      "segment_id": "27928173",
+      "type": "actually_lit",
+      "days_ago": 12,
+      "label": "SAMPLE DATA"
+    },
+    {
+      "city": "manchester",
+      "segment_id": "27928173",
+      "type": "actually_lit",
+      "days_ago": 20,
+      "label": "SAMPLE DATA"
+    }
+  ]
+}

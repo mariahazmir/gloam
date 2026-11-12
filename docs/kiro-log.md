@@ -320,3 +320,143 @@ Credits: 4,000 at start (redeemed 8 Nov).
 - Kiro built the graph builder (validates each segment alone, rejects every copy of a duplicate id, splits at shared coordinates, sorts everything by value so input order can't matter) and the snapper (200 m grid, 3x3 lookup, inclusive 150 m), with property tests 4, 5, 6 and 15. It sorts nodes by the string "lon,lat", which is deterministic but not geographic; that matches the design. 
 - It left five type errors in the task 2 test file that it first reported as clean; I had it fix them.
 - Credits: 13.99
+
+## 10 Nov: Tasks
+
+### Web app task 4: scoring and tiers
+
+- Kiro wrote dread, the tier rule (integer rank comparisons, no 0.5 cut-off anywhere) and the note overrides, then property tests 1, 2, 7 and 8 (rank-only tiers: five order-preserving transforms and a shift of every probability below or above 0.5 all give identical tiers).
+- The parts ran as separate sub-agents, so no one ran the whole suite until I did. I ran the full suite, which passed and ran tiers on all five real packs.
+- Credits: 8.99
+
+### Web App Task 5: checkpoint
+
+- 49 tests passing in 58 s, no code changes.
+- Credits: 1.34
+
+### Web App Task 6 (6.1 to 6.8): routing
+
+- Kiro wrote the cost functions and the router (backward Dijkstra, then a forward walk picking the smallest street id among cheapest steps) with property tests 9-14. 
+- Property 9's brute-force check found a real bug: for tiny snap positions (t around 5e-324) the router returned "no route" even though one existed. 
+- The sub-agent first narrowed the test generator to avoid it, which hides the bug. I had it fix the router (1 mm collapse onto the junction plus a safe walk) and restore the full range. 
+- A weak example in the Property 11 test was replaced with the hand-checked one from the design.
+- Real-data check of the router: 40 pairs of nodes about 1 km apart in KL and 40 in Seattle, routed at lambda 0, 1, 3, 6 and 10. Zero monotonicity violations. At lambda 3 the route differs from the shortest in 40/40 KL pairs and 38/40 Seattle pairs, with dark exposure 6-35% lower for 1-3% more distance in the pairs I looked at. Lambda 3, 6 and 10 gave identical routes, so the slider's top range may be wasted; I'll check before building the slider.
+- Credits: 29.34
+
+### Web App Task 6 (6.9 to 6.12): shares, comparison, heartbeat
+
+- Kiro added the tier-share rounding (largest remainder, sums to exactly 100), distance and minutes formatting, route comparison on displayed values, and the heartbeat series and text summary, with properties 16, 17 and 18. 
+- The sub-agents invented the RouteSummary, RouteDelta and HeartbeatSeries shapes because the design didn't define them; I accepted them and updated the design. 
+- The heartbeat summary and unit strings were written outside strings.ts, so the banned-word test would not have seen them; I'm having Kiro move them at task 9.1.
+- Credits: 8.94
+
+### Web App Task 7: corrections and settings
+
+- Kiro wrote the weight, status rule, dark-spot list, CSV export and the two local stores (one note per street per device; failed reads and writes leave earlier data untouched), with properties 19-24. 
+- The sub-agents ran only their own files. 
+- Decisions: capped the Property 19 date range because the weight underflows to 0 after about 88 years; header row unquoted in the CSV; added a small keyValueStorage wrapper so tests need no browser.
+- Credits: 16.39
+
+### Web App Task 8: visual maths
+
+- Kiro wrote the flicker maths (max rate 8/3 per second, under the cap of 3), the effects ladder and the tier style tables, with properties 27-30. 
+- My review found the slow-change test only compared samples up to 99 ms apart, short of the 4-step window the design's bound needs; Kiro strengthened it. 
+- It also left 16 type errors in the task 7 tests because sub-agents only run their own files, so I added a standing rule to tech.md.
+- Credits: 14.49
+
+### Web App Task 9: strings, banned words, validation parsing
+
+- Kiro wrote the string catalogue (Disclaimer verbatim, tier wording, templates), a whole-token banned-word matcher ("insecure" doesn't match "secure") and a parser for docs/validation.md that returns figures exactly as written, with properties 25 and 26 and example tests that expand every template and also scan the real validation file. 
+- The sub-agent invented the lighting-terms check and the error/legend wording because the spec gave no mechanism.
+- Credits: 11.05
+
+### Web App Task 10
+
+- Kiro wrote the app state reducer (starts in Plan_Mode, Start_Setting_State; Report_Mode taps never move points; Plan_Mode taps never select a street) with Property 31. 
+- It noticed the spec didn't say what happens to the example flag when the user sets a point during the Sample_Walk. 
+- I decided that setting any point clears the example first and applies the new point alone, and added R17.17. 
+- Credits: 14.5
+
+### Web App Task 11: checkpoint
+  
+- 163 tests passing in 20 s, no code changes.
+- Credits: 1.3
+
+### Web App Task 12: shell I/O, sample walks, no-network test
+
+- Kiro wrote the pack manifest and loaders (segments first, then buildings; one AbortController per load; 15 s deadline; nothing committed on failure), the geolocation wrapper, the sample-walk picker and Property 33 (zero network calls from the pure modules). 
+- Picker chose one walk per city by maximising the dark-metre difference; I noted that makes them best cases, not typical, and will label them honestly in the UI.
+- Credits: 18.35
+
+### Web App Task 13: map and visuals
+
+- What Kiro built: the bundled dark map style (one OpenFreeMap vector source loaded through its TileJSON; only water, waterway, landcover, landuse, park and roads; no labels, icons or glyphs), the map view with an always-open attribution, the street layers with 27 flicker cohort layers, the "your note" marker, the 5 s tile-timeout fallback and an fps sampler, with mocked-event tests. tsc clean; 44 files, 207 tests passing. Not yet run in a browser.
+- Spec changes made along the way: tile timeout raised from 3 s to 5 s (a cold tile from Ningbo took 1.7 s); the allowed-request list no longer includes glyphs or sprites.
+- What went wrong: during 13.1 Kiro appended its own entry to this log, which I write myself. I told it off, deleted its entry and added a steering rule saying never to edit docs/kiro-log.md. Kiro also chose the base-map colours itself instead of using the palette in design.md; I've asked it to use one palette module for both the map and the tier colours.
+- Credits: 16.76
+
+### WWeb App Task 14.1 to 14.2: shell
+
+- Kiro’s first browser check found the map blank. Cause: MapLibre 6.17 couldn’t locate its worker file, in dev and in the production build. Kiro fixed it by importing the worker as a Vite asset. My guess (Vite blocking the pack files) was wrong; I should have asked for the Console first.
+- Credits: 29.79
+
+### Web App Task 14.3: plan controls
+
+- Kiro built the mode switch, crosshair buttons, "tap sets" control, "use my location", the four settings toggles, the lambda slider (0-10, step 0.5, default 3) and the planner that checks out-of-area, too-far, same-place and no-route cases. 
+- It caches the Shortest_Route per start/end pair and throttles the slider (immediately after a pause, then at most every 100 ms with the last value always applied, which I prefer over a plain debounce). 
+- One route on Seattle's 34,609-edge graph took 19 ms on a desktop (57 ms worst). Real-data check before this task: routes still change between slider steps up to lambda 10 in KL and Seattle, so I kept the range. 
+- Nothing is wired into the page yet.
+- Credits: 12.65
+
+### Web App Task 14.4, 14.7: route panel, wiring
+
+- 14.4: route panel with Gloam route and Shortest route side by side (distance, walking time, share of length by lighting tier, signed deltas), the verbatim Disclaimer, and the dread chart along the route.
+- 14.7: wiring. Plan controller, crosshair buttons ("Set start here", "Set end here", "Use my location"), map taps, lantern route layer, and a first-run example walk per city with a label and a clear control.
+- Slider updates use throttling, not debouncing, so the route moves while you drag. Measured 18–57 ms per replan. The cache key includes the user's overrides.
+- Route panel and heartbeat chart built from `STRINGS`. Low-confidence markers differ by shape, not colour alone. Reduced-effects mode draws no pulse.
+- The example walk is drawn automatically for each city from the picked sample walks. A new `showExample` reducer action sets and clears it. Only one pack is held in memory at a time.
+- Result reported: `tsc` clean, 46 files, 223 tests passing. Nothing was run in a browser.
+- Kiro had not opened a browser, so I had Mari run it herself. I told her not to let Kiro take screenshots, because they were unreliable earlier.
+- Real browser check on Seattle at phone width (393 px):
+  - The example walk loads with its label ("Example walk, picked to show the difference. Yours may differ.") and "Clear example".
+  - Route panel shows 1.1 km, 14 min vs 13 min, confirmed lit 26% vs 0%, +34 m, +1 min, and −893 m through estimated streets darker than most streets here.
+  - Heartbeat chart draws with a diamond marker for the low-confidence stretch.
+  - Disclaimer, Plan/Report, start/end toggle, the three location buttons, slider and four settings all show.
+- Gap found: tapping a point shows nothing on the map until a route exists, because there are no start/end markers. This goes into the next prompt.
+- Polish for later, not blocking: the slider value at the right edge renders as a tiny glyph; the corner note is large on a phone; the UI overall needs a final visual pass.
+- Next prompt to Kiro: start/end markers (different shape or ring for start vs end, drawn above the segments and below the route), then 14.6.
+- Credits: 15.99
+
+### Web App Task 14.6, 14.5: markers; legend/demo/reset, corrections
+
+- Start/end markers (spec first: new R6.12 and a design note), different shapes so it isn't colour alone.
+- 14.6: About, How Gloam Guesses (AUC from the bundled validation.md only, names the cities that did not beat the baseline), Legend (≤80 chars per line), Demo mode (on by default when hosted), Reset, Reduced-effects switch.
+- 14.5: Report mode, one-tap notes, street card, Dark_Spot_List with CSV export.
+- Markers: solid disc for start, hollow ring for end, drawn above the segments and below the route. Pure `buildMarkersGeoJSON` tested.
+- 14.6: all items done. The raw-text link is a `blob:` URL, so no network request. Reset restores the example walk and display defaults and keeps my slider, toggles and notes.
+- 14.5: a tap selects the street within about 10 px, querying only street layers. A note overrides lit probability and confidence for my routing only, and Tiers never see notes. Sample rows carry the SAMPLE DATA badge and vanish when Demo mode is off.
+- Results: tsc clean, 48 files, 257 tests. `vite build` succeeds. No DOM tests, because the test setup has no jsdom, and Kiro listed the untested UI parts itself.
+- Kiro treats an empty sample list as a load failure. I asked for a check that cities without sample rows don't show a false error. Kiro answered that all five cities have 12 sample rows. [ ] verified with the node one-liner
+- Focus is lost after a report tap. Asked for a fix.
+- Asked Kiro to check the CSV for spreadsheet formula injection.
+- Credits: 26.58
+
+### Web App Task 14.7, 14.8: final wiring check, manual-check document
+
+- 14.7: finish the wiring. First run, Sample_Walk with label and clear control, hint, one pack in memory, no location request on load.
+- 14.8: a manual-check document for the things tests can't cover (focus order, attribution, layouts, browsers, fps, graph build time, keyboard use). Results are mine to record.
+- I added two fixes to the 14.7 prompt: restore keyboard focus after a report tap, and neutralise spreadsheet formula characters in the CSV.
+- 14.7: it audited `main.ts` against each sub-item. Everything was already wired from the earlier UI tasks, so the only change was a stale header comment. Reported tsc exit 0, 48 files, 257 tests.
+- 14.8: created `docs/app-checks.md` with nine sections (focus, attribution, 390 and 768 px layouts, browsers, fps, graph build time, keyboard use, hosting placeholder for task 16.2). All result fields empty, no checks run.
+- Kiro did not report the focus fix or the CSV fix. The test count stayed at 257, so I treated both as not done and re-sent them.
+- It did not capture the tsc output, which breaks the tech.md rule. Asked for the raw last lines of both commands from now on.
+- It wrote an entry into `docs/kiro-log.md` for 14.8, even though the steering rule says never to. I removed it. Steering didn't stop it, so the rule now goes in every prompt, and I set the file read-only with `attrib +R` while Kiro works.
+- Re-sent the two fixes with a requirement that the test count goes up.
+- Credits: 7.16
+
+### Web App Task 15: Checkpoint
+
+- `npx tsc --noEmit` in `app/` printed no errors and exited 0.
+- `npx vitest --run` ended with 49 test files and 264 tests passing, in 5.12 s. Nothing failed, so nothing was edited.
+- Credits: 1.36
+

@@ -8,8 +8,9 @@ import { defineConfig } from "vitest/config";
 export default defineConfig(({ mode }) => ({
   base: loadEnv(mode, ".", "GLOAM_").GLOAM_BASE ?? "/",
   server: {
-    // Allow `?raw` imports of docs/validation.md from the repo root.
+    // Allow `?raw` imports of docs/validation.md and the pack files in ../data.
     fs: { allow: [".."] },
+    host: "127.0.0.1",
   },
   test: {
     environment: "node",

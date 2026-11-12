@@ -16,7 +16,7 @@ Static hosting is confirmed as a Render static site. Everything that depends on 
 
 ### Research summary
 
-- OpenFreeMap documents that custom styles are allowed, and that a customised style must be hosted by the app itself. That matches the requirement that the map style is bundled ([OpenFreeMap quick start](https://openfreemap.org/quick_start/)). The bundled style references the OpenFreeMap vector source and glyphs. The exact source and glyph URLs are copied from OpenFreeMap's published `liberty` style at implementation time and recorded in `style.ts`; they are not guessed here.
+- OpenFreeMap documents that custom styles are allowed, and that a customised style must be hosted by the app itself. That matches the requirement that the map style is bundled ([OpenFreeMap quick start](https://openfreemap.org/quick_start/)). The bundled style references the OpenFreeMap vector source through its TileJSON URL `https://tiles.openfreemap.org/planet` (confirmed 10 Nov from the published `liberty` style). Tiles are never loaded from a hardcoded tile URL because it carries a changing version folder. Version 1 has no text labels or icons, so the style has no glyphs, no sprite and no symbol layers.
 - The `data/*.segments.geojson` files in the repository show the real input shape: `metadata` holds `schema_version`, `kind`, `city`, `attribution`, `licence`, `estimates_note`; each feature is a LineString with `id` (a JSON number), `name`, `highway`, `lit_probability`, `confidence`, `label_source`. Segment ids are unique in all five shipped files (checked: berlin 16668, kl 10225, london 15296, manchester 21792, seattle 17402). Pack sizes are 3 to 6.3 MB for segments and 1.7 to 2.9 MB for buildings before gzip.
 - Highway values seen in the data: footway, service, residential, steps, primary, secondary, cycleway, tertiary, path, unclassified, pedestrian, secondary_link, living_street, primary_link, tertiary_link, track. These drive the routing toggles in Requirement 8.
 - `docs/validation.md` is the only source of figures for the How_Gloam_Guesses_Screen. It currently has metric tables for berlin, london and manchester (walking paths), and says hold-out validation was skipped for kl and seattle.
@@ -61,7 +61,7 @@ flowchart TD
 
 Rules that keep this honest:
 
-- `net/packLoader.ts` and `net/sampleLoader.ts` are the only modules that call `fetch`, and they only request the files named in Requirement 13.5. The map library issues its own requests: the OpenFreeMap TileJSON request (named in Requirement 13.5), tiles and glyphs. Pack files are served gzip- or Brotli-compressed (Requirement 17.6). No route, start, end or position value is ever passed to either (Requirements 13.4 to 13.6).
+- `net/packLoader.ts` and `net/sampleLoader.ts` are the only modules that call `fetch`, and they only request the files named in Requirement 13.5. The map library issues its own requests: the OpenFreeMap TileJSON request and the vector tiles it lists (both named in Requirement 13.5). It makes no glyph or sprite request. Pack files are served gzip- or Brotli-compressed (Requirement 17.6). No route, start, end or position value is ever passed to either (Requirements 13.4 to 13.6).
 - Core modules import nothing from the shell, the DOM or `maplibre-gl`. No circular imports; dependency direction is shown in the diagram.
 - All user-visible text lives in `content/strings.ts` (see Components). No other module contains a literal UI string.
 
@@ -97,10 +97,10 @@ app/
 
 | Topic | Decision | Why |
 |---|---|---|
-| Pack delivery | Pack files are imported with `import.meta.glob('../../data/{seattle,kl,london,berlin,manchester}.*.geojson', { query: '?url', import: 'default' })` and fetched on demand. The glob matches the ten files of the five shipped packs. The manifest in `pack/manifest.ts` lists the five cities and looks up each file URL from the glob result. | No copy step, hashed URLs, nothing fetched until the user chooses a city (Requirement 1.4). The manifest makes "one entry per shipped pack" explicit (Requirement 1.1). |
+| Pack delivery | Pack files are imported with `import.meta.glob('../../../data/{seattle,kl,london,berlin,manchester}.*.geojson', { query: '?url', import: 'default' })` and fetched on demand. The glob matches the ten files of the five shipped packs. The manifest in `pack/manifest.ts` lists the five cities and looks up each file URL from the glob result. | No copy step, hashed URLs, nothing fetched until the user chooses a city (Requirement 1.4). The manifest makes "one entry per shipped pack" explicit (Requirement 1.1). |
 | Which packs ship | Five packs ship: Seattle, Kuala Lumpur, London, Berlin and Manchester. The manifest has one entry for each and the City_Picker lists all five. | Requirement 1.1 names all five. |
 | Fonts | Caprasimo and DM Sans are committed as woff2 files and loaded with `@font-face`. | A font CDN request would break the network allow-list (Requirement 13.5). Both fonts are SIL OFL; the licence text goes in `docs/` and the README credits. |
-| Map style | `map/style.ts` builds a `StyleSpecification` object in code: dark background, a few dim water, park and road layers from the OpenFreeMap vector source, glyphs from OpenFreeMap, no sprite. The base-map `building` layer is omitted because buildings come from the Buildings_File. | Style is bundled (no style request). No sprite means fewer requests. Avoids two building layers. |
+| Map style | `map/style.ts` builds a `StyleSpecification` object in code: dark background, then dim layers from the `openmaptiles` vector source (`url: "https://tiles.openfreemap.org/planet"`) using only the source layers `water`, `waterway`, `landcover`, `landuse`, `park` and `transportation`. No `glyphs`, no `sprite`, no symbol layers, no `ne2_shaded` raster source. The base-map `building` layer is omitted because buildings come from the Buildings_File. Attribution is always open (`AttributionControl` with `compact: false`) and reads "OpenFreeMap © OpenMapTiles Data from OpenStreetMap" with links, plus "© OpenStreetMap contributors". | Style is bundled (no style request). No glyphs and no sprite means fewer requests (Requirement 13.5). Avoids two building layers. |
 | Graph | Undirected. Every Edge is walkable both ways. Each Edge is stored once and the adjacency lists both directions as "darts". | Requirement glossary: Street_Graph is undirected. |
 | Where the graph is built | Main thread, after the street layer is drawn, scheduled with `setTimeout(0)` so first paint is not blocked. A module Web Worker is the fallback if the 3 s target (Requirement 2.7) is missed on the reference phone. | Simplest thing that can meet the first-run order in Requirement 17.3. Measure before adding complexity. |
 | Hosting | Render static site (confirmed by the user). Output is a plain `dist/` folder. `VITE_GLOAM_HOSTED=true` sets Demo_Mode on by default (Requirement 14.2). To verify on the deployed Render site, not assumed: (a) pack files are served gzip- or Brotli-compressed, checked via the `Content-Encoding` response header (Requirement 17.6); (b) the site is served over HTTPS; (c) the URL stays stable and up from 16 Dec to 29 Jan; (d) the site loads from the US, China and Malaysia, tested from China and Malaysia (Requirement 15.5). Record results in `docs/app-checks.md`. | Nothing in the app depends on a host except the flag and compression. |
@@ -125,12 +125,12 @@ app/
 | Dark_Spot_List (R11) | Enabled in version 1. Counts combine local and Sample_Data Corrections. An entry is labelled "SAMPLE DATA" if any contributing Correction is sample. |
 | "Lowest quarter" of confidence (R9.3 to R9.5) | Nearest-rank: sort the pack's Estimated_Segment confidences ascending, `n` of them, threshold = value at index `ceil(n / 4) - 1`; an Edge is low-confidence when its effective confidence is at or below the threshold. |
 | "Highest quarter" of Dread (R9.4) | Sort the route's `m` Edge Dreads ascending, threshold = value at index `m - ceil(m / 4)`; an Edge is in the highest quarter when its Dread is at or above the threshold. |
-| Tap state machine (R6.1) | Plan_Mode starts in Start_Setting_State. Setting a start moves to End_Setting_State. Setting an end stays in End_Setting_State. A "tap sets: start / end" segmented control shows and changes the state. |
+| Tap state machine (R6.1) | Plan_Mode starts in Start_Setting_State. After any point-setting action (tap, `setStartHere`, `setEndHere`, `useLocation`), and after the Sample_Walk is cleared first when it was showing (R17.17), if exactly one of start and end is unset the state becomes the unset point's state (start unset: Start_Setting_State; end unset: End_Setting_State); if both are set it is unchanged. So a start action with an end already set leaves the state as it was. Report_Mode taps never change it. A "tap sets: start / end" segmented control shows and changes the state. |
 | Out-of-area (R1.9) and too far (R6.6) | Out of area means outside the bounding box of all Segment coordinates grown by 150 m. Inside that box but with no street within 150 m (inclusive) gives the "too far from a street" message. |
 | Fit to Sample_Walk (R5.1, R14.7, R17.7) | `boundsOf(points)` returns the south-west and north-east corners of every route coordinate plus start and end. The map shell calls `fitBounds` with padding `{ top: 80, bottom: 300, left: 40, right: 40 }`, `maxZoom: 17`, `duration: 0` on first run. |
 | Frame-rate fallback (R5.6) | Effects ladder in order: `flicker`, `glow`, `fog`, `extrusion`. A 1 s frame counter feeds a pure controller (see Components). |
 | Geolocation timeout (R6.3) | `getCurrentPosition` with `timeout: 10000`, plus a guard timer of 10 s in case the browser never calls back. |
-| Tile timeout (R5.7) | A 3 s watch starts when the style loads. If the base vector source has not reported loaded tiles by then, or a source error fires, base layers are hidden and the message is shown. |
+| Tile timeout (R5.7) | A 5 s watch starts when the style loads. If the base vector source has not reported loaded tiles by then, or a source error fires, base layers are hidden and the message is shown. |
 | Zero-length route | If start and end snap to the same point, no route is shown; the app shows "Start and end are the same place". Approved. |
 | Duplicate segment ids | Ids must be unique. If an id appears twice, every copy is rejected with an error naming `id`. Rejecting all copies keeps the result independent of input order. |
 
@@ -297,7 +297,7 @@ export function medianConfidence(graph: StreetGraph): number;
 ```ts
 export interface RouteRequest {
   graph: StreetGraph;
-  start: SnapPoint; end: SnapPoint;
+  start: RoutePoint; end: RoutePoint;   // RoutePoint = Pick<SnapPoint, 'edge' | 't'>; the router reads only these
   lambda: number;
   settings: PersonalSettings;
   overrides: ReadonlyMap<string, Override>;
@@ -311,7 +311,7 @@ export interface Route {
 export function findRoute(req: RouteRequest): Route | null;   // null = no connected path
 ```
 
-**Overlay for snapped points.** Start and end usually fall inside an Edge. The router builds a small, local overlay without changing the graph: each snapped Edge is replaced by sub-pieces split at the snapped `t` values (sorted), with lengths scaled by `t` and the same attributes. `t` of 0 or 1 reuses the existing node. If start and end share an Edge, the piece between them is also a candidate. Sub-pieces carry a `sub` ordinal for tie-breaking.
+**Overlay for snapped points.** Start and end usually fall inside an Edge. The router builds a small, local overlay without changing the graph: each snapped Edge is replaced by sub-pieces split at the snapped `t` values (sorted), with lengths scaled by `t` and the same attributes. `t` of 0 or 1 reuses the existing node. If start and end share an Edge, the piece between them is also a candidate. Sub-pieces carry a `sub` ordinal for tie-breaking. **1 mm collapse rule:** before splitting, a snap position within 1 mm of an Edge end (`t * lengthM <= 0.001`, or `(1 - t) * lengthM <= 0.001`) is collapsed onto that end node (`t` becomes 0 or 1), so returned `fromT`/`toT` and piece lengths use the collapsed position. This keeps piece costs above float resolution. The forward walk keeps a visited-node guard so it cannot loop; if float resolution makes the strict progress check find no step, it picks among darts with non-increasing distance (smallest dart key, never revisiting a node), and as a last resort follows the Dijkstra tree, so `findRoute` never returns null once the start node was reached.
 
 **Algorithm.**
 
@@ -381,7 +381,7 @@ export function toCsv(rows: ReadonlyArray<DarkSpot>): string;
 - `communityStatus` splits Corrections into the lit side (`actually_lit`) and the dark side (`actually_dark` plus `light_is_out`), sums canonical-order weights per side, and returns the side whose sum is at least the threshold (default 3) and strictly greater than the other. A single Correction can never reach the threshold, so it never creates or changes a status (Requirements 10.6, 16.12).
 - Worked examples (today = the same day): three lit reports dated today give lit sum 3, dark sum 0, so lit, 3 people. Three lit plus one dark gives 3 against 1, lit, 3 people. Three lit and three dark gives a tie, so no status. Three lit reports each 30 days old give 3 x 0.5 = 1.5, below 3, so no status.
 - `darkSpots` keeps segments with at least one `actually_dark` or `light_is_out` report, sorts by total count descending then segment id ascending, and keeps 20 (Requirement 11.1).
-- `toCsv` writes the header `name,highway,segment_id,actually_dark,light_is_out`. Every field is wrapped in double quotes with embedded quotes doubled. A field whose first character is `=`, `+`, `-`, `@`, tab or carriage return gets a single quote prefix before quoting. An unnamed segment has an empty name field (Requirements 11.3, 11.5). No coordinates, dates or user data are written.
+- `toCsv` writes the header `name,highway,segment_id,actually_dark,light_is_out`. Every field is wrapped in double quotes with embedded quotes doubled. A field whose first character is `=`, `+`, `-`, `@`, tab or carriage return gets a single quote prefix before quoting. An unnamed segment has an empty name field (Requirements 11.3, 11.5). The header row is written unquoted: its names are plain words with underscores, so quoting adds nothing. Only data fields are quoted. No coordinates, dates or user data are written.
 - `storage/localCorrectionStore.ts` implements `CorrectionStore` over `localStorage` key `gloam.corrections.v1` as an array of `[segmentId, type, date]`. A failed read or write throws `StoreError`, leaves earlier data untouched, and the UI shows the error and carries on (Requirement 10.9). All app code uses the interface only (Requirement 10.8).
 
 ### settings/
@@ -429,14 +429,15 @@ export function stepEffects(s: EffectsState, fps: number, nowMs: number): Effect
 
 ### state/appState.ts
 
-A pure reducer `(state, action) => state`. State holds mode (`plan` or `report`), setting state (`start` or `end`), start and end positions, `exampleActive`, lambda, settings, reduced-effects, demo flag, and selected segment. Actions: `tap`, `setStartHere`, `setEndHere`, `useLocation`, `switchMode`, `chooseSettingState`, `clearExample`, `reset`. `clearExample` clears the example start, end and route and returns to Plan_Mode in Start_Setting_State. In Report_Mode a tap never changes start or end; in Plan_Mode a tap never selects a segment (Requirements 6.1, 6.11, 10.1). Snapping and routing happen in effects triggered by state changes, not inside the reducer.
+A pure reducer `(state, action) => state`. State holds mode (`plan` or `report`), setting state (`start` or `end`), start and end positions, `exampleActive`, lambda, settings, reduced-effects, demo flag, and selected segment. Actions: `tap`, `setStartHere`, `setEndHere`, `useLocation`, `switchMode`, `chooseSettingState`, `clearExample`, `reset`. `clearExample` clears the example start, end and route and returns to Plan_Mode in Start_Setting_State. In Report_Mode a tap never changes start or end; in Plan_Mode a tap never selects a segment (Requirements 6.1, 6.11, 10.1). While `exampleActive` is true, every point-setting action (a Plan_Mode `tap`, `setStartHere`, `setEndHere`, `useLocation`) first clears both example points and the flag, then applies the new point alone; the state then follows the general rule below, which also applies when the example is not active. Report_Mode taps do not clear the example (Requirement 17.17). One helper computes the setting state from the resulting start and end: the unset point's state when exactly one is unset, otherwise the prior state; `setStart` and `setEnd` both use it, and `chooseSettingState` overrides it manually. Longitude and latitude are validated before any state change. Snapping and routing happen in effects triggered by state changes, not inside the reducer.
 
 ### map/
 
-- `style.ts` returns the bundled style. `mapView.ts` creates the `maplibregl.Map` with `maxPitch: 60`, `attributionControl: { compact: false }` (always open, so it cannot be collapsed behind a button) and custom attribution strings for OpenStreetMap contributors, OpenFreeMap and OpenMapTiles (Requirement 5.3). Panels reserve bottom space so nothing covers the attribution.
+- `style.ts` returns the bundled style. `mapView.ts` creates the `maplibregl.Map` with `maxPitch: 60`, `attributionControl: { compact: false }` (always open, so it cannot be collapsed behind a button) and the always-visible attribution "OpenFreeMap © OpenMapTiles Data from OpenStreetMap" (each part a link) plus "© OpenStreetMap contributors", set as the vector source `attribution` in `style.ts` (Requirement 5.3). A test checks that the attribution string contains the three links and the contributors text. Panels reserve bottom space so nothing covers the attribution.
 - Buildings use a `fill-extrusion` layer with `fill-extrusion-height` read from `height_m`. Buildings skipped by `parseBuildingsFile` are never added.
 - `layers.ts` adds the Segments source with `promoteId: 'id'` and `tier` and `conf` properties copied into each feature. The "your note" marker uses feature-state: the shell calls `map.setFeatureState({ source, id }, { noted: true })` when a note is saved or restored (and `false` when removed), and the marker layer filters or styles on `['feature-state', 'noted']`. No GeoJSON data is rebuilt when a note changes. The id passed is the pack's `id` property in its original type (a number in the shipped files), then the cohort layers, the "your note" marker layer (driven by MapLibre feature-state, see below), and the route layer last so the lantern path stays on top (Requirement 4.6).
-- `tileWatch.ts` implements the 3 s rule. When it fires, base layers get `visibility: none`, Segments stay on the plain background, and the message appears. Routing is unaffected (Requirements 5.7, 17.12).
+- Start and end markers (Requirement 6.12) are two `circle` layers on one GeoJSON source, added after the "your note" layer and before the route casing. Start is a filled lantern disc, end is a hollow pumpkin ring (larger, thicker stroke), so shape differs as well as colour. The pure `buildMarkersGeoJSON(start, end, snapTo)` gives each point its Snap position when `snapTo` returns one and its tapped position otherwise, so a marker shows as soon as the point is set.
+- `tileWatch.ts` implements the 5 s rule. When it fires, base layers get `visibility: none`, Segments stay on the plain background, and the message appears. Routing is unaffected (Requirements 5.7, 17.12).
 - The map layer reads frame counts with `requestAnimationFrame` and passes `fps` to `stepEffects` once per second.
 
 ## Data Models
@@ -612,7 +613,7 @@ Reflection: the prework produced about 60 testable criteria. Redundant ones were
 
 ### Property 19: Report weight halves every 30 days and never grows
 
-*For any* Correction date and `today`, `reportWeight` is greater than 0 and at most 1, equals 1 when the date is today or later, and equals `0.5 ^ (days / 30)` otherwise. *For any* Correction and two times `t1 <= t2`, the weight at `t2` is at most the weight at `t1`.
+*For any* Correction date and `today`, `reportWeight` is at least 0 and at most 1 (and greater than 0 for ages up to 50 years), equals 1 when the date is today or later, and equals `0.5 ^ (days / 30)` otherwise. *For any* Correction and two times `t1 <= t2`, the weight at `t2` is at most the weight at `t1`.
 
 **Validates: Requirements 10.4, 16.14**
 
@@ -684,9 +685,9 @@ Reflection: the prework produced about 60 testable criteria. Redundant ones were
 
 ### Property 31: Modes and taps behave as specified
 
-*For any* sequence of reducer actions, in Report_Mode a tap never changes start or end, and in Plan_Mode a tap never selects a segment. In Plan_Mode a tap sets the start in Start_Setting_State and the end in End_Setting_State, replacing any earlier point of that kind, and setting a start moves to End_Setting_State. The initial state is Plan_Mode and Start_Setting_State. `reset` clears start, end and route, restores the example and the first-run Demo_Mode value.
+*For any* sequence of reducer actions, in Report_Mode a tap never changes start or end, and in Plan_Mode a tap never selects a segment. In Plan_Mode a tap sets the start in Start_Setting_State and the end in End_Setting_State, replacing any earlier point of that kind. After each of the four point-setting actions (after clearing the example first, if it was active, which leaves only the new point), if exactly one of start and end is unset, the setting state equals the unset point's state; if both are set it equals the prior setting state; `chooseSettingState` overrides it. Hand example: from a fresh state with no example, `setEndHere` at (5, 6) gives start null, end (5, 6), state `start`; a tap at (10, 20) then sets the start, both are set, and the state stays `start`. With start (1, 2), end (3, 4) and state `end`, `setEndHere` at (7, 8) leaves state `end`; with state `start` and both set, a tap at (9, 9) sets the start and leaves state `start`. Report_Mode taps keep the example and the state. The initial state is Plan_Mode and Start_Setting_State. `reset` clears start, end and route, restores the example and the first-run Demo_Mode value.
 
-**Validates: Requirements 6.1, 6.11, 10.1, 17.13**
+**Validates: Requirements 6.1, 6.11, 10.1, 17.13, 17.17**
 
 ### Property 32: Fitted bounds contain every point
 
@@ -715,7 +716,7 @@ Reflection: the prework produced about 60 testable criteria. Redundant ones were
 | No connected path | "No walking route found". No route, distance, time or Tier summary (Requirement 6.8). |
 | Start and end snap to the same point | "Start and end are the same place". No route (approved). |
 | Geolocation denied, unavailable or over 10 s | Message that the location could not be found. Start unchanged. Nothing sent anywhere (Requirements 6.3, 17.15). |
-| Tile request slow (3 s) or failing | Base layers hidden, Segments on a plain background, message shown, attribution and routing kept (Requirement 5.7). |
+| Tile request slow (5 s) or failing | Base layers hidden, Segments on a plain background, message shown, attribution and routing kept (Requirement 5.7). |
 | Frame rate under 30 fps for 2 s | Effects ladder drops one effect at a time (Requirement 5.6). |
 | Settings read or write fails | In-memory settings used, message shown, toggles and routing still work (Requirement 8.7). |
 | Corrections read or write fails | `StoreError`. Message shown, earlier data untouched, map and routing keep working (Requirement 10.9). |
@@ -748,7 +749,7 @@ Property-based testing applies here. The core is pure logic with clear inputs an
 - Tests on real files in `data/`: each of the five shipped packs parses; the graph builds; each Sample_Walk start and end snaps, a route exists, the Gloam_Route differs from the Shortest_Route at lambda 3 with toggles off, and it crosses at least 3 different Tiers (Requirement 14.9); every Sample_Data segment id exists in its pack (Requirement 14.10). The City_Picker test checks five entries and that only the `kl` entry has the exact description text.
 - String catalogue: every entry (with sample arguments), the bundled `docs/validation.md` text and the Disclaimer pass `findBanned`; the failure report names the string and the entry (Requirement 12.10). Lighting strings use only the allowed terms.
 - Validation quote test: parses `docs/validation.md` as it exists and checks each quoted figure against the file (Requirement 12.11). The expected "did not beat" cities are computed in the test from the parsed validation file (cities whose parsed model figure is lower than the parsed baseline figure), not from a hard-coded list, and the test checks that the screen names exactly those cities.
-- Network test: with a stubbed `fetch`, loading a pack requests exactly two URLs, planning a route makes none, and no URL contains a coordinate (Requirements 13.5, 13.9). The allow-list in the test names the map's TileJSON request alongside tiles and glyphs.
+- Network test: with a stubbed `fetch`, loading a pack requests exactly two URLs, planning a route makes none, and no URL contains a coordinate (Requirements 13.5, 13.9). The allow-list in the test is exactly: the app files, the TileJSON at `https://tiles.openfreemap.org/planet`, the vector tiles it lists, the two pack files and the Sample_Data file while Demo_Mode is on. Glyph and sprite requests are not allowed.
 - Map and UI: mocked MapLibre events for the tile-timeout rule; layer order check that the route layer is last; static style table check that the five reduced-effects styles are pairwise different; attribution element present and unobstructed.
 
 **Measured targets, not asserted in CI.** Graph build under 3 s for 22 000 Segments, 30 fps, 2 s to street layer and 5 s to Sample_Walk on the first run, and reach from the US, China and Malaysia. Results and the reference device are recorded in `docs/app-checks.md` and `docs/kiro-log.md`.

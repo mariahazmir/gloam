@@ -155,11 +155,11 @@ Items marked "(decide, measure)" in the source requirements are targets. They ar
 
 1. WHEN a City_Pack finishes loading, THE Web_App SHALL show a dark MapLibre GL JS map using OpenFreeMap tiles, with the map centre within 100 metres of the centre of the City_Pack bounding box, except that on first run the view is fitted to the Sample_Walk as described in Requirement 17, criterion 7.
 2. WHEN the map has loaded, THE Web_App SHALL draw each building from the Buildings_File as an extruded footprint whose height equals `height_m` metres.
-3. WHILE the map is shown, THE Web_App SHALL keep the text "© OpenStreetMap contributors" and the attribution of OpenFreeMap and OpenMapTiles visible and not covered by any other on-screen element.
+3. WHILE the map is shown, THE Web_App SHALL keep the attribution "OpenFreeMap © OpenMapTiles Data from OpenStreetMap" (with links to OpenFreeMap, OpenMapTiles and the OpenStreetMap copyright page) and the text "© OpenStreetMap contributors" always visible, expanded and not collapsed, and not covered by any other on-screen element.
 4. WHEN the user touches the map, THE Web_App SHALL pan on a one-finger drag, zoom on a two-finger pinch, and tilt on a two-finger vertical drag, with tilt limited to 0 to 60 degrees.
 5. WHILE effects are on, THE Web_App SHALL keep the map at 30 frames per second or higher, measured over 10 seconds of continuous pan, zoom and tilt on a mid-range phone (target, to be measured; the reference device is recorded in `docs/app-checks.md`).
 6. IF the measured frame rate stays below 30 frames per second for 2 consecutive seconds, THEN THE Web_App SHALL turn off active effects one at a time, until the frame rate is 30 frames per second or higher or no effects remain, and SHALL keep the map, routes and attribution visible (target, to be measured).
-7. IF a map tile request has not completed within 3 seconds or returns an error, THEN THE Web_App SHALL draw the Segments from the City_Pack on a plain background, SHALL show a message indicating the base map is unavailable, SHALL keep the map attributions visible, and SHALL keep route planning available.
+7. IF a map tile request has not completed within 5 seconds or returns an error, THEN THE Web_App SHALL draw the Segments from the City_Pack on a plain background, SHALL show a message indicating the base map is unavailable, SHALL keep the map attributions visible, and SHALL keep route planning available.
 8. IF a building's `height_m` is missing, not a finite number, or less than 0, THEN THE Web_App SHALL skip extrusion for that building, SHALL still draw all other buildings, and SHALL report an error naming `height_m` in the developer console.
 
 ### Requirement 6: Route planning
@@ -168,7 +168,7 @@ Items marked "(decide, measure)" in the source requirements are targets. They ar
 
 #### Acceptance Criteria
 
-1. WHILE the Web_App is in Plan_Mode, WHEN the user taps the map, THE Web_App SHALL set the start point at the tapped position if the Web_App is in Start_Setting_State or the end point at the tapped position if it is in End_Setting_State, and SHALL replace any earlier point of the same kind. The Web_App begins in Plan_Mode and Start_Setting_State, and enters End_Setting_State when a start point is set (suggested, to be confirmed in the design).
+1. WHILE the Web_App is in Plan_Mode, WHEN the user taps the map, THE Web_App SHALL set the start point at the tapped position if the Web_App is in Start_Setting_State or the end point at the tapped position if it is in End_Setting_State, and SHALL replace any earlier point of the same kind. The Web_App begins in Plan_Mode and Start_Setting_State. WHEN a start or end point has been set (by a tap, by "use my location", by "Set start here" or by "Set end here"), THE Web_App SHALL, if exactly one of the start and end points is unset, enter the state of the unset point (Start_Setting_State if the start is unset, End_Setting_State if the end is unset), and SHALL otherwise leave the state unchanged. WHEN the user chooses a state with the "tap sets" control, THE Web_App SHALL enter that state. Report_Mode taps never move points and never change the state.
 2. WHEN the user chooses "use my location", THE Web_App SHALL request the device position through the browser geolocation interface and use it as the start point.
 3. IF the device position is denied, unavailable or not returned within 10 seconds, THEN THE Web_App SHALL show a message indicating that the location could not be found, SHALL keep any existing start point unchanged and SHALL NOT send the position over the network.
 4. THE Web_App SHALL offer no place-name search.
@@ -179,6 +179,7 @@ Items marked "(decide, measure)" in the source requirements are targets. They ar
 9. WHILE a route is shown, THE Web_App SHALL show the Disclaimer verbatim on the same screen.
 10. WHILE the Web_App is in Plan_Mode, THE Web_App SHALL show the Crosshair at the centre of the map and two buttons labelled "Set start here" and "Set end here", operable by keyboard and by touch, that set the start point or the end point, respectively, at the map centre and replace any earlier point of the same kind. These buttons are in addition to tapping the map.
 11. THE Web_App SHALL provide a Mode_Switch, operable by keyboard and by touch, that shows the current mode and starts in Plan_Mode.
+12. WHEN a start or end point is set, THE Web_App SHALL draw a marker for it on the map at once, before any route exists: at the Snap position when the point has snapped, otherwise at the tapped position. The start marker is a filled disc and the end marker is a hollow ring, so the two differ by shape and not by colour alone. Markers are drawn above the Segment layers and below the Gloam_Route, and are removed when the point is cleared.
 
 ### Requirement 7: Dread trade-off
 
@@ -287,7 +288,7 @@ Items marked "(decide, measure)" in the source requirements are targets. They ar
 2. THE Web_App SHALL include no analytics, telemetry or usage-tracking code that sends data to any server.
 3. THE Web_App SHALL set zero cookies and SHALL write to browser local storage only for Personal_Settings and Corrections.
 4. THE Router, THE Graph_Builder and THE Tier_Assigner SHALL make zero network requests.
-5. THE Web_App SHALL limit network requests to: the app files, the map's TileJSON request, map tiles, glyphs and sprites from OpenFreeMap, one request for each of the two data files of the chosen City_Pack, and one request for the Sample_Data file while Demo_Mode is on, and the map style is bundled with the app.
+5. THE Web_App SHALL limit network requests to: exactly these: the app files, the TileJSON at `https://tiles.openfreemap.org/planet` and the vector tiles it lists, one request for each of the two data files of the chosen City_Pack, and one request for the Sample_Data file while Demo_Mode is on. The map style is bundled with the app and has no glyphs and no sprite, so no glyph or sprite request is made.
 6. Route planning SHALL make zero network requests, and every map tile request made while the map is viewed SHALL carry only the tile address of the viewed area, with no start point, end point, route coordinate or coordinate derived from them in its URL, query string, headers or body.
 7. WHEN the user requests their current position, THE Web_App SHALL read the position from browser geolocation, keep it in memory on the device only, and include it in no network request.
 8. IF browser geolocation is denied or unavailable, THEN THE Web_App SHALL show a message stating that the current position cannot be used, keep any start point already set, and make zero network requests as a result.
@@ -378,6 +379,7 @@ Items marked "(decide, measure)" in the source requirements are targets. They ar
 14. WHEN the user taps "use my location", THE Web_App SHALL request location permission from the browser and, if granted, use the returned position as the start point without sending it over the network.
 15. IF the location permission is denied, or the position is unavailable or not returned within 10 seconds, THEN THE Web_App SHALL show a message indicating location is unavailable, keep the current map state unchanged, and allow the user to set the start by tapping the map.
 16. IF the City_Pack fails to load or is not complete within 15 seconds, THEN THE Web_App SHALL replace the progress indicator with a message indicating the City_Pack could not be loaded and provide a retry control.
+17. WHILE the Sample_Walk is showing, WHEN the user sets a point by tapping the map in Plan_Mode, by "Set start here", by "Set end here" or by "use my location", THE Web_App SHALL first clear the Sample_Walk (both example points and the example label) and then apply the new point alone, so that the other point is unset. THE Web_App SHALL then enter the state of the unset point as described in Requirement 6, criterion 1 (the new point is the only one set, so a start leaves End_Setting_State and an end leaves Start_Setting_State). Report_Mode taps never move points and SHALL NOT clear the Sample_Walk.
 
 ## Targets to measure and open questions
 
