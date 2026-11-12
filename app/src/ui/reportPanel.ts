@@ -46,12 +46,18 @@ export function createReportPanel(opts: ReportPanelOptions): ReportPanel {
   exportMessage.hidden = true;
   opts.host.append(reportSection, spotsSection);
 
+  // The button last pressed. The card redraws after a report, which drops focus, so show() puts it back.
+  let pressed: HTMLButtonElement | null = null;
+
   const buttonRow = el(
     'div',
     { className: 'point-buttons', attrs: { role: 'group', 'aria-label': STRINGS.report.buttons.text } },
     ...BUTTONS.map(({ type, label }) => {
       const b = el('button', { className: 'plan-button', text: label, attrs: { type: 'button' } });
-      b.addEventListener('click', () => opts.onReport(type));
+      b.addEventListener('click', () => {
+        pressed = b;
+        opts.onReport(type);
+      });
       return b;
     }),
   );
@@ -113,7 +119,10 @@ export function createReportPanel(opts: ReportPanelOptions): ReportPanel {
           children.push(el('p', { className: 'plan-message', text: STRINGS.errors.correctionsStore.text, attrs: { role: 'status' } }));
         }
         reportSection.replaceChildren(...children);
+        if (pressed !== null && reportSection.contains(pressed)) pressed.focus();
       }
+
+      pressed = null;
 
       // Dark_Spot_List: open when entering Report_Mode; after that the user decides.
       if (view.inReportMode && !wasReportMode) spotsSection.open = true;

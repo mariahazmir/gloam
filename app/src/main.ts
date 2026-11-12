@@ -54,11 +54,11 @@ import { hostedDefault, prefersReducedMotion } from './state/firstRun';
 import validationRaw from '../../docs/validation.md?raw';
 import { EFFECT_LADDER } from './visual/effects';
 
-// Wiring (task 14.7), for what exists so far: the map, the first-run Seattle pack drawn from
-// its Segment_File, the flicker cohorts, then the Street_Graph built after first paint, the
-// Sample_Walk and the buildings. Plan_Mode controls, taps, the route panel and the lantern
-// route layer follow the plan controller's state. About, the guess screen, Legend, Demo_Mode,
-// Reset and the Reduced_Effects switch are task 14.6. Report_Mode comes with task 14.5.
+// Wiring (task 14.7). First run: the Seattle Segment_File is fetched first and the street layer
+// is drawn from it; the Street_Graph is built after first paint (setTimeout 0); then the
+// Sample_Walk is shown (example label, clear control, fitted view) and the buildings are added.
+// The hint shows while a point is missing. Nothing asks for location on load; only the
+// "use my location" tap does. One pack is held in memory; a new choice cancels the earlier load.
 
 /** Camera when a pack is fitted. maxPitch (60) stays in mapView.ts. */
 const FIT_PITCH = 45;
