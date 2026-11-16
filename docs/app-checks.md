@@ -144,12 +144,14 @@ Target: 30 fps. Measure, do not assume.
 - [x] Frame rate recorded (average, and lowest if the tool shows it)
 - [x] Repeated with Reduced_Effects on
 
-- Reference phone (model, OS, browser version): iPhone 16, iOS, Chrome 157 on Lenovo Legion Slim 5, Windows 11
+- Reference phone (model, OS, browser version): fps not measured on the phone
 - Pack used: Manchester
-- Measured fps (effects on): 165
-- Measured fps (Reduced_Effects on): 165
+- Measured fps (effects on): 165*
+- Measured fps (Reduced_Effects on): 165*
 - Date: 16 Nov 2026
 - Tester: Mariah
+
+*165 fps on a Lenovo Legion Slim 5, Windows 11, Chrome 157, which matches that laptop's display refresh rate
 
 ## 7. Graph build time for a 22,000-segment pack (Req 2.7)
 
@@ -162,7 +164,7 @@ Target: under 3 s.
 
 - Pack and segment count: Manchester, 21,792 segments (36,010 nodes, 47,777 edges)
 - Time on laptop: Node (not a browser), median of 3: parse 64 ms + graph build 374 ms = 438 ms. Browser time: 435 ms
-- Time on reference phone: 980 ms
+- Time on reference phone: ~1 s (timed by hand with a stopwatch)
 
 - Date: 16 Nov 2026
 - Device: Lenovo Legion Slim 5, Windows 11, Chrome 157; iPhone 15 Pro, iOS 26.6.2, Chrome 157
@@ -231,16 +233,14 @@ All checks passed.
 
 - [x] HTTPS: PASS (checkHost, 12 Nov 2026)
 - [x] Pack files compressed (Content-Encoding: gzip or Brotli): PASS (checkHost, 12 Nov 2026). An earlier run the same day failed (served as `binary/octet-stream`, no `Content-Encoding`); fixed in task 16.3.
-  - Content-Encoding per pack file: `br` for all 11 files under `/assets/` (the ten packs plus `sample-data`, listed in the output above)
-- [ ] URL stable (the same URL stays in use for the whole period): not yet checked
-- [ ] Up from 16 Dec to 29 Jan: **recheck before submitting.** Only a single reading on 12 Nov 2026 exists. Rechecked on: (empty)
-- [ ] Loads within 10 s on 10 Mbit/s from the US: not yet measured, to be filled in by the owner
-  - Result / date / tester:
-- [ ] Loads within 10 s on 10 Mbit/s from China: not yet measured, to be filled in by the owner (the 12 Nov script run did not time a page load)
-  - Result / date / tester:
-- [ ] Loads within 10 s on 10 Mbit/s from Malaysia: not yet measured, to be filled in by the owner
-  - Result / date / tester:
-- Reference phone used for the fps and graph-time checks (sections 6 and 7): not yet chosen, to be filled in by the owner (model, OS, browser version)
+  - Content-Encoding per pack file: `br` for all 11 files under `/assets/` (the ten packs plus `sample-data`)
+- [x] URL stable: https://gloam.onrender.com/ has been the address since 12 Nov 2026, and the service will not be renamed or recreated during the judging period.
+- [ ] Up from 16 Dec to 29 Jan: not yet verifiable. Up on 12 Nov and 16 Nov 2026 (checkHost: PASS on 16 Nov). Recheck on submission day (about 2 Dec) and again before 16 Dec.
+- [ ] Loads within 10 s on 10 Mbit/s from the US: Not tested.
+- [x] Loads within 10 s on 10 Mbit/s from China (Ningbo): PASS
+  - Result / date / tester: 5.85 s, [median of 3 / single run], 16 Nov 2026, Mari. Chrome DevTools throttling set to 10,240 kbit/s down, 50 ms latency, cache disabled, [Seattle] pack, timed from navigation to the map showing the city. Real connection from Ningbo, throttled to 10 Mbit/s.
+- [ ] Loads within 10 s on 10 Mbit/s from Malaysia: Not tested.
+- Reference phone used for the fps and graph-time checks (sections 6 and 7): iPhone 15 Pro. fps not measured on the phone; the 165 fps on the laptop (Legion Slim 5) matches its display refresh rate.
 
 ### Prior manual test (not part of this run)
 
