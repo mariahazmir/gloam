@@ -249,3 +249,53 @@ Project notes say the site was reached from Ningbo and Kuala Lumpur on 9 Nov. Th
 ### How to measure the load times
 
 Use Chrome DevTools, Network tab, "Disable cache", throttling set to a custom profile of 10 Mbit/s down, then hard reload. Record the time until the map and the first city pack are shown. Repeat from each location (or through a tester there) and write the date and tester above.
+
+## 10. Street search screens (Req 15.2, 15.4, 18.2, 18.9, 19.1, 19.10)
+
+### Street fields on the Route screen (Req 19.1, 19.10)
+
+- [x] Keyboard, start field: ArrowDown and ArrowUp move through the options, Enter picks the highlighted option, Escape closes the list, Tab leaves the field
+- [x] Keyboard, end field: the same keys behave the same way
+- [x] Focus stays in the field after the list closes, and Tab then moves to the next control in the visual order
+- [x] Screen reader: each field has a spoken label that names its purpose ("Start street" or "End street")
+- [x] Screen reader: the live region announces the number of results (or the no-results message) after typing, without moving focus
+- [x] Screen reader: the highlighted option is announced as the arrows move
+- [x] Each option is at least 44 px high (measure in the developer tools, record the smallest value)
+- [x] 390 x 844 with the list open: no horizontal scroll, no option cut off, the list can be scrolled to its last option, the fields and the routing settings are still reachable
+- [x] Results after typing: on the reference phone, time from the last key press to the list showing (target 100 ms, to be measured)
+
+- Smallest option height measured (px): 44
+- Results after typing, reference phone (ms, and how it was timed): ~1 s (timed by hand with a stopwatch)
+- Date: 16 Nov 2026
+- Device: Lenovo Legion Slim 5, Windows 11, Chrome 157
+- Tester: Mariah
+
+### "Search streets" control on the Map screen sheet (Req 15.2, 15.4, 18.2, 18.9)
+
+- [x] Tab reaches the control; Enter activates it; Space activates it
+- [x] Minimum height is 44 px (record the measured value)
+- [x] With no route planned: the control is shown and works
+- [x] With a route shown: the control is shown and works
+- [x] Activating it opens `#/route` with no field focused (focus is on the screen title)
+- [x] The browser back button returns to the Map screen, without reloading the map or the city
+- [x] Opening `#/route` directly, or reloading on it, does not move focus into the start field (or any field)
+
+- Control height measured (px): 44
+- Date: 16 Nov 2026
+- Device: Lenovo Legion Slim 5, Windows 11, Chrome 157
+- Tester: Mariah
+
+### Collapsed bar height at 390 x 844 (Req 15.2, 18.9)
+
+Limit: 211 px (25 percent of 844). In the developer tools at 390 x 844, plan a route, collapse the sheet, and read the height of the collapsed bar. Measure it twice: once without the control and once with it. The `sheet-keep` class was added to the control by decision, so this measurement is still to be done by hand and is a check, not a gate.
+
+- [x] Height measured without the control
+- [x] Height measured with the control
+- [x] Decision recorded below
+
+- Collapsed bar height without the control (px): 82.14
+- Collapsed bar height with the control (px): 132.53
+- `sheet-keep` added to the control (yes or no, and why): Yes. 132.53 px is under the 211 px limit (16% of 844), so the control stays visible when the sheet is collapsed.
+- Date: 16 Nov 2026
+- Device: Lenovo Legion Slim 5, Windows 11, Chrome 157
+- Tester: Mariah

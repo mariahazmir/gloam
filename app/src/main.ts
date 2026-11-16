@@ -45,7 +45,11 @@ import { createCityPicker } from './ui/cityPicker';
 import { createGuidance } from './ui/guidance';
 import { createPlanControls } from './ui/planControls';
 import { createRoutePanel } from './ui/routePanel';
+import { createStreetFields } from './ui/streetFields';
+import { buildStreetIndex, type StreetIndex } from './search/streetSearch';
+import type { Availability } from './search/comboboxState';
 import { createShell } from './ui/shell';
+import { createSearchControl } from './ui/mapSheet';
 import { createCreditsScreen } from './ui/creditsScreen';
 import { createGuessScreen } from './ui/guessScreen';
 import { createTools } from './ui/tools';
@@ -155,7 +159,7 @@ const pointsHost = el('div', { className: 'sheet-extra' });
 // .sheet-keep parts stay visible when the sheet is collapsed (base.css).
 const messagesHost = el('div', { className: 'sheet-keep' });
 const footerHost = el('div', { className: 'sheet-footer sheet-keep' });
-shell.mapSheet.body.append(messagesHost, guidanceHost, summaryHost, lambdaHost, mapModeHost, pointsHost, footerHost);
+shell.mapSheet.body.append(messagesHost, guidanceHost, createSearchControl(), summaryHost, lambdaHost, mapModeHost, pointsHost, footerHost);
 const reportModeHost = el('div');
 shell.reportSheet.body.append(reportModeHost);
 createGuidance(guidanceHost, controller);
@@ -165,7 +169,44 @@ createGuidance(guidanceHost, controller);
 const routeContentHost = el('div', { className: 'page-section' });
 const routeSettingsCard = el('section', { className: 'glass page-card', attrs: { 'aria-label': STRINGS.plan.settingsLegend.text } });
 const routeFooterHost = el('div', { className: 'page-foot' });
-shell.routePage.body.append(routeContentHost, routeSettingsCard, routeFooterHost);
+const streetFieldsHost = el('div', { className: 'page-section street-fields' });
+shell.routePage.body.append(streetFieldsHost, routeContentHost, routeSettingsCard, routeFooterHost);
+// Street search (Requirement 19): one index per pack, built after the graph; both fields are
+// created here, once, so the Route_Screen has them with or without a route.
+let streetIndex: StreetIndex | null = null;
+let indexTimer: ReturnType<typeof setTimeout> | null = null;
+const streetFields = createStreetFields({
+  host: streetFieldsHost,
+  getCentre: () => {
+    const c = map.getCenter().wrap();
+    return { lon: c.lng, lat: c.lat };
+  },
+  getIndex: () => streetIndex,
+  availability: 'loading',
+  // The same path as a tapped point: snap, out-of-area, too-far, Sample_Walk clearing, setting state.
+  onChoose: (kind, result) => controller.dispatch({ type: 'chooseStreet', kind, lon: result.lon, lat: result.lat }),
+});
+
+/** City_Pack switch: drops the pending build, the index, the typed text and the results. */
+function resetStreetSearch(availability: Availability): void {
+  if (indexTimer !== null) clearTimeout(indexTimer);
+  indexTimer = null;
+  streetIndex = null;
+  streetFields.clear(availability);
+}
+
+/** Builds the index once for a pack whose graph is built, off the paint path, then enables the fields. */
+function scheduleStreetIndex(target: Shown): void {
+  const graph = target.graph;
+  if (graph === null) return;
+  streetFields.setAvailability('indexing');
+  indexTimer = setTimeout(() => {
+    indexTimer = null;
+    if (shown !== target) return;
+    streetIndex = buildStreetIndex(target.segments, graph);
+    streetFields.setAvailability('ready');
+  }, 0);
+}
 const routePanel = createRoutePanel({
   summary: summaryHost,
   footer: footerHost,
@@ -422,6 +463,7 @@ async function drawStreets(id: PackId, meta: PackMeta, segments: Segment[]): Pro
   for (const n of session.corrections()) if (byId.has(n.segmentId)) setNoted(map, n.segmentId, true);
   const next: Shown = { id, segments, byId, tiers, graph: null, plan: null, lowConfThreshold: null, complete: false };
   shown = next; // the previous pack's data is released here
+  resetStreetSearch('loading');
   controller.refresh(); // drops the old pack from the planner and clears the route
   const bounds = boundsOf(segments.flatMap((s) => s.coordinates));
   map.fitBounds([bounds.sw, bounds.ne], { padding: 24, maxZoom: 17, duration: 0, pitch: FIT_PITCH, bearing: FIT_BEARING });
@@ -493,6 +535,7 @@ function discardPartial(): void {
   removeGloamLayers(map);
   layersReady = false;
   shown = null;
+  resetStreetSearch('no-pack');
   controller.refresh();
   about.setCity(null);
   picker.setActive(null);
@@ -536,6 +579,7 @@ function loadCity(entry: ManifestEntry): void {
     await buildGraphAfterPaint(target);
     if (!current() || shown !== target) return;
     preparePlan(target);
+    scheduleStreetIndex(target);
     showSampleWalk(entry);
     setBuildings(map, pack.buildings, effects);
     for (const problem of pack.skippedBuildings) console.error('buildings: skipped', problem);

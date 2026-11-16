@@ -38,6 +38,11 @@ function collect(): Entry[] {
         for (const c of COUNTS) out.push({ path: `${path}(${c})`, kind: t.kind, text: f(c) });
       } else if (path.endsWith("loadingCity")) {
         for (const city of ["Seattle", "Kuala Lumpur"]) out.push({ path: `${path}(${city})`, kind: t.kind, text: f(city) });
+      } else if (path.endsWith("search.count")) {
+        for (const c of [0, 1, 8]) out.push({ path: `${path}(${c})`, kind: t.kind, text: f(c) });
+      } else if (path.endsWith("templates.searchOffset")) {
+        for (const [r, d] of [[null, "north"], ["600 m", "north-east"], ["1.2 km", "south"]] as const)
+          out.push({ path: `${path}(${r}, ${d})`, kind: t.kind, text: f(r, d) });
       } else if (path.endsWith("heartbeat.routeLength")) {
         for (const d of ["0 m", "850 m", "2.1 km"]) out.push({ path: `${path}(${d})`, kind: t.kind, text: f(d) });
       } else if (path.endsWith("heartbeat.highStretches") || path.endsWith("heartbeat.lowStretches")) {
@@ -99,6 +104,20 @@ describe("wording: banned words", () => {
     expect(entries.some((e) => e.path.startsWith("STRINGS.templates.tierWording("))).toBe(true);
   });
 
+  it("the scan covers every search string, all 8 compass words and the offset and count samples", () => {
+    const paths = entries.map((e) => e.path);
+    for (const k of ["openLabel", "startLabel", "endLabel", "helper", "unnamedNote", "shortQuery", "noMatch", "unavailable.noPack", "unavailable.loading", "unavailable.indexing"])
+      expect(paths, k).toContain(`STRINGS.search.${k}`);
+    for (const k of ["n", "ne", "e", "se", "s", "sw", "w", "nw"]) expect(paths, k).toContain(`STRINGS.compass.${k}`);
+    const texts = (p: string): string[] => entries.filter((e) => e.path.startsWith(p)).map((e) => e.text);
+    expect(texts("STRINGS.search.count(")).toEqual(["0 streets found", "1 street found", "8 streets found"]);
+    expect(texts("STRINGS.templates.searchOffset(")).toEqual([
+      "at the map centre",
+      "about 600 m north-east",
+      "about 1.2 km south",
+    ]);
+  });
+
   it("no catalogue entry contains a banned word", () => {
     for (const e of entries) expectNoBanned(e.path, e.text);
   });
@@ -155,6 +174,15 @@ describe("wording: fixed texts", () => {
     for (const [k, v] of Object.entries(STRINGS.legend) as [string, Str][]) {
       expect(v.text.length, `STRINGS.legend.${k}: ${v.text}`).toBeLessThanOrEqual(80);
     }
+  });
+
+  it("hint.setPoints is short, mentions typing a street name, and has no banned words", () => {
+    const h = STRINGS.hint.setPoints;
+    expect(h.text).toBe("Tap the map or type a street name to set where you start and where you're going");
+    expect(h.kind).toBe("general");
+    expect(h.text.length).toBeLessThanOrEqual(90);
+    expect(h.text).toMatch(/type a street name/);
+    expect(findBanned(h.text)).toEqual([]);
   });
 
   it("DISCLAIMER is verbatim", () => {

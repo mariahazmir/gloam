@@ -292,7 +292,7 @@ a {
   border-radius: 3px;
 }
 
-/* Collapsed: a compact bar with only the details button and the Disclaimer, plus anything marked
+/* Collapsed: a compact bar with the details button, the Disclaimer and "Search streets", plus anything marked
    .sheet-keep (loading and error messages), all smaller. No walking time, tiles, chart or slider (Requirement 18.9). */
 .sheet.collapsed {
   padding: 0.25rem 0.75rem 0.6rem;
@@ -316,6 +316,14 @@ a {
 .sheet.collapsed .sheet-body > .sheet-keep:empty,
 .sheet.collapsed .sheet-body > .sheet-keep:has(> .plan-messages:empty) {
   display: none;
+}
+
+/* "Search streets" stays in the collapsed bar, smaller, but never under 44 px high. */
+.sheet.collapsed .sheet-body > .sheet-search {
+  display: block;
+  min-height: 44px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.9rem;
 }
 
 .sheet.collapsed .sheet-handle {
@@ -493,6 +501,80 @@ a {
   border: 0;
   border-radius: 999px;
   cursor: pointer;
+}
+
+/* "Search streets" on the Map_Screen sheet, and the two street fields on the Route_Screen. */
+.sheet-search,
+.street-combo-input,
+.street-combo-option {
+  min-height: 44px;
+  color: inherit;
+  background: var(--glass-fill);
+  border: var(--glass-border-width) solid var(--glass-border);
+}
+
+.sheet-search {
+  padding: 0.4rem 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 999px;
+}
+
+.street-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.street-field-label {
+  margin: 0 0 0.25rem;
+  font-size: 0.85rem;
+  color: var(--mist);
+}
+
+.street-combo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.street-combo-input {
+  width: 100%;
+  padding: 0.4rem 1rem;
+  font: inherit;
+  border-radius: 1rem;
+}
+
+.street-combo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.street-combo-option {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  border-radius: 1rem;
+}
+
+.street-combo-option[aria-selected='true'] {
+  border: 3px solid var(--lantern);
+}
+
+.street-combo-offset,
+.street-combo-helper,
+.street-combo-note,
+.street-combo-unavailable,
+.street-combo-status {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--mist);
 }
 
 .button-dot {

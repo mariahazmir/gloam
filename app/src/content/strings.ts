@@ -58,6 +58,15 @@ export function packProblem(city: string, packId: string, file: PackFileKind, ki
   return `${city} could not be loaded: ${packId}.${file}.geojson is ${kind}.`;
 }
 
+/**
+ * Distance and direction of a search result from the map centre, e.g. "about 600 m north-east".
+ * `rounded` is the text from `roundDistance` (null means at the centre); `direction` is a compass word.
+ */
+export function searchOffsetWording(rounded: string | null, direction: string): string {
+  if (rounded === null) return 'at the map centre';
+  return `about ${rounded} ${direction}`;
+}
+
 export const STRINGS = {
   app: {
     name: g('Gloam'),
@@ -106,7 +115,36 @@ export const STRINGS = {
     span: { kind: 'general', text: (from: number, to: number) => `${from} m to ${to} m` } as Tpl<[number, number]>,
   },
   hint: {
-    setPoints: g("Tap the map to set where you start and where you're going"),
+    setPoints: g("Tap the map or type a street name to set where you start and where you're going"),
+  },
+  search: {
+    openLabel: g('Search streets'),
+    startLabel: g('Start street'),
+    endLabel: g('End street'),
+    noRouteYet: g('No route yet. Search for a start and an end above, or tap the map.'),
+    helper: g('Type a street name. Only named streets in the loaded city are searched, not places or addresses.'),
+    unnamedNote: g('Streets with no name in the map data cannot be found here. Tap the map to use them.'),
+    shortQuery: g('Type at least 2 characters.'),
+    noMatch: g('No named street matches that in this city.'),
+    count: {
+      kind: 'general',
+      text: (n: number) => `${n} ${n === 1 ? 'street' : 'streets'} found`,
+    } as Tpl<[number]>,
+    unavailable: {
+      noPack: g('Choose a city first, then search its streets.'),
+      loading: g('The city is still loading. Street search will be ready soon.'),
+      indexing: g('Getting the street names ready…'),
+    },
+  },
+  compass: {
+    n: g('north'),
+    ne: g('north-east'),
+    e: g('east'),
+    se: g('south-east'),
+    s: g('south'),
+    sw: g('south-west'),
+    w: g('west'),
+    nw: g('north-west'),
   },
   plan: {
     modeSwitch: g('Mode'),
@@ -277,5 +315,6 @@ export const STRINGS = {
     packProblem: { kind: 'general', text: packProblem } as Tpl<[string, string, PackFileKind, PackProblem['kind']]>,
     tierWording: { kind: 'lighting', text: tierWording } as Tpl<[Tier, number]>,
     confirmedBy: { kind: 'lighting', text: confirmedBy } as Tpl<[number]>,
+    searchOffset: { kind: 'general', text: searchOffsetWording } as Tpl<[string | null, string]>,
   },
 } as const;

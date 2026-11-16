@@ -7,7 +7,8 @@ import { el } from './dom';
 
 // Plan_Mode controls (Requirements 1.9, 6.1 to 6.6, 6.10, 6.11, 7.1, 7.10, 8.1, 8.5 to 8.7).
 // This module only draws the controls and forwards what the user does to the
-// PlanController; it never routes or snaps. There is no place-name search (6.4).
+// PlanController; it never routes or snaps. The only search is the offline
+// street-name search of Requirement 19 (ui/streetFields.ts); there is no place or address search.
 
 export const LAMBDA_MIN = 0;
 export const LAMBDA_MAX = 10;

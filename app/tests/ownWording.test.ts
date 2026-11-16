@@ -67,6 +67,10 @@ function catalogue(): Array<{ path: string; text: string }> {
     else if (typeof n.kind !== "string") for (const [k, v] of Object.entries(n)) walk(v, `${path}.${k}`);
   };
   walk(STRINGS, "STRINGS");
+  // Templates with sample arguments (Requirement 19: search strings).
+  for (const n of [0, 1, 8]) out.push({ path: `STRINGS.search.count(${n})`, text: STRINGS.search.count.text(n) });
+  for (const [r, d] of [[null, "north"], ["600 m", "north-east"], ["1.2 km", "south"]] as const)
+    out.push({ path: `STRINGS.templates.searchOffset(${r}, ${d})`, text: STRINGS.templates.searchOffset.text(r, d) });
   return out;
 }
 
@@ -78,6 +82,28 @@ describe("Requirement 18.11: own wording", () => {
       expect(text.toLowerCase().includes("likely busier"), file).toBe(false);
       expect(text.toLowerCase().includes("likely lit"), file).toBe(false);
     }
+  });
+
+  it("the field name strings are in the catalogue checked below, with kind general", () => {
+    const paths = catalogue().map((e) => e.path);
+    expect(paths).toContain("STRINGS.search.startLabel");
+    expect(paths).toContain("STRINGS.search.endLabel");
+    expect(STRINGS.search.startLabel.kind).toBe("general");
+    expect(STRINGS.search.endLabel.kind).toBe("general");
+  });
+
+  it("the compass words and the offset template appear only in content/strings.ts", () => {
+    const compass = /(['"`])(north|north-east|east|south-east|south|south-west|west|north-west)\1/i;
+    const template = /return\s+(['"`])at the map centre\1|`about \$\{/i;
+    const others = Object.entries(SOURCES).filter(([file]) => !file.endsWith("/content/strings.ts"));
+    expect(others.length).toBeGreaterThan(20);
+    for (const [file, text] of others) {
+      expect(compass.test(text), `${file} has a compass word literal`).toBe(false);
+      expect(template.test(text), `${file} has the offset template`).toBe(false);
+    }
+    const own = SOURCES["../src/content/strings.ts"]!;
+    expect(compass.test(own)).toBe(true);
+    expect(template.test(own)).toBe(true);
   });
 
   it.skipIf(REFERENCE === undefined)("no catalogue string is copied from reference.html", async () => {

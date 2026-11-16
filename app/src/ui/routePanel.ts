@@ -148,7 +148,7 @@ export function createRoutePanel(hosts: RoutePanelHosts): RoutePanel {
         hosts.footer.replaceChildren();
         hosts.pageFooter.replaceChildren();
         hosts.page.replaceChildren(
-          el('p', { className: 'page-empty glass', text: STRINGS.screens.noRoute.text, attrs: { role: 'status' } }),
+          el('p', { className: 'page-empty glass', text: STRINGS.search.noRouteYet.text, attrs: { role: 'status' } }),
           link('map', STRINGS.screens.backToMap.text, 'primary-button'),
         );
         return;

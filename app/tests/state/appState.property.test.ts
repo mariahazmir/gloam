@@ -19,6 +19,12 @@ const actionArb: fc.Arbitrary<AppAction> = fc.oneof(
   fc.record({ type: fc.constant('setStartHere' as const), lon: lonArb, lat: latArb }),
   fc.record({ type: fc.constant('setEndHere' as const), lon: lonArb, lat: latArb }),
   fc.record({ type: fc.constant('useLocation' as const), lon: lonArb, lat: latArb }),
+  fc.record({
+    type: fc.constant('chooseStreet' as const),
+    kind: fc.constantFrom('start' as const, 'end' as const),
+    lon: lonArb,
+    lat: latArb,
+  }),
   fc.record({ type: fc.constant('switchMode' as const), mode: fc.constantFrom('plan' as const, 'report' as const) }),
   fc.record({
     type: fc.constant('chooseSettingState' as const),
@@ -26,6 +32,12 @@ const actionArb: fc.Arbitrary<AppAction> = fc.oneof(
   }),
   fc.constant({ type: 'clearExample' as const }),
 );
+
+const POINT_TYPES = ['tap', 'setStartHere', 'setEndHere', 'useLocation', 'chooseStreet'] as const;
+type PointType = (typeof POINT_TYPES)[number];
+/** Builds a point-setting action; only chooseStreet carries a `kind`. */
+const pointAction = (type: PointType, p: LonLat, kind: 'start' | 'end'): AppAction =>
+  type === 'chooseStreet' ? { type, kind, ...p } : { type, ...p };
 
 const actionsArb = fc.array(actionArb, { minLength: 0, maxLength: 25 });
 
@@ -190,15 +202,15 @@ describe('Property 31: modes and taps', () => {
 
 describe('Property 31: setting a point clears the Sample_Walk (17.17)', () => {
   const exampleOpts = fc.record({ example: fc.record({ start: lonLatArb, end: lonLatArb }) });
-  const pointTypes = ['tap', 'setStartHere', 'setEndHere', 'useLocation'] as const;
+  const pointTypes = POINT_TYPES;
 
   it('each point-setting action leaves only the new point and clears the example', () => {
     fc.assert(
-      fc.property(exampleOpts, fc.constantFrom(...pointTypes), fc.constantFrom('start' as const, 'end' as const), lonLatArb, (o, type, ss, p) => {
+      fc.property(exampleOpts, fc.constantFrom(...pointTypes), fc.constantFrom('start' as const, 'end' as const), fc.constantFrom('start' as const, 'end' as const), lonLatArb, (o, type, ss, kind, p) => {
         const init = reduce(createInitialState(o), { type: 'chooseSettingState', settingState: ss });
-        const r = reduce(init, { type, ...p });
+        const r = reduce(init, pointAction(type, p, kind));
         expect(r.exampleActive).toBe(false);
-        const isEnd = type === 'setEndHere' || (type === 'tap' && ss === 'end');
+        const isEnd = type === 'setEndHere' || (type === 'tap' && ss === 'end') || (type === 'chooseStreet' && kind === 'end');
         expect(r.start).toEqual(isEnd ? null : p);
         expect(r.end).toEqual(isEnd ? p : null);
         expect(r.settingState).toBe(isEnd ? 'start' : 'end');
@@ -258,12 +270,13 @@ describe('Property 31: setting a point clears the Sample_Walk (17.17)', () => {
 });
 
 describe('Property 31: setting state follows the unset point (6.1, 17.17)', () => {
-  const pointTypes = ['tap', 'setStartHere', 'setEndHere', 'useLocation'] as const;
+  const pointTypes = POINT_TYPES;
+  const kindArb = fc.constantFrom('start' as const, 'end' as const);
   it('after any point-setting action the state is the unset point state, or unchanged when both are set', () => {
     fc.assert(
-      fc.property(initialArb, actionsArb, fc.constantFrom(...pointTypes), lonLatArb, (init, actions, type, p) => {
+      fc.property(initialArb, actionsArb, fc.constantFrom(...pointTypes), kindArb, lonLatArb, (init, actions, type, kind, p) => {
         const s = reduce(actions.reduce(reduce, init), { type: 'switchMode', mode: 'plan' });
-        const r = reduce(s, { type, ...p });
+        const r = reduce(s, pointAction(type, p, kind));
         if (r.start === null && r.end !== null) expect(r.settingState).toBe('start');
         else if (r.end === null && r.start !== null) expect(r.settingState).toBe('end');
         else expect(r.settingState).toBe(s.settingState);
@@ -275,7 +288,7 @@ describe('Property 31: setting state follows the unset point (6.1, 17.17)', () =
     fc.assert(
       fc.property(initialArb, actionsArb, fc.constantFrom(...pointTypes), lonLatArb, fc.constantFrom('start' as const, 'end' as const), (init, actions, type, p, ss) => {
         const s = reduce(actions.reduce(reduce, init), { type: 'switchMode', mode: 'plan' });
-        expect(reduce(reduce(s, { type, ...p }), { type: 'chooseSettingState', settingState: ss }).settingState).toBe(ss);
+        expect(reduce(reduce(s, pointAction(type, p, ss)), { type: 'chooseSettingState', settingState: ss }).settingState).toBe(ss);
         const rep = reduce(s, { type: 'switchMode', mode: 'report' });
         expect(reduce(rep, { type: 'tap', ...p }).settingState).toBe(s.settingState);
       }),

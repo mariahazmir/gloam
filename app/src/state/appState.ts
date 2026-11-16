@@ -39,6 +39,7 @@ export type AppAction =
   | { type: 'setStartHere'; lon: number; lat: number }
   | { type: 'setEndHere'; lon: number; lat: number }
   | { type: 'useLocation'; lon: number; lat: number }
+  | { type: 'chooseStreet'; kind: SettingState; lon: number; lat: number }
   | { type: 'switchMode'; mode: Mode }
   | { type: 'chooseSettingState'; settingState: SettingState }
   | { type: 'clearExample' }
@@ -115,6 +116,15 @@ export function reduce(state: AppState, action: AppAction): AppState {
       return setEnd(state, 'end', action.lon, action.lat);
     case 'useLocation':
       return setStart(state, 'location', action.lon, action.lat);
+    case 'chooseStreet':
+      // A chosen Search_Result's midpoint for the field's own point; Plan_Mode only (Requirement 19.4).
+      if (action.kind !== 'start' && action.kind !== 'end') {
+        throw new ArgumentError('kind', `must be 'start' or 'end', got ${String(action.kind)}`);
+      }
+      if (state.mode !== 'plan') return state;
+      return action.kind === 'start'
+        ? setStart(state, 'street', action.lon, action.lat)
+        : setEnd(state, 'street', action.lon, action.lat);
     case 'switchMode':
       if (action.mode !== 'plan' && action.mode !== 'report') {
         throw new ArgumentError('mode', `must be 'plan' or 'report', got ${String(action.mode)}`);
