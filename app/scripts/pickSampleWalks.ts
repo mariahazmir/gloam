@@ -124,7 +124,7 @@ export function loadPack(id: string) {
   const tierOf = (edge: number): Tier => tiers.get(graph.edges[edge]!.segmentId)!;
   const median = medianConfidence(graph);
   const index = buildSnapIndex(graph);
-  return { graph, tierOf, median, index };
+  return { graph, tierOf, median, index, segments: parsed.segments };
 }
 function pickForPack(id: string): void {
   const { graph, tierOf, median, index } = loadPack(id);
