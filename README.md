@@ -24,7 +24,7 @@ have that feeling too?
 
 Thing is, KL doesn't have the data. In OpenStreetMap, only about 0.8% of KL's
 vehicle roads are tagged as lit. Night-walking apps usually lean on lighting
-records that already exist, so cities like KL get left in the dark (pun-intended, wink wink).
+records that already exist, so cities like KL get left in the dark (pun-intended, _winkwink_).
 
 So Gloam does some detective work instead. It reads clues from the map (road
 type, bus stops, food places, shops, how packed the buildings are) and makes an
