@@ -43,7 +43,6 @@ import { createLocalSettingsStore } from './storage/localSettingsStore';
 import type { PackMeta, Segment, Tier } from './types';
 import { createCityPicker } from './ui/cityPicker';
 import { createGuidance } from './ui/guidance';
-import { createMapCorner } from './ui/mapCorner';
 import { createPlanControls } from './ui/planControls';
 import { createRoutePanel } from './ui/routePanel';
 import { createShell } from './ui/shell';
@@ -92,11 +91,9 @@ const map = createMapView({
 // Register straight away: the inline style loads without waiting for any tile.
 const styleReady = new Promise<void>((resolve) => map.once('style.load', () => resolve()));
 
-const corner = createMapCorner(shell.cornerHost);
 const picker = createCityPicker(shell.pickerHost, {
   entries: MANIFEST,
   statusHost: shell.mapSheet.body,
-  captionHost: shell.captionHost,
   onChoose: (id) => loadCity(entryOf(id)),
 });
 
@@ -155,8 +152,9 @@ const guidanceHost = el('div');
 const summaryHost = el('div', { className: 'route-host' });
 const lambdaHost = el('div', { className: 'sheet-extra' });
 const pointsHost = el('div', { className: 'sheet-extra' });
-const messagesHost = el('div');
-const footerHost = el('div', { className: 'sheet-footer' });
+// .sheet-keep parts stay visible when the sheet is collapsed (base.css).
+const messagesHost = el('div', { className: 'sheet-keep' });
+const footerHost = el('div', { className: 'sheet-footer sheet-keep' });
 shell.mapSheet.body.append(messagesHost, guidanceHost, summaryHost, lambdaHost, mapModeHost, pointsHost, footerHost);
 const reportModeHost = el('div');
 shell.reportSheet.body.append(reportModeHost);
@@ -427,7 +425,6 @@ async function drawStreets(id: PackId, meta: PackMeta, segments: Segment[]): Pro
   controller.refresh(); // drops the old pack from the planner and clears the route
   const bounds = boundsOf(segments.flatMap((s) => s.coordinates));
   map.fitBounds([bounds.sw, bounds.ne], { padding: 24, maxZoom: 17, duration: 0, pitch: FIT_PITCH, bearing: FIT_BEARING });
-  corner.show(meta);
   about.setCity(meta);
   picker.setActive(id);
   if (!flickerStarted) {
@@ -497,7 +494,6 @@ function discardPartial(): void {
   layersReady = false;
   shown = null;
   controller.refresh();
-  corner.clear();
   about.setCity(null);
   picker.setActive(null);
 }

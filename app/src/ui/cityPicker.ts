@@ -3,7 +3,7 @@ import type { ManifestEntry, PackId } from '../pack/manifest';
 import { el } from './dom';
 
 // City_Picker (Requirements 1.1, 1.3, 1.5, 1.6, 17.4, 17.16). One button per manifest
-// entry; only the entry with a description shows one. The progress state and the
+// entry, showing the city name only. The progress state and the
 // problem message share one status area, and every change to it is synchronous, so
 // the progress state is gone well inside 500 ms of an outcome.
 
@@ -13,8 +13,6 @@ export interface CityPickerOptions {
   onChoose: (id: PackId) => void;
   /** Where the progress state and problem message go (the panel). The status box is only in it while it has content. */
   statusHost: HTMLElement;
-  /** Where a city's description goes (a small caption under the header row). */
-  captionHost: HTMLElement;
 }
 
 export interface CityPicker {
@@ -34,18 +32,7 @@ export function createCityPicker(host: HTMLElement, opts: CityPickerOptions): Ci
     const button = el('button', { className: 'city-button', text: entry.label, attrs: { type: 'button' } });
     button.addEventListener('click', () => opts.onChoose(entry.id));
     buttons.set(entry.id, button);
-    const item = el('li', { className: 'city-item' }, button);
-    if (entry.description !== undefined) {
-      // The description is a caption under the header row, not part of the chip.
-      const description = el('p', {
-        className: 'city-description',
-        text: entry.description,
-        attrs: { id: `city-description-${entry.id}` },
-      });
-      button.setAttribute('aria-describedby', description.id);
-      opts.captionHost.append(description);
-    }
-    return item;
+    return el('li', { className: 'city-item' }, button);
   });
 
   const list = el('ul', { className: 'city-list' }, ...items);

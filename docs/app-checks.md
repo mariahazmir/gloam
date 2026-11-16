@@ -67,6 +67,8 @@ Required text: "© OpenStreetMap contributors", plus OpenFreeMap and OpenMapTile
 
 - [ ] Map: no horizontal scroll, no control cut off; the sheet stops below the attribution strip
 - [ ] Map: the Disclaimer is visible with the sheet expanded and collapsed while a route is shown
+- [ ] Map: the collapsed sheet shows only the details button and the Disclaimer (no walking time, tiles, chart or slider) and is no more than 25 percent of the screen height
+- [ ] Map and Report: the attribution is a frosted card with white text at least 12 px high and underlined links, readable over the map in each city
 - [ ] Route: no horizontal scroll, no control cut off; the routing settings and the Disclaimer are visible
 - [ ] Report: no horizontal scroll, no control cut off; the attribution strip and the Disclaimer are visible
 - [ ] How Gloam guesses: no horizontal scroll, no control cut off

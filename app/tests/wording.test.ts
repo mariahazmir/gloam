@@ -118,10 +118,7 @@ describe("wording: lighting terms", () => {
 
   it("lighting entries use only the allowed lighting wording", () => {
     for (const e of entries.filter((x) => x.kind === "lighting")) {
-      // Descriptions of the data (not a claim about a street) are checked by phrase, not by term presence.
-      const problems = lightingProblems(e.text).filter(
-        (p) => !(p === "uses none of the allowed terms" && e.path === "STRINGS.city.kualaLumpurDescription"),
-      );
+      const problems = lightingProblems(e.text);
       expect(problems, `${e.path}: ${JSON.stringify(e.text)}`).toEqual([]);
     }
   });
@@ -166,9 +163,6 @@ describe("wording: fixed texts", () => {
     );
   });
 
-  it("Kuala Lumpur description is exact", () => {
-    expect(STRINGS.city.kualaLumpurDescription.text).toBe("the case where lighting records are missing");
-  });
 });
 
 describe("wording: docs/validation.md", () => {

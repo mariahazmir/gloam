@@ -215,44 +215,24 @@ a {
   transform: none;
 }
 
-.caption-host:empty {
-  display: none;
-}
-
-/* The map attribution, always open, in a strip no sheet covers (Requirements 5.3, 18.10). */
+/* The map attribution, always open, in a frosted-glass card no sheet covers (Requirements 5.3, 18.10).
+   White text at 12 px, links underlined. MapLibre's own light background and dark link colour are overridden. */
 .attribution-strip .maplibregl-ctrl-attrib {
   margin: 0;
-  padding: 0.2rem 0.75rem;
-  font-size: 0.7rem;
-  line-height: 1.35;
-  color: var(--mist);
-  background: var(--sheet);
-  border-radius: 999px;
-}
-
-.attribution-strip .maplibregl-ctrl-attrib a {
-  color: var(--amber);
-}
-
-.corner-host:empty {
-  display: none;
-}
-
-.corner-note {
-  padding: 0.35rem 0.75rem;
-  font-size: 0.7rem;
-  line-height: 1.3;
-  color: var(--mist);
+  padding: 0.4rem 0.9rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: white;
+  background: var(--glass-fill);
+  border: var(--glass-border-width) solid var(--glass-border);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   border-radius: 1rem;
 }
 
-.corner-note p {
-  margin: 0;
-  overflow-wrap: anywhere;
-}
-
-.corner-note p + p {
-  margin-top: 0.15rem;
+.attribution-strip .maplibregl-ctrl-attrib a {
+  color: white;
+  text-decoration: underline;
 }
 
 /* Bottom sheets sit over the map and stop below the top overlay, so the attribution stays clear. */
@@ -281,8 +261,6 @@ a {
 .sheet-body > div:empty {
   display: none;
 }
-
-
 
 .sheet-handle,
 .sheet-grip {
@@ -314,10 +292,53 @@ a {
   border-radius: 3px;
 }
 
-/* Collapsed: only the route card, the details link and the Disclaimer (Requirement 18.9). */
-.sheet.collapsed .sheet-extra,
-.sheet.collapsed .mode-switch {
+/* Collapsed: a compact bar with only the details button and the Disclaimer, plus anything marked
+   .sheet-keep (loading and error messages), all smaller. No walking time, tiles, chart or slider (Requirement 18.9). */
+.sheet.collapsed {
+  padding: 0.25rem 0.75rem 0.6rem;
+  border-radius: 1.5rem;
+}
+
+.sheet.collapsed .sheet-body {
+  gap: 0.4rem;
+}
+
+.sheet.collapsed .sheet-body > * {
   display: none;
+}
+
+.sheet.collapsed .sheet-body > .sheet-keep,
+.sheet.collapsed .sheet-body > .picker-status {
+  display: flex;
+  flex-direction: column;
+}
+
+.sheet.collapsed .sheet-body > .sheet-keep:empty,
+.sheet.collapsed .sheet-body > .sheet-keep:has(> .plan-messages:empty) {
+  display: none;
+}
+
+.sheet.collapsed .sheet-handle {
+  height: 1.1rem;
+  margin-bottom: 0;
+}
+
+.sheet.collapsed .sheet-footer {
+  position: static;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  background: none;
+}
+
+.sheet.collapsed .primary-button {
+  min-height: 2.25rem;
+  font-size: 0.9rem;
+}
+
+.sheet.collapsed .disclaimer {
+  font-size: 0.65rem;
+  line-height: 1.3;
 }
 
 /* Full pages: the night gradient with a magenta glow top right and a pumpkin glow bottom left. */
@@ -559,17 +580,6 @@ a {
 /* The focus ring sits inside the chip so the scroll box does not clip it. */
 .city-button:focus-visible {
   outline-offset: -3px;
-}
-
-.city-description {
-  margin: 0;
-  padding: 0 0.5rem;
-  overflow: hidden;
-  font-size: 0.7rem;
-  line-height: 1.2;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  opacity: 0.85;
 }
 
 .progress {

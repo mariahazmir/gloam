@@ -27,15 +27,11 @@ export interface Shell {
   crosshairHost: HTMLElement;
   /** Under the header: the always-open map attribution. */
   attributionHost: HTMLElement;
-  /** Under the attribution: the pack attribution and estimates note. */
-  cornerHost: HTMLElement;
   /** The header's walk label: the example label or the city name. */
   walkLabel: HTMLElement;
   /** The chip row: the "SAMPLE DATA" chip, then the City_Picker. */
   sampleChipHost: HTMLElement;
   pickerHost: HTMLElement;
-  /** A small caption line under the chips; holds a city's description. */
-  captionHost: HTMLElement;
   mapSheet: Sheet;
   reportSheet: Sheet;
   routePage: Page;
@@ -105,17 +101,13 @@ export function createShell(root: HTMLElement): Shell {
   );
   const sampleChipHost = el('div', { className: 'sample-chip-host' });
   const pickerHost = el('nav', { className: 'picker-host', attrs: { 'aria-label': STRINGS.shell.cityPicker.text } });
-  const captionHost = el('div', { className: 'caption-host' });
   const attributionHost = el('div', { className: 'attribution-strip' });
-  const cornerHost = el('div', { className: 'corner-host' });
   const mapTop = el(
     'div',
     { className: 'map-top' },
     header,
     el('div', { className: 'chip-row' }, sampleChipHost, pickerHost),
-    captionHost,
     attributionHost,
-    cornerHost,
   );
 
   const mapSheet = sheet('sheet-map', STRINGS.shell.panel.text, true);
@@ -165,11 +157,9 @@ export function createShell(root: HTMLElement): Shell {
     mapContainer,
     crosshairHost,
     attributionHost,
-    cornerHost,
     walkLabel,
     sampleChipHost,
     pickerHost,
-    captionHost,
     mapSheet,
     reportSheet,
     routePage: route.page,

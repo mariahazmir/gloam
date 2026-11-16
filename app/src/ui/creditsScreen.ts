@@ -4,11 +4,11 @@ import { el } from './dom';
 import { sampleBadge } from './tools';
 
 // Credits_Screen, the About screen of Requirement 1.8 (Requirements 13.11, 18.5): licences,
-// privacy, the Demo_Mode note and the loaded City_Pack's attribution and estimates note.
+// privacy, the Demo_Mode note and the loaded City_Pack's attribution.
 
 export interface CreditsScreen {
-  /** Shows the loaded City_Pack's attribution and estimates note; null when none is loaded. */
-  setCity(meta: Pick<PackMeta, 'attribution' | 'estimatesNote'> | null): void;
+  /** Shows the loaded City_Pack's attribution; null when none is loaded. The estimates note is not shown (Requirement 1.8). */
+  setCity(meta: Pick<PackMeta, 'attribution'> | null): void;
 }
 
 function creditRow(label: string, ...detail: Array<Node | string>): HTMLElement {
@@ -59,7 +59,7 @@ export function createCreditsScreen(host: HTMLElement): CreditsScreen {
   const setCity: CreditsScreen['setCity'] = (meta) => {
     city.replaceChildren(
       el('h3', { className: 'section-label', text: STRINGS.about.cityHeading.text }),
-      ...(meta === null ? [para(STRINGS.about.noCity.text)] : [para(meta.attribution), para(meta.estimatesNote)]),
+      ...(meta === null ? [para(STRINGS.about.noCity.text)] : [para(meta.attribution)]),
     );
   };
   setCity(null);

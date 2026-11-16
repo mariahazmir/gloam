@@ -66,7 +66,6 @@ export const STRINGS = {
     cityPicker: g('Choose a city'),
     map: g('Street lighting map'),
     panel: g('Route and settings'),
-    cityNote: g('About the city data on this map'),
   },
   sampleWalk: {
     label: g('Example walk, picked to show the difference. Yours may differ.'),
@@ -105,9 +104,6 @@ export const STRINGS = {
     } as Tpl<[string]>,
     noLowStretches: g('No low-confidence stretches were found.'),
     span: { kind: 'general', text: (from: number, to: number) => `${from} m to ${to} m` } as Tpl<[number, number]>,
-  },
-  city: {
-    kualaLumpurDescription: l('the case where lighting records are missing'),
   },
   hint: {
     setPoints: g("Tap the map to set where you start and where you're going"),
