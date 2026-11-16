@@ -304,71 +304,71 @@ Rules for every task:
   - [x] 19.7 Compact collapsed sheet, no city description, no estimates note, glass attribution strip
     - _Requirements: 1.3, 1.8, 18.9, 18.10_
 
-- [ ] 20. Street search for start and end
-  - [ ] 20.1 Implement `search/streetSearch.ts`: `normalise`, tokenising, matching and ranking
+- [~] 20. Street search for start and end
+  - [x] 20.1 Implement `search/streetSearch.ts`: `normalise`, tokenising, matching and ranking
     - `normalise` (lowercase, NFD, strip U+0300 to U+036F, fold `ß ø đ ł æ œ`, split on non-letter/digit, join with one space); `searchStreets(index, query, centre)` returns at most 8 results, `[]` for a trimmed query under 2 code points; rank tiers exact, prefix, other word-start; total-order comparator (tier, normalised-name length, normalised name, distance from the map centre nearest first taken from the UNROUNDED haversine, stretch key), so `centre` is part of the order and the result; compute the haversine for every match; `roundDistance` is display-only and never feeds the comparator
     - Throw `ArgumentError` naming `query` (not a string) or `centre` (via `requireLatLon('centre', ...)`); no I/O, no console output
     - _Requirements: 16.3, 16.23, 19.1, 19.2, 19.6, 19.9_
-  - [ ] 20.2 Add stretch grouping, midpoint and `buildStreetIndex` to `search/streetSearch.ts`
+  - [x] 20.2 Add stretch grouping, midpoint and `buildStreetIndex` to `search/streetSearch.ts`
     - `groupStretches(segments, graph)` by union-find over shared nodes and equal normalised names (no gap tolerance; key = smallest segment id by code unit; display name = raw name of that Segment); `buildStreetIndex` normalises each name once and computes each midpoint by length over Edges in `compareEdgeKeys` order; throw `ArgumentError` naming `segments` or `graph`
     - _Requirements: 19.2, 19.3, 19.4, 19.6, 19.9_
-  - [ ] 20.3 Add `compassOf` and `roundDistance` to `search/streetSearch.ts` and the new strings to `content/strings.ts`
+  - [x] 20.3 Add `compassOf` and `roundDistance` to `search/streetSearch.ts` and the new strings to `content/strings.ts`
     - Bearing sectors and distance rounding as in the design decisions table; in `strings.ts` (all `kind: 'general'`, own words): `search.helper`, the unnamed-streets note, `search.shortQuery`, `search.noMatch`, `search.count(n)`, `search.unavailable.noPack`, `.loading`, `.indexing`, `search.openLabel` ("Search streets", used by the Map_Screen control in 20.17), the 8 compass words and `searchOffsetWording(rounded, direction)` including the "at the map centre" case
     - _Requirements: 19.1, 19.3, 19.5, 19.7, 12.1, 18.11_
-  - [ ] 20.4 Implement `search/comboboxState.ts`
+  - [x] 20.4 Implement `search/comboboxState.ts`
     - Pure reducer `comboStep` and `announcement` with the actions, wrap-around keyboard rules, `availability` and `reset` handling from the design; no DOM
     - _Requirements: 19.1, 19.7, 19.8_
-  - [ ] 20.5 Write property test for street search
+  - [x] 20.5 Write property test for street search
     - **Property 36: Street search returns only pack names, ignores case and diacritics, caps at 8 and is deterministic**
     - Clause (d): same query, same centre and same pack give the same results in the same order, also after rebuilding the index from any permutation of the Segments, and the 8 results are the first 8 of the total order (tier, normalised-name length, normalised name, unrounded haversine distance from the centre nearest first, stretch key) checked against a reference sort written in the test
     - Generators as in the design, including several stretches that share one name at varied distances from the centre (with exactly equal-distance pairs) and Segment permutations
     - **Validates: Requirements 16.23, 19.1, 19.2, 19.6, 19.9**
-  - [ ] 20.6 Write property test for street search silence
+  - [x] 20.6 Write property test for street search silence
     - **Property 37: Street search makes no network request and touches no storage**
     - Stub `fetch`, `XMLHttpRequest`, `WebSocket`, `navigator.sendBeacon`; storage objects that throw on access; spy on `console`; as in Property 33
     - **Validates: Requirements 13.12, 16.24, 19.2**
-  - [ ] 20.7 Write example tests for hand-checked search values
+  - [x] 20.7 Write example tests for hand-checked search values
     - "Church Lane" hand example from design.md (Property 36, example 3): 10 stretches, centre (0, 0), midpoints on lon 0, latitude offsets in thousandths of a degree, 0.001 degree = 111.195 m. Keys and offsets: "40" +3, "12" -5, "7" +1, "31" -2, "25" +5, "9" -8, "18" +4, "60" -6, "5" +9, "22" -7. Query "church lane" returns 8 in order "7" 111.195 m, "31" 222.390 m, "40" 333.585 m, "18" 444.780 m, "12" 555.975 m, "25" 555.975 m (equal distance, "12" before "25" by key), "60" 667.170 m, "22" 778.366 m; "9" (889.561 m) and "5" (1000.756 m) are dropped; key order alone would give a different list; shuffled Segment input gives the same 8 in the same order. Build the index entries with the midpoints set directly so the tie is exact
     - Normalisation of "Straße des 17. Juni", "Élan Way", "main  street"; ranking and grouping of hand example 1 and 2 of Property 36 (queries "main", "main street", "street main", "m", "é", "el", "STRASSE 17"); `compassOf` boundaries 22.5, 67.5, 337.5; `roundDistance` and wording for 612 m at 50 degrees, 1240 m at 181, 975 m at 337.5, 20 m, and (0, 0) to latitude 0.0054; midpoint on a stretch of three 100 m Edges; `ArgumentError` names `query` and `centre`
     - _Requirements: 19.2, 19.3, 19.4, 16.3_
-  - [ ] 20.8 Write example tests for the combobox state machine
+  - [x] 20.8 Write example tests for the combobox state machine
     - Drive `comboStep` and `announcement`: ArrowDown and ArrowUp with wrap (closed list, no active option), Enter with and without an active option, Escape keeps query and results, blur closes without choosing, `pointerChoose` valid and invalid index, short and empty queries, no match, `availability` and `reset` clearing state, "1 street found" and "3 streets found"
     - _Requirements: 19.1, 19.7, 19.8_
-  - [ ] 20.9 Add the new search strings to the own-wording tests
+  - [x] 20.9 Add the new search strings to the own-wording tests
     - Include every new string (with sample arguments: `count` for 0, 1 and 8; `searchOffsetWording` for here, metre and kilometre cases; all 8 compass words) in the banned-word scan and the reference-text test of Requirement 18.11; check the compass words and the template appear only in `content/strings.ts`
     - _Requirements: 12.1, 12.2, 18.11, 19.3, 19.5_
-  - [ ] 20.10 Write real-pack tests for street search
+  - [x] 20.10 Write real-pack tests for street search
     - For each of the five packs in `data/`: every Segment with a non-empty normalised name is found when its own raw name is the query, passing the midpoint of that Segment's own stretch as the `centre` (that stretch is then at distance 0 and first among stretches of equal name, so it is returned even for names shared by more than 8 stretches; the test never expects name-only order). The result must have that name and a stretch containing the Segment id. A second check with a far-away centre only asserts that every returned name matches the query and that the order equals the reference sort. One known name per pack, picked from the data, returns at least one result; a chosen result's midpoint snaps to the graph within 150 m
     - _Requirements: 19.2, 19.3, 19.4, 19.6_
-  - [ ] 20.11 Add `app/scripts/streetNameStats.ts` and the `segments` return in `loadPack`
+  - [x] 20.11 Add `app/scripts/streetNameStats.ts` and the `segments` return in `loadPack`
     - Add `segments` to the return of `loadPack` in `app/scripts/pickSampleWalks.ts` (one field, other uses unchanged); the script follows `routeStats.ts`, runs offline, imports `groupStretches` and `normalise` from `src/search/streetSearch.ts`, and prints per pack: Segment count, share of Segments with a name (one decimal), number of distinct names, number with more than one stretch, and that as a share of distinct names ("n/a" when none), and the largest number of stretches sharing one normalised name with that name (ties: smallest normalised name by code unit; "n/a" when no names), read from the same `groupStretches` result
     - Line format, one per pack: `<city>: segments=<n> named=<p>% names=<n> multi-stretch=<n> (<p>%) most-stretches=<n> "<normalised name>"`
     - The executor only writes the script; the user runs it (see 20.18)
     - _Requirements: 19.11_
-  - [ ] 20.12 Implement `ui/streetCombobox.ts` (DOM shell)
+  - [x] 20.12 Implement `ui/streetCombobox.ts` (DOM shell)
     - Thin shell over `comboStep`: `role="combobox"`, `aria-expanded`, `aria-controls`, `aria-autocomplete="list"`, `aria-activedescendant`; `role="listbox"` and `role="option"` with `aria-selected`; options at least 44 px high with name and offset wording; keyboard (arrows, Enter, Escape, Tab); `role="status"` live region with `aria-live="polite"`; always-visible helper line; input `disabled` with the `search.unavailable.*` message when not ready; no animation; the query is held only in the input and one in-memory variable; the shell passes the current map centre to `searchStreets` when building results
     - _Requirements: 19.1, 19.5, 19.7, 19.10, 13.12, 15.4_
-  - [ ] 20.13 Wire the Street_Comboboxes into the Route_Screen and app state
+  - [x] 20.13 Wire the Street_Comboboxes into the Route_Screen and app state
     - Start and end fields on the Route_Screen (also shown when no route exists, see the entry point in 20.17); build the index once per pack with `setTimeout(0)` after the graph build, then dispatch `availability: 'ready'`; choosing a result dispatches the existing `chooseStreet` action for the field's own kind and goes through the existing snap, out-of-area, too-far and Sample_Walk-clearing path; on a City_Pack switch clear the pending build, the index, the input text and results and dispatch `availability: 'loading'`
     - Update the stale comment in `ui/planControls.ts` ("There is no place-name search (6.4)") to say that only the offline street-name search of Requirement 19 exists; change no other UI hint text
     - _Requirements: 6.1, 6.4, 6.5, 6.6, 17.17, 18.3, 19.1, 19.4, 19.5, 19.8, 19.9_
-  - [ ] 20.14 Write a DOM-free shell test for `ui/streetCombobox.ts`
+  - [x] 20.14 Write a DOM-free shell test for `ui/streetCombobox.ts`
     - With a minimal fake element set: ARIA attributes follow `ComboState`, option `min-height` is 44 px or more, the input value and index are cleared on a City_Pack switch, disabled states show the matching message
     - _Requirements: 19.1, 19.7, 19.8_
-  - [ ] 20.15 Add the street search screens to `docs/app-checks.md`
+  - [x] 20.15 Add the street search screens to `docs/app-checks.md`
     - Checklist items to record by hand: keyboard use of both fields (arrows, Enter, Escape, Tab), screen-reader label and live-region check, 44 px option height, 390 x 844 layout with the list open, and a 100 ms measurement of results after typing on the reference phone (target, to be measured, not a guarantee)
-    - "Search streets" control on the Map_Screen sheet: keyboard (Tab reaches it, Enter and Space activate it), 44 px minimum height, works with no route planned and with a route shown, opens `#/route` with the start field focused, browser back returns to the Map_Screen
-    - Manual measurement of the collapsed bar height with a route shown at 390 x 844 in the developer tools (limit 211 px, 25 percent of 844), recorded with and without the control; `sheet-keep` is added to the control only if the measured height with it is 211 px or less
+    - "Search streets" control on the Map_Screen sheet: keyboard (Tab reaches it, Enter and Space activate it), 44 px minimum height, works with no route planned and with a route shown, opens `#/route` with nothing auto-focused (focus goes to the screen title), browser back returns to the Map_Screen
+    - Manual measurement of the collapsed bar height with a route shown at 390 x 844 in the developer tools (limit 211 px, 25 percent of 844), recorded with and without the control. `sheet-keep` was added to the control by decision (see 20.17), so this is still to be done by hand, as a check and not a gate
     - _Requirements: 15.2, 15.4, 18.2, 18.9, 19.1, 19.10_
-  - [ ] 20.16 Change the `hint.setPoints` string and test it
+  - [x] 20.16 Change the `hint.setPoints` string and test it
     - In `app/src/content/strings.ts` change `hint.setPoints` to "Tap the map or type a street name to set where you start and where you're going" (79 characters, `kind: 'general'`)
     - Add an example test to `app/tests/wording.test.ts`: the text is at most 90 characters, mentions typing a street name, passes `findBanned`, and is the text the Reset_Control path shows (both read the one key `STRINGS.hint.setPoints`)
     - Files touched: `app/src/content/strings.ts`, `app/tests/wording.test.ts`, and `.kiro/specs/gloam-web-app/requirements.md` (already updated; not edited here). `app/src/ui/guidance.ts` reads the string by key (`STRINGS.hint.setPoints.text`) and is not edited. `app/tests/ownWording.test.ts` already enumerates the catalogue, so the new text is covered there with no edit
     - _Requirements: 17.10, 17.13, 12.1_
-  - [ ] 20.17 Add the Map_Screen "Search streets" control and the Route_Screen with no route
+  - [x] 20.17 Add the Map_Screen "Search streets" control and the Route_Screen with no route
     - In `ui/mapSheet.ts`, a `<button type="button">` with class `sheet-search`, label `search.openLabel` from `content/strings.ts`, `min-height: 44px`, in the normal tab order (keyboard and touch), drawn outside the route card so it exists with or without a route; its click sets `location.hash` to `hashOf('route')` (`#/route`)
-    - Do NOT add `sheet-keep` by default (expanded sheet only). The CSS rule `.sheet.collapsed > :not(.sheet-keep) { display: none }` stays as is; `sheet-keep` is added to the control only after the manual measurement in 20.15 shows the collapsed bar at 211 px or less
-    - The Route_Screen renders with no route: back control, both Street_Comboboxes, the four routing settings; route-only parts (chart, stretches, comparison, Disclaimer) hidden or replaced by a short "no route yet" line; the start field is focused on the `hashchange` to `#/route` only, never on page load
+    - `sheet-keep` was added to the control by decision (class list `sheet-search sheet-keep`), overriding the earlier "only after measurement" note. The collapsed bar keeps it at a smaller size with `min-height: 44px`. The 211 px collapsed-bar measurement in 20.15 is still to be done by hand, kept as a check rather than a gate
+    - The Route_Screen renders with no route: back control, both Street_Comboboxes, the four routing settings; route-only parts (chart, stretches, comparison, Disclaimer) hidden or replaced by a short "no route yet" line; nothing is auto-focused on arrival, on `hashchange` or on page load (focus goes to the screen title, as for every screen)
     - Do not change `ui/guidance.ts`; the "change start or end" control, if present, never holds or replaces "Search streets"
     - _Requirements: 6.10, 18.2, 18.3, 18.9, 19.1_
   - [ ] 20.18 MANUAL, USER ONLY: run the statistics script and confirm its output before citing it

@@ -131,6 +131,14 @@
     "12.5 Write property test for no network calls": {
       "status": "passed",
       "lastRunTimestamp": 1794300749170
+    },
+    "20.5 Write property test for street search": {
+      "status": "passed",
+      "lastRunTimestamp": 1794832160706
+    },
+    "20.6 Write property test for street search silence": {
+      "status": "passed",
+      "lastRunTimestamp": 1794831034121
     }
   },
   "executionHistory": {
@@ -1394,6 +1402,235 @@
         "executionId": "09aac79c-4b44-4e59-8d34-1f3ee8b1e3b6",
         "chatSessionId": "sess_2125ec76-f979-4216-bd92-cb2f12e70728",
         "timestamp": 1794757443985
+      }
+    ],
+    "20.1 Implement `search/streetSearch.ts`: `normalise`, tokenising, matching and ranking": [
+      {
+        "executionId": "d9fd3859-2313-4b51-8bc0-292f02922992",
+        "chatSessionId": "sess_ab46f073-6741-4c0f-867c-3383ded2da1d",
+        "timestamp": 1794830000485
+      },
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794830058397
+      },
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794830152207
+      }
+    ],
+    "20.2 Add stretch grouping, midpoint and `buildStreetIndex` to `search/streetSearch.ts`": [
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794830161210
+      },
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794830253848
+      }
+    ],
+    "20.3 Add `compassOf` and `roundDistance` to `search/streetSearch.ts` and the new strings to `content/strings.ts`": [
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794830260749
+      },
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794830352879
+      }
+    ],
+    "20.4 Implement `search/comboboxState.ts`": [
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794830361841
+      },
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794830448980
+      }
+    ],
+    "20.5 Write property test for street search": [
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794830455794
+      },
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794831052122
+      }
+    ],
+    "20.6 Write property test for street search silence": [
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794830455881
+      },
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794831052393
+      }
+    ],
+    "20.7 Write example tests for hand-checked search values": [
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794830456181
+      },
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794831054105
+      }
+    ],
+    "20.8 Write example tests for the combobox state machine": [
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794830457671
+      },
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794831054518
+      }
+    ],
+    "20.11 Add `app/scripts/streetNameStats.ts` and the `segments` return in `loadPack`": [
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794830458055
+      },
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794831056180
+      }
+    ],
+    "20.9 Add the new search strings to the own-wording tests": [
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794831066818
+      },
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794831163395
+      }
+    ],
+    "20.16 Change the `hint.setPoints` string and test it": [
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794831066910
+      },
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794831163799
+      }
+    ],
+    "20.10 Write real-pack tests for street search": [
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794831168431
+      },
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794831281360
+      }
+    ],
+    "20.12 Implement `ui/streetCombobox.ts` (DOM shell)": [
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794831170163
+      },
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794831282084
+      }
+    ],
+    "20.13 Wire the Street_Comboboxes into the Route_Screen and app state": [
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794831288614
+      },
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794831426493
+      },
+      {
+        "executionId": "f27ca139-0c0c-4b5c-9606-e32ba730cc73",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794831908931
+      },
+      {
+        "executionId": "f27ca139-0c0c-4b5c-9606-e32ba730cc73",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794832270658
+      }
+    ],
+    "20.14 Write a DOM-free shell test for `ui/streetCombobox.ts`": [
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794831288698
+      },
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794831428264
+      }
+    ],
+    "20.15 Add the street search screens to `docs/app-checks.md`": [
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794831432995
+      },
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794831532407
+      }
+    ],
+    "20.17 Add the Map_Screen \"Search streets\" control and the Route_Screen with no route": [
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794831434762
+      },
+      {
+        "executionId": "f864c7d9-7cad-44da-8e2e-fdf791a3ebaf",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794831530560
+      },
+      {
+        "executionId": "ad7f6e25-d16f-48da-a24c-400753daaab4",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794835318414
+      },
+      {
+        "executionId": "ad7f6e25-d16f-48da-a24c-400753daaab4",
+        "chatSessionId": "sess_6d99a1b7-9cbb-4b1b-8363-5cfbdc458ee4",
+        "timestamp": 1794835561686
       }
     ]
   }
