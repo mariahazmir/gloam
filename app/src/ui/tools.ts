@@ -76,7 +76,6 @@ export function createTools(opts: ToolsOptions): Tools {
   const { controller } = opts;
   const effects = switchRow(STRINGS.tools.effectsSwitch.text, STRINGS.tools.effectsDetail.text);
   const demo = switchRow(STRINGS.tools.demoSwitch.text, STRINGS.tools.demoDetail.text);
-  const badge = sampleBadge();
   const chip = sampleBadge();
   opts.chipHost.append(chip);
   const demoError = el('p', { className: 'plan-message', text: STRINGS.errors.sampleDataLoad.text, attrs: { role: 'status' } });
@@ -98,7 +97,6 @@ export function createTools(opts: ToolsOptions): Tools {
       { className: 'glass page-card switch-card', attrs: { 'aria-label': STRINGS.screens.settingsHeading.text } },
       effects.button,
       demo.button,
-      el('div', { className: 'demo-badge-row' }, badge),
       demoError,
     ),
     el(
@@ -112,7 +110,6 @@ export function createTools(opts: ToolsOptions): Tools {
   controller.subscribe(({ state }: PlanSnapshot) => {
     demo.set(state.demo);
     effects.set(state.reducedEffects);
-    badge.hidden = !state.demo; // sample data only appears while Demo_Mode is on
     chip.hidden = !state.demo;
   });
 
