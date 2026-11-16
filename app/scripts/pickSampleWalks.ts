@@ -19,14 +19,14 @@ import type { Tier } from '../src/types';
 import { ArgumentError } from '../src/validation/errors';
 import { requireFinite } from '../src/validation/guards';
 
-const PACKS = ['seattle', 'kl', 'london', 'berlin', 'manchester'] as const;
+export const PACKS = ['seattle', 'kl', 'london', 'berlin', 'manchester'] as const;
 const LAMBDA = 3;
 const MIN_WALK_M = 800;
 const MAX_WALK_M = 1500;
 const MIN_SHARE_PCT = 5;
 const MIN_TIERS = 3;
 const CANDIDATES = 4000;
-const SEED = 20260;
+export const SEED = 20260;
 
 /** Small seeded generator so the pick is repeatable. */
 export function mulberry32(seed: number): () => number {
@@ -111,10 +111,11 @@ export function best(cands: ReadonlyArray<Candidate>, minPct: number): Candidate
   return top;
 }
 
-const round5 = (n: number): number => Math.round(n * 1e5) / 1e5;
+export const round5 = (n: number): number => Math.round(n * 1e5) / 1e5;
 const fmt = (p: [number, number]): string => `[${p[0]}, ${p[1]}]`;
 
-function pickForPack(id: string): void {
+/** Loads one pack from data/ and builds everything routing needs. */
+export function loadPack(id: string) {
   const dataDir = fileURLToPath(new URL('../../data/', import.meta.url));
   const parsed = parseSegmentFile(JSON.parse(readFileSync(`${dataDir}${id}.segments.geojson`, 'utf8')));
   if ('kind' in parsed) throw new ArgumentError('pack', `${id}: ${parsed.detail}`);
@@ -123,6 +124,10 @@ function pickForPack(id: string): void {
   const tierOf = (edge: number): Tier => tiers.get(graph.edges[edge]!.segmentId)!;
   const median = medianConfidence(graph);
   const index = buildSnapIndex(graph);
+  return { graph, tierOf, median, index };
+}
+function pickForPack(id: string): void {
+  const { graph, tierOf, median, index } = loadPack(id);
   const rand = mulberry32(SEED);
   const pts: Array<[number, number]> = graph.edges
     .filter((e) => e.lengthM >= 20)
@@ -167,4 +172,4 @@ function pickForPack(id: string): void {
   );
 }
 
-for (const id of PACKS) pickForPack(id);
+if (process.argv[1]?.includes('pickSampleWalks')) for (const id of PACKS) pickForPack(id);
