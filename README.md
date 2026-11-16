@@ -51,6 +51,12 @@ credits and privacy. The offline pipeline is described under
 Specs, steering docs and hooks live in [`.kiro/`](.kiro/). The story of how
 Kiro helped build this is in [`docs/kiro-log.md`](docs/kiro-log.md).
 
+- **Specs:** two Build a Feature specs, `gloam-data-pipeline` and `gloam-web-app`.
+- **Steering:** product, tech, structure and design rules that every spec inherits.
+- **Hooks:** one protects my hand-written Kiro log, one runs the wording tests
+  on save, and one type-checks when the agent stops.
+- **Property-based testing:** Hypothesis for the pipeline, fast-check for the app.
+
 ## Data credits
 
 Map data © OpenStreetMap contributors, available under the

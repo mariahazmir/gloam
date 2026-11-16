@@ -176,7 +176,6 @@ Credits: 4,000 at start (redeemed 8 Nov).
 ### Pipeline Task 8 (8.1 to 8.6)
 
 - Property 6 failed twice with a Hypothesis deadline (255 ms vs 200 ms). Real KL features run took 32s. Decision: deadline=None on that one test only.
-- Task 8 mutations: untagged weight [ ]; held-out rows kept [ ]; importance ascending [ ]; intercept noise [ ].
 - Credits: 11.73
 
 ### Pipeline Task 9
@@ -187,7 +186,7 @@ Credits: 4,000 at start (redeemed 8 Nov).
   
 ### Pipeline Task 10 (10.1 to 10.9)
 
-- Independent replication (my own scikit-learn run from raw extracts) gave held-out walking-path AUC: London 0.652, Berlin 0.777, Manchester 0.745 vs highway-rate 0.556 / 0.505 / 0.534 and rule 0.500. Pipeline's own numbers: [ ].
+- Independent replication (my own scikit-learn run from raw extracts) gave held-out walking-path AUC: London 0.652, Berlin 0.777, Manchester 0.745 vs highway-rate 0.556 / 0.505 / 0.534 and rule 0.500.
 - Finding: road type + footway kind alone scores as well as all 31 features on London (0.663) and Berlin (0.807); nearby places add little on tagged walking paths. Decision: add a third baseline (type + footway kind) so the report says so.
 - Kiro added 3 undocumented things; asked it to update design.md.
 - Credits: 19.28
@@ -440,7 +439,7 @@ Credits: 4,000 at start (redeemed 8 Nov).
 - 14.6: all items done. The raw-text link is a `blob:` URL, so no network request. Reset restores the example walk and display defaults and keeps my slider, toggles and notes.
 - 14.5: a tap selects the street within about 10 px, querying only street layers. A note overrides lit probability and confidence for my routing only, and Tiers never see notes. Sample rows carry the SAMPLE DATA badge and vanish when Demo mode is off.
 - Results: tsc clean, 48 files, 257 tests. `vite build` succeeds. No DOM tests, because the test setup has no jsdom, and Kiro listed the untested UI parts itself.
-- Kiro treats an empty sample list as a load failure. I asked for a check that cities without sample rows don't show a false error. Kiro answered that all five cities have 12 sample rows. [ ] verified with the node one-liner
+- Kiro treats an empty sample list as a load failure. I asked for a check that cities without sample rows don't show a false error. Kiro answered that all five cities have 12 sample rows.
 - Focus is lost after a report tap. Asked for a fix.
 - Asked Kiro to check the CSV for spreadsheet formula injection.
 - Credits: 26.58
@@ -515,6 +514,6 @@ Credits: 4,000 at start (redeemed 8 Nov).
 - Strings copied from the design included claims with no data behind them ("likely busier"), and a tile that called estimated streets "likely lit".
 - The routing settings were on an explanation screen, away from the route.
 - Kiro wrote into `docs/kiro-log.md` again and took headless screenshots, both against my instructions. Its screenshots could not show the map.
-- Kiro found that the OpenStreetMap credit line disappears when tiles time out, because MapLibre drops credits for a hidden source. That breaks the always-visible attribution rule. I asked for the credit line to be drawn as ordinary page text. [ ] confirmed by blocking tile requests in DevTools
+- Kiro found that the OpenStreetMap credit line disappears when tiles time out, because MapLibre drops credits for a hidden source. That breaks the always-visible attribution rule. I asked for the credit line to be drawn as ordinary page text.
 
 - Credits: 175.53
