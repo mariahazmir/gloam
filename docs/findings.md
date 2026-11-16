@@ -68,7 +68,7 @@ Source: `docs/app-checks.md`.
 - Frame rate: 165 fps with effects on and with Reduced_Effects on, on the laptop. The laptop's built-in display refreshes at 165 Hz (checked 16 Nov 2026), so 165 fps is the display's cap. It shows the laptop is not struggling and says nothing about phones. Frame rate was not measured on a phone.
 - Hosting: Render static site over HTTPS. Pack files are served Brotli-compressed (all 11 `/assets/` files, checked with `checkHost` on 12 Nov 2026). The first check failed because Render served the `.geojson` files as `binary/octet-stream` with no compression; the build now emits them as `.json`.
 - Largest built pack files (before Brotli): Manchester segments 6.6 MB, Seattle 5.1 MB, Berlin 4.8 MB, London 4.3 MB, Kuala Lumpur 3.1 MB. Segment files as sent by Render with Brotli (measured 16 Nov 2026): Manchester 0.85 MB, Seattle 0.56 MB, Berlin 0.56 MB, London 0.50 MB, Kuala Lumpur 0.44 MB.
-- Load time on a 10 Mbit/s connection: Ningbo 5.85s, Malaysia [CONFIRM or "not tested"], US not tested.
+- Load time on a 10 Mbit/s connection: Ningbo 5.85s, Malaysia not tested, US not tested.
 - Browsers tested: Chrome 157 on a Windows laptop; Chrome and Safari on an iPhone 15 Pro, iOS 26.6.2. Layouts checked at 390 x 844 and 768 px, plus keyboard use and focus order.
 
 ## 6. Privacy
