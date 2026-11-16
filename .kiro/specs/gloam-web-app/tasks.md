@@ -285,6 +285,21 @@ Rules for every task:
 
 - [x] 18. Final checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
+- [x] 19. Screens and reference styling
+  - [x] 19.1 Add `state/screens.ts` and `routing/stretches.ts` (pure)
+    - _Requirements: 18.1, 18.2, 18.6_
+  - [x] 19.2 Property test for screen addresses
+    - **Property 35: Screen addresses round-trip**
+    - **Validates: Requirement 18.1**
+  - [x] 19.3 Property test for stretches
+    - **Property 34: Stretches cover the route exactly and never repeat a neighbour**
+    - **Validates: Requirements 18.2, 18.6**
+  - [x] 19.4 Split the shell into the five screens, wire the hash, and move About and the guess dialog into screens
+    - _Requirements: 6.9, 6.10, 6.11, 17.7, 17.9, 18.1 to 18.5, 18.8 to 18.10_
+  - [x] 19.5 Restyle the screens and map layers to the design reference
+    - _Requirements: 4.6, 6.12, 18.7_
+  - [x] 19.6 Spec fixes: Property 35 examples, largest-remainder stretch metres (Property 34), own wording with a reference-text test, routing settings on the Route_Screen, add the screens to `docs/app-checks.md`
+    - _Requirements: 18.1, 18.3, 18.5, 18.6, 18.11_
 
 ## Notes
 

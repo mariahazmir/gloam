@@ -1,5 +1,5 @@
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { STRINGS } from './content/strings';
+import { DISCLAIMER, STRINGS } from './content/strings';
 import { boundsOf } from './geo/bounds';
 import { buildGraph, type StreetGraph } from './graph/build';
 import { buildSnapIndex, packBounds, snap } from './graph/snap';
@@ -47,8 +47,11 @@ import { createMapCorner } from './ui/mapCorner';
 import { createPlanControls } from './ui/planControls';
 import { createRoutePanel } from './ui/routePanel';
 import { createShell } from './ui/shell';
-import { createAboutDialog, createGuessDialog } from './ui/infoDialogs';
+import { createCreditsScreen } from './ui/creditsScreen';
+import { createGuessScreen } from './ui/guessScreen';
 import { createTools } from './ui/tools';
+import { routeStretches } from './routing/stretches';
+import { hashOf, screenFromHash, type Screen } from './state/screens';
 import { el } from './ui/dom';
 import { hostedDefault, prefersReducedMotion } from './state/firstRun';
 import validationRaw from '../../docs/validation.md?raw';
@@ -84,6 +87,7 @@ const map = createMapView({
   container: shell.mapContainer,
   center: firstEntry.sampleWalk.start,
   zoom: 12,
+  attributionHost: shell.attributionHost,
 });
 // Register straight away: the inline style loads without waiting for any tile.
 const styleReady = new Promise<void>((resolve) => map.once('style.load', () => resolve()));
@@ -91,7 +95,7 @@ const styleReady = new Promise<void>((resolve) => map.once('style.load', () => r
 const corner = createMapCorner(shell.cornerHost);
 const picker = createCityPicker(shell.pickerHost, {
   entries: MANIFEST,
-  statusHost: shell.panel,
+  statusHost: shell.mapSheet.body,
   captionHost: shell.captionHost,
   onChoose: (id) => loadCity(entryOf(id)),
 });
@@ -137,17 +141,46 @@ const controller = createPlanController({
   geolocation: typeof navigator === 'undefined' ? null : navigator.geolocation,
 });
 
+// ---- Screens (Requirement 18.1) ------------------------------------------------------
+
+/** The hash is the source of truth; the screen change then sets the mode (Requirement 18.4). */
+function navigate(screen: Screen): void {
+  if (screenFromHash(window.location.hash) !== screen) window.location.hash = hashOf(screen);
+}
+
+// Map_Screen sheet, in order: messages, example label and hint, route card, slider, Mode_Switch,
+// start and end controls, then the details link and the Disclaimer, which stick to the bottom.
+const mapModeHost = el('div');
 const guidanceHost = el('div');
-const routeHost = el('div', { className: 'route-host' });
-shell.panel.append(guidanceHost, routeHost);
+const summaryHost = el('div', { className: 'route-host' });
+const lambdaHost = el('div', { className: 'sheet-extra' });
+const pointsHost = el('div', { className: 'sheet-extra' });
+const messagesHost = el('div');
+const footerHost = el('div', { className: 'sheet-footer' });
+shell.mapSheet.body.append(messagesHost, guidanceHost, summaryHost, lambdaHost, mapModeHost, pointsHost, footerHost);
+const reportModeHost = el('div');
+shell.reportSheet.body.append(reportModeHost);
 createGuidance(guidanceHost, controller);
-createPlanControls({ host: shell.panel, crosshairHost: shell.crosshairHost, controller });
-const routePanel = createRoutePanel(routeHost);
+// Route_Screen: the route views, then the four routing settings, then the report link and the
+// Disclaimer (Requirement 18.3). The settings card sits outside the redrawn hosts, so changing a
+// toggle replans the route without dropping focus.
+const routeContentHost = el('div', { className: 'page-section' });
+const routeSettingsCard = el('section', { className: 'glass page-card', attrs: { 'aria-label': STRINGS.plan.settingsLegend.text } });
+const routeFooterHost = el('div', { className: 'page-foot' });
+shell.routePage.body.append(routeContentHost, routeSettingsCard, routeFooterHost);
+const routePanel = createRoutePanel({
+  summary: summaryHost,
+  footer: footerHost,
+  page: routeContentHost,
+  pageFooter: routeFooterHost,
+});
+routePanel.show(null);
 
-// ---- Legend, Demo_Mode, Reduced_Effects switch, About, guess screen, Reset ------
+// ---- How_Gloam_Guesses_Screen and Credits_Screen: legend, switches, settings, Reset ----
 
-const about = createAboutDialog();
-const guess = createGuessDialog(validationRaw);
+const guess = createGuessScreen(validationRaw);
+shell.aboutPage.body.append(guess.intro);
+const about = createCreditsScreen(shell.creditsPage.body);
 
 /** Reset_Control (Requirement 17.13): synchronous, so it finishes well inside 1 second. */
 function resetToFirstRun(): void {
@@ -162,11 +195,39 @@ function resetToFirstRun(): void {
 }
 
 const tools = createTools({
-  host: shell.panel,
+  host: shell.aboutPage.body,
+  chipHost: shell.sampleChipHost,
   controller,
-  onAbout: () => about.open(),
-  onGuess: () => guess.open(),
   onReset: resetToFirstRun,
+});
+shell.aboutPage.body.append(guess.rest);
+createPlanControls({
+  modeHosts: [mapModeHost, reportModeHost],
+  pointsHost,
+  lambdaHost,
+  settingsHost: routeSettingsCard,
+  messagesHost,
+  crosshairHost: shell.crosshairHost,
+  controller,
+  openMode: (mode) => navigate(mode === 'report' ? 'report' : 'map'),
+});
+
+/** Shows the screen the hash names and puts the mode in step with it. */
+function applyHash(): void {
+  const screen = screenFromHash(window.location.hash);
+  shell.showScreen(screen);
+  const mode = screen === 'report' ? 'report' : 'plan';
+  if (controller.getSnapshot().state.mode !== mode) controller.dispatch({ type: 'switchMode', mode });
+}
+window.addEventListener('hashchange', applyHash);
+
+// The header label: "example walk" while the Sample_Walk shows, otherwise the city name.
+controller.subscribe(({ state }) => {
+  shell.walkLabel.textContent = state.exampleActive
+    ? STRINGS.screens.exampleShort.text
+    : shown !== null
+      ? entryOf(shown.id).label
+      : '';
 });
 
 /** Sample_Data held while Demo_Mode is on. The Dark_Spot_List and overlays (task 14.5) read it. */
@@ -220,11 +281,16 @@ function onReport(type: ReportType): void {
 }
 
 const reportPanel = createReportPanel({
-  host: shell.panel,
+  host: shell.reportSheet.body,
   onReport,
   makeCsv: () => toCsv(listedSpots),
   download: downloadText,
 });
+// The route can still be drawn behind this sheet, so the Disclaimer stays on this screen too (6.9).
+shell.reportSheet.body.append(
+  el('p', { className: 'small-print', text: STRINGS.screens.reportPrivacy.text }),
+  el('p', { className: 'disclaimer', text: DISCLAIMER }),
+);
 
 /** Draws the card and the list from the current pack, notes and (while Demo_Mode is on) Sample_Data. */
 function renderReport(): void {
@@ -253,11 +319,12 @@ function renderReport(): void {
   });
 }
 
+/** True when the last Report_Mode tap found no street. Declared before the subscription below,
+ *  because subscribe() calls renderReport at once and renderReport writes this. */
+let nothingThere = false;
+
 // Registered after the Demo_Mode listener, so Sample_Data is already dropped when this runs.
 controller.subscribe(renderReport);
-
-/** True when the last Report_Mode tap found no street. */
-let nothingThere = false;
 
 /** The id of the Segment drawn under a screen point (a few pixels of slack for a finger), or null. */
 function segmentAt(point: { x: number; y: number }): string | null {
@@ -304,6 +371,18 @@ controller.subscribe(({ state, outcome }) => {
         settings: state.settings,
         medianConfidence: pack.plan.medianConfidence,
       }),
+      stretches: routeStretches(
+        outcome.gloam.pieces.map((p) => {
+          const edge = graph.edges[p.edge]!;
+          return {
+            // An empty name counts as no name, so the row reads "unnamed".
+            name: pack.byId.get(edge.segmentId)?.name || null,
+            tier: tierOf(p.edge),
+            confidence: edge.confidence,
+            lengthM: p.view.lengthM,
+          };
+        }),
+      ),
     });
     if (state.exampleActive && state.start !== null && state.end !== null && fittedFor !== state.start) {
       fittedFor = state.start;
@@ -408,6 +487,8 @@ function showSampleWalk(entry: ManifestEntry): void {
     start: { lon: start[0], lat: start[1] },
     end: { lon: end[0], lat: end[1] },
   });
+  // showExample returns to Plan_Mode; the screen decides the mode, so keep Report_Mode on its screen.
+  if (screenFromHash(window.location.hash) === 'report') controller.dispatch({ type: 'switchMode', mode: 'report' });
 }
 
 function discardPartial(): void {
@@ -469,4 +550,5 @@ function loadCity(entry: ManifestEntry): void {
   });
 }
 
+applyHash();
 loadCity(firstEntry);

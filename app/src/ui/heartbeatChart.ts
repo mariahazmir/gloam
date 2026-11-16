@@ -49,8 +49,12 @@ export function lowConfidenceStretches(series: HeartbeatSeries): Stretch[] {
   return out;
 }
 
-/** The chart, its marker key and the screen-reader summary, as one figure. */
-export function createHeartbeatChart(series: HeartbeatSeries): HTMLElement {
+/** Each chart gets its own ids, since the Map_Screen and the Route_Screen can both hold one. */
+let chartCount = 0;
+
+/** The chart, its marker key and the screen-reader summary, as one figure. compact drops the key and caption for the Map_Screen sheet. */
+export function createHeartbeatChart(series: HeartbeatSeries, opts: { compact?: boolean } = {}): HTMLElement {
+  const n = ++chartCount;
   const total = series.totalM > 0 ? series.totalM : 1;
   const x = (m: number): number => LEFT + (m / total) * PLOT_W;
   const y = (d: number): number => TOP + (1 - d) * PLOT_H;
@@ -64,6 +68,20 @@ export function createHeartbeatChart(series: HeartbeatSeries): HTMLElement {
     focusable: 'false',
   });
 
+  // The compact chart stretches to a short strip; base.css keeps strokes unscaled and hides the text.
+  if (opts.compact) root.setAttribute('preserveAspectRatio', 'none');
+  // The line runs lantern to pumpkin to glow, as in the design reference.
+  const gradientId = `heartbeat-gradient-${n}`;
+  const defs = svg('defs', {});
+  // User-space units, so a flat line (a box with no height) still gets its colour.
+  const gradient = svg('linearGradient', { id: gradientId, gradientUnits: 'userSpaceOnUse', x1: LEFT, y1: 0, x2: W - RIGHT, y2: 0 });
+  gradient.append(
+    svg('stop', { offset: 0, 'stop-color': PALETTE.lantern }),
+    svg('stop', { offset: 0.6, 'stop-color': PALETTE.pumpkin }),
+    svg('stop', { offset: 1, 'stop-color': PALETTE.glow }),
+  );
+  defs.append(gradient);
+  root.append(defs);
   // Low-confidence markers go under the line: a dashed band plus a diamond.
   const stretches = lowConfidenceStretches(series);
   for (const s of stretches) {
@@ -130,18 +148,19 @@ export function createHeartbeatChart(series: HeartbeatSeries): HTMLElement {
       svg('path', {
         d,
         fill: 'none',
-        stroke: PALETTE.lantern,
-        'stroke-width': 2,
+        stroke: `url(#${gradientId})`,
+        'stroke-width': 3,
+        'stroke-linecap': 'round',
         'stroke-linejoin': 'round',
         class: 'heartbeat-line',
       }),
     );
   }
 
-  const summaryId = 'heartbeat-summary';
+  const summaryId = `heartbeat-summary-${n}`;
   root.setAttribute('aria-describedby', summaryId);
-  const figure = el('figure', { className: 'heartbeat' }, el('figcaption', { className: 'heartbeat-title', text: STRINGS.chart.title.text }), root);
-  if (stretches.length > 0) figure.append(el('p', { className: 'heartbeat-key', text: STRINGS.chart.lowConfidenceKey.text }));
+  const figure = el('figure', { className: opts.compact ? 'heartbeat heartbeat-compact' : 'heartbeat' }, el('figcaption', { className: 'heartbeat-title', text: STRINGS.chart.title.text }), root);
+  if (stretches.length > 0 && !opts.compact) figure.append(el('p', { className: 'heartbeat-key', text: STRINGS.chart.lowConfidenceKey.text }));
   // Screen-reader summary: always in the page, hidden from sight only.
   figure.append(
     el('p', { className: 'sr-only', text: describeHeartbeat(series), attrs: { id: summaryId } }),

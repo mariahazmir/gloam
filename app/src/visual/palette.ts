@@ -16,12 +16,28 @@ export const GLASS = {
   borderWidth: '1.5px',
 } as const;
 
+/** Supporting tones from the design reference: wordmark amber, lit-line gold, soft text, fog violet and the bottom-sheet fill. */
+export const TONES = {
+  amber: '#ffb347',
+  litLine: '#ffc65a',
+  mist: '#F1E6FF',
+  fog: '#d79cff',
+  sheet: 'rgba(40, 12, 76, 0.62)',
+  /** Extruded buildings: a light violet, drawn see-through on the map. */
+  building: '#8a64b8',
+} as const;
+
 /** CSS custom properties set on the document root at start-up. */
 export const CSS_VARS: Readonly<Record<string, string>> = {
   '--pumpkin': PALETTE.pumpkin,
   '--lantern': PALETTE.lantern,
   '--glow': PALETTE.glow,
   '--dusk': PALETTE.dusk,
+  '--amber': TONES.amber,
+  '--lit-line': TONES.litLine,
+  '--mist': TONES.mist,
+  '--fog': TONES.fog,
+  '--sheet': TONES.sheet,
   '--night-top': NIGHT.top,
   '--night-bottom': NIGHT.bottom,
   '--glass-fill': GLASS.fill,

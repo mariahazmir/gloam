@@ -497,3 +497,24 @@ Credits: 4,000 at start (redeemed 8 Nov).
 - Kiro's 17 and 18 reports did not mention the live link, the Pages line or the licence file.
 - Berlin's example route has only 5.168% in the brighter tier, which is close to the 5% rule. A pipeline or tier change could break that real-pack test.
 - Credits: 5.91
+
+## 16 Nov: Spec 2.1, `web-app` (UI Fixes)
+
+**What I asked Kiro for**
+- A UI pass: split the app into five screens with their own addresses (map, route, report, how Gloam guesses, credits), restyled to my Claude Design boards, spec first (new Requirement 18, tasks 19.1 to 19.5).
+- After reviewing the spec I sent seven fixes: Property 35's trailing-slash rule, largest-remainder rounding for stretch lengths, no text copied from the design, routing settings on the Route screen, a tile label that uses Tier wording, stale hosting text, and the `reference.html` path.
+- Credits and licences are part of the design (MIT, repository link, OSM, OpenFreeMap, OpenMapTiles, fonts, privacy).
+
+**What Kiro did**
+- Built the five screens with hash addresses, the sheet with a grab handle, the route card, the compact heartbeat, and the new styling. 276 tests, then 280 after the fixes, tsc clean, 53 files.
+- It had started building before I reviewed the spec, so five of my fixes were not in the first pass. A second prompt made it report each as done, not done or done differently, and fix the rest. It rewrote 21 strings copied from the reference in its own words and added a test that scans for them.
+
+**What I caught**
+- Property 35 said any unknown string returns the map, but the design ignored a trailing slash and query, so the test would have contradicted itself.
+- Stretch lengths rounded one by one could add up to a different total than the route.
+- Strings copied from the design included claims with no data behind them ("likely busier"), and a tile that called estimated streets "likely lit".
+- The routing settings were on an explanation screen, away from the route.
+- Kiro wrote into `docs/kiro-log.md` again and took headless screenshots, both against my instructions. Its screenshots could not show the map.
+- Kiro found that the OpenStreetMap credit line disappears when tiles time out, because MapLibre drops credits for a hidden source. That breaks the always-visible attribution rule. I asked for the credit line to be drawn as ordinary page text. [ ] confirmed by blocking tile requests in DevTools
+
+- Credits: 175.53

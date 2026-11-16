@@ -433,12 +433,20 @@ A pure reducer `(state, action) => state`. State holds mode (`plan` or `report`)
 
 ### map/
 
-- `style.ts` returns the bundled style. `mapView.ts` creates the `maplibregl.Map` with `maxPitch: 60`, `attributionControl: { compact: false }` (always open, so it cannot be collapsed behind a button) and the always-visible attribution "OpenFreeMap © OpenMapTiles Data from OpenStreetMap" (each part a link) plus "© OpenStreetMap contributors", set as the vector source `attribution` in `style.ts` (Requirement 5.3). A test checks that the attribution string contains the three links and the contributors text. Panels reserve bottom space so nothing covers the attribution.
+- `style.ts` returns the bundled style. `mapView.ts` creates the `maplibregl.Map` with `maxPitch: 60`, `attributionControl: { compact: false }` (always open, so it cannot be collapsed behind a button) and the always-visible attribution "OpenFreeMap © OpenMapTiles Data from OpenStreetMap" (each part a link) plus "© OpenStreetMap contributors", set as the vector source `attribution` in `style.ts` (Requirement 5.3). A test checks that the attribution string contains the three links and the contributors text. The attribution control is placed `top-left` and moved by CSS into a strip under the header, above every sheet, so nothing covers it (Requirement 18.10).
 - Buildings use a `fill-extrusion` layer with `fill-extrusion-height` read from `height_m`. Buildings skipped by `parseBuildingsFile` are never added.
 - `layers.ts` adds the Segments source with `promoteId: 'id'` and `tier` and `conf` properties copied into each feature. The "your note" marker uses feature-state: the shell calls `map.setFeatureState({ source, id }, { noted: true })` when a note is saved or restored (and `false` when removed), and the marker layer filters or styles on `['feature-state', 'noted']`. No GeoJSON data is rebuilt when a note changes. The id passed is the pack's `id` property in its original type (a number in the shipped files), then the cohort layers, the "your note" marker layer (driven by MapLibre feature-state, see below), and the route layer last so the lantern path stays on top (Requirement 4.6).
 - Start and end markers (Requirement 6.12) are two `circle` layers on one GeoJSON source, added after the "your note" layer and before the route casing. Start is a filled lantern disc, end is a hollow pumpkin ring (larger, thicker stroke), so shape differs as well as colour. The pure `buildMarkersGeoJSON(start, end, snapTo)` gives each point its Snap position when `snapTo` returns one and its tapped position otherwise, so a marker shows as soon as the point is set.
+- Reference styling (Requirement 18.7): the route casing is white and the route line uses `line-gradient` from pumpkin to glow, so the route source is added with `lineMetrics: true`. The start disc is pumpkin with a white stroke, the end ring is a translucent night fill with a thicker white stroke. Buildings are extruded in a light violet (`TONES.building`) at 0.6 opacity.
 - `tileWatch.ts` implements the 5 s rule. When it fires, base layers get `visibility: none`, Segments stay on the plain background, and the message appears. Routing is unaffected (Requirements 5.7, 17.12).
 - The map layer reads frame counts with `requestAnimationFrame` and passes `fps` to `stepEffects` once per second.
+
+### ui/ screens (Requirement 18)
+- `state/screens.ts` (pure): `type Screen = 'map' | 'route' | 'report' | 'about' | 'credits'`, `screenFromHash(hash): Screen` (unknown or empty gives `'map'`, a trailing slash or query is ignored) and `hashOf(screen): string`. `hashOf` then `screenFromHash` returns the same screen.
+- `ui/shell.ts` builds one layer per screen. The map and its overlays (header, chip row, attribution strip, corner note, Crosshair) stay mounted. The Map_Screen sheet and the Report_Screen sheet sit over the map; the Route_Screen, How_Gloam_Guesses_Screen and Credits_Screen are full-page layers over it. `showScreen(screen)` sets `data-screen` on the shell, and CSS shows the matching layer. Screen changes are synchronous.
+- `main.ts` listens to `hashchange`. Entering `report` dispatches `switchMode: report`; any other screen dispatches `switchMode: plan`. The Mode_Switch buttons change the hash, so mode and screen never disagree.
+- `routing/stretches.ts` (pure): `routeStretches(pieces, info)` where `info(edge)` gives `{ segmentId, name, tier, confidence, lengthM }` for the piece's length. Consecutive pieces with the same `name` and `tier` merge into one stretch; the stretch confidence is the lowest of its pieces; lengths add. `estimatedCount(stretches)` counts stretches whose Tier is one of the three estimated Tiers. `wholeMetres(stretches)` gives the displayed lengths by the largest-remainder method: each length is floored, and the metres still needed to reach `Math.round(total)` go one each to the largest fractional parts, ties to the earlier stretch (Requirement 18.6).
+- The Map_Screen route card and tiles, the compact Heartbeat_Chart (the same chart with a smaller height and no key) and the Route_Screen list are drawn by `ui/routePanel.ts`. The Report_Screen reuses `ui/reportPanel.ts`. The four routing settings sit on the Route_Screen, in a card that the route views never redraw, so a change keeps focus on the toggle (Requirement 18.3). The How_Gloam_Guesses_Screen and Credits_Screen replace `ui/infoDialogs.ts` with `ui/guessScreen.ts` and `ui/creditsScreen.ts`; the validation text and link are drawn as before.
 
 ## Data Models
 
@@ -700,6 +708,14 @@ Reflection: the prework produced about 60 testable criteria. Redundant ones were
 *For any* generated input to the Graph_Builder, Tier_Assigner, Router, snapping, status rule and CSV functions, with `fetch`, `XMLHttpRequest`, `WebSocket` and `navigator.sendBeacon` replaced by stubs that fail the test when called, the number of calls during the run is 0.
 
 **Validates: Requirements 13.4, 13.6, 13.9, 16.16**
+
+### Property 34: Stretches cover the route exactly and never repeat a neighbour
+*For any* list of route pieces with names, Tiers, confidences and non-negative lengths, the stretches' lengths sum to the pieces' total length (within the Comparison_Tolerance), no two neighbouring stretches share both name and Tier, every stretch's confidence is the lowest confidence of the pieces it covers, and the estimated count is between 0 and the number of stretches. The whole-metre lengths from `wholeMetres` are non-negative integers, each less than 1 m from its exact length, and they sum to the rounded total length.
+**Validates: Requirements 18.2, 18.6**
+
+### Property 35: Screen addresses round-trip
+*For any* screen, `screenFromHash(hashOf(screen))` returns that screen. `screenFromHash` removes a leading `#` or `#/`, then everything from the first `/` or `?`, so a trailing slash and a query are ignored. *For any* string whose remainder after that removal is not a known screen name, `screenFromHash` returns `'map'`. Examples: `"#/route/"` and `"#/route?x=1"` give `'route'`; `"#/nonsense"`, `""` and `"#"` give `'map'`.
+**Validates: Requirement 18.1**
 
 ## Error Handling
 

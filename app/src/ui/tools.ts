@@ -2,15 +2,17 @@ import { STRINGS } from '../content/strings';
 import type { PlanController, PlanSnapshot } from '../state/planController';
 import { el } from './dom';
 
-// Legend, Demo_Mode and Reduced_Effects switches, About and guess buttons, and the Reset_Control
-// (Requirements 4.10, 14.1, 17.9, 17.11, 17.13). This module only draws and forwards what the user
-// does; main.ts applies the changes. Switches show their current state in words, not colour alone.
+// Legend, Demo_Mode and Reduced_Effects switches and the Reset_Control on the
+// How_Gloam_Guesses_Screen, plus the "SAMPLE DATA" chip in the map header (Requirements 4.10,
+// 14.1, 17.9, 17.11, 17.13, 18.5). This module only draws and forwards what the user does;
+// main.ts applies the changes. Switches show their current state in words, not colour alone.
 
 export interface ToolsOptions {
+  /** The How_Gloam_Guesses_Screen body. */
   host: HTMLElement;
+  /** The map header's chip row slot for the "SAMPLE DATA" chip. */
+  chipHost: HTMLElement;
   controller: PlanController;
-  onAbout(): void;
-  onGuess(): void;
   onReset(): void;
 }
 
@@ -24,32 +26,47 @@ export function sampleBadge(): HTMLElement {
   return el('span', { className: 'sample-badge', text: STRINGS.labels.sampleData.text });
 }
 
+/** A Legend line "Title: detail" shown as a card with the title in bold. The line itself is unchanged. */
+function legendCard(className: string, swatch: string, line: string): HTMLElement {
+  const cut = line.indexOf(': ');
+  const title = cut > 0 ? line.slice(0, cut) : line;
+  const detail = cut > 0 ? line.slice(cut + 2) : '';
+  return el(
+    'li',
+    { className: `legend-card ${className}`, attrs: { 'aria-label': line } },
+    el('i', { className: `legend-swatch ${swatch}`, attrs: { 'aria-hidden': 'true' } }),
+    el('div', { attrs: { 'aria-hidden': 'true' } }, el('div', { className: 'legend-title', text: title }), el('div', { className: 'legend-detail', text: detail })),
+  );
+}
+
 function legend(): HTMLElement {
-  const items: Array<[className: string, text: string]> = [
-    ['legend-swatch legend-glow', STRINGS.legend.glow.text],
-    ['legend-swatch legend-flicker', STRINGS.legend.flicker.text],
-    ['legend-swatch legend-fog', STRINGS.legend.fog.text],
-  ];
   return el(
     'section',
     { className: 'legend', attrs: { 'aria-label': STRINGS.tools.legendHeading.text } },
-    el('h3', { className: 'tools-heading', text: STRINGS.tools.legendHeading.text }),
     el(
       'ul',
       { className: 'legend-list' },
-      ...items.map(([cls, text]) =>
-        el('li', { className: 'legend-item' }, el('span', { className: cls, attrs: { 'aria-hidden': 'true' } }), el('span', { text })),
-      ),
+      legendCard('legend-card-glow', 'legend-glow', STRINGS.legend.glow.text),
+      legendCard('glass', 'legend-flicker', STRINGS.legend.flicker.text),
+      legendCard('glass', 'legend-fog', STRINGS.legend.fog.text),
+      legendCard('glass', 'legend-route', STRINGS.screens.legendRoute.text),
     ),
   );
 }
 
-/** A switch button: role="switch", with "on" or "off" in its text. */
-function switchButton(label: string): { button: HTMLButtonElement; set(on: boolean): void } {
-  const button = el('button', { className: 'plan-button tool-switch', attrs: { type: 'button', role: 'switch', 'aria-checked': 'false' } });
+/** A switch row: role="switch", with the label, a detail line, "on" or "off" in words, and a track. */
+function switchRow(label: string, detail: string): { button: HTMLButtonElement; set(on: boolean): void } {
+  const state = el('span', { className: 'switch-state' });
+  const button = el(
+    'button',
+    { className: 'switch-row', attrs: { type: 'button', role: 'switch', 'aria-checked': 'false' } },
+    el('span', { className: 'switch-text' }, el('span', { className: 'switch-label', text: label }), el('span', { className: 'switch-detail', text: detail })),
+    state,
+    el('span', { className: 'switch-track', attrs: { 'aria-hidden': 'true' } }),
+  );
   const set = (on: boolean): void => {
     button.setAttribute('aria-checked', String(on));
-    button.textContent = `${label}: ${on ? STRINGS.plan.on.text : STRINGS.plan.off.text}`;
+    state.textContent = on ? STRINGS.plan.on.text : STRINGS.plan.off.text;
   };
   set(false);
   return { button, set };
@@ -57,12 +74,13 @@ function switchButton(label: string): { button: HTMLButtonElement; set(on: boole
 
 export function createTools(opts: ToolsOptions): Tools {
   const { controller } = opts;
-
-  const demo = switchButton(STRINGS.tools.demoSwitch.text);
+  const effects = switchRow(STRINGS.tools.effectsSwitch.text, STRINGS.tools.effectsDetail.text);
+  const demo = switchRow(STRINGS.tools.demoSwitch.text, STRINGS.tools.demoDetail.text);
   const badge = sampleBadge();
+  const chip = sampleBadge();
+  opts.chipHost.append(chip);
   const demoError = el('p', { className: 'plan-message', text: STRINGS.errors.sampleDataLoad.text, attrs: { role: 'status' } });
   demoError.hidden = true;
-  const effects = switchButton(STRINGS.tools.effectsSwitch.text);
 
   demo.button.addEventListener('click', () =>
     controller.dispatch({ type: 'setDemo', demo: !controller.getSnapshot().state.demo }),
@@ -70,29 +88,23 @@ export function createTools(opts: ToolsOptions): Tools {
   effects.button.addEventListener('click', () =>
     controller.dispatch({ type: 'setReducedEffects', reducedEffects: !controller.getSnapshot().state.reducedEffects }),
   );
-
-  const action = (label: string, onClick: () => void): HTMLButtonElement => {
-    const b = el('button', { className: 'plan-button', text: label, attrs: { type: 'button' } });
-    b.addEventListener('click', onClick);
-    return b;
-  };
+  const reset = el('button', { className: 'secondary-button', text: STRINGS.labels.reset.text, attrs: { type: 'button' } });
+  reset.addEventListener('click', opts.onReset);
 
   opts.host.append(
+    legend(),
     el(
       'section',
-      { className: 'tools' },
-      legend(),
-      el('h3', { className: 'tools-heading', text: STRINGS.tools.heading.text }),
-      el('div', { className: 'tool-row' }, demo.button, badge),
+      { className: 'glass page-card switch-card', attrs: { 'aria-label': STRINGS.screens.settingsHeading.text } },
+      effects.button,
+      demo.button,
+      el('div', { className: 'demo-badge-row' }, badge),
       demoError,
-      el('div', { className: 'tool-row' }, effects.button),
-      el(
-        'div',
-        { className: 'tool-row' },
-        action(STRINGS.tools.openAbout.text, opts.onAbout),
-        action(STRINGS.tools.openGuess.text, opts.onGuess),
-        action(STRINGS.labels.reset.text, opts.onReset),
-      ),
+    ),
+    el(
+      'section',
+      { className: 'glass page-card', attrs: { 'aria-label': STRINGS.labels.reset.text } },
+      el('div', { className: 'tool-row' }, reset),
       el('p', { className: 'tool-note', text: STRINGS.tools.resetHint.text }),
     ),
   );
@@ -101,6 +113,7 @@ export function createTools(opts: ToolsOptions): Tools {
     demo.set(state.demo);
     effects.set(state.reducedEffects);
     badge.hidden = !state.demo; // sample data only appears while Demo_Mode is on
+    chip.hidden = !state.demo;
   });
 
   return {
