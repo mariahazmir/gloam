@@ -517,3 +517,14 @@ Credits: 4,000 at start (redeemed 8 Nov).
 - Kiro found that the OpenStreetMap credit line disappears when tiles time out, because MapLibre drops credits for a hidden source. That breaks the always-visible attribution rule. I asked for the credit line to be drawn as ordinary page text.
 
 - Credits: 175.53
+
+## 16 Nov: Spec 2.2, `web-app` (street search)
+
+- Ran tasks 20.1-20.17 in one go. tsc clean; vitest 60 files, 350 passed, 1 skipped (reference.html not in Kiro's checkout).
+- I caught: Kiro added focus-on-arrival despite my instruction (removed); a hedge in 20.7 that the index might depend on input order (checked); missing timing report.
+- Asked Kiro to fix six things after the 20.1 to 20.17 run: remove focus-on-arrival, check midpoint determinism, add chooseStreet to Property 31, update the announcement signature in design.md, give the inputs proper accessible names, and report timings.
+- I caught: Kiro added focus-on-arrival on #/route after I told it not to (a phone keyboard would pop up on arrival), so I had it removed. Kiro's 20.7 note said midpoints "may differ by an ulp" with input order. I asked it to prove the index is order-independent. A new test (Property 36 clause e, 100 runs, compared with ===) passed on the unchanged code, so the caveat was wrong. The inputs were named only "start"/"end", so they are now "Start street" / "End street".
+- Result: tsc clean; vitest 60 files, 354 passed, 1 skipped (the reference.html wording test, because the file is not in the checkout).
+- Timings in Node, median of 3: buildStreetIndex 12.6 ms (KL) to 27.7 ms (Manchester); one search for "st" 0.1 to 0.8 ms. Phone timing not measured (target 100 ms, still open).
+- Not browser-tested. 20.18 (statistics script) is mine to run.
+- Credits: 62.97
