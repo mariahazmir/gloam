@@ -497,4 +497,3 @@ Credits: 4,000 at start (redeemed 8 Nov).
 - Kiro's 17 and 18 reports did not mention the live link, the Pages line or the licence file.
 - Berlin's example route has only 5.168% in the brighter tier, which is close to the 5% rule. A pipeline or tier change could break that real-pack test.
 - Credits: 5.91
-
