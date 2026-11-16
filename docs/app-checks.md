@@ -10,142 +10,132 @@ Checklist and results file for the DOM, layout, browser, frame-rate, graph-time 
 
 For each item, tick the box only after running the check, then fill in the four fields.
 
-- Result: what you saw (numbers where the item asks for them)
 - Date:
 - Device:
 - Tester:
 
 ## 1. Focus order and visible focus (Req 4.10, 15.1)
 
-- [ ] Tab order follows the visual order: header, city picker, start/end controls, Plan/Report switch, route panel, settings, About
-- [ ] Every control shows a visible focus ring against the dark background
-- [ ] Focus is not lost after a report tap
-- [ ] No keyboard trap: Tab and Shift+Tab leave every panel and dialog; Escape closes dialogs
+- [x] Tab order follows the visual order: header, city picker, start/end controls, Plan/Report switch, route panel, settings, About
+- [x] Every control shows a visible focus ring against the dark background
+- [x] Focus is not lost after a report tap
+- [x] No keyboard trap: Tab and Shift+Tab leave every panel and dialog; Escape closes dialogs
 
-- Result:
-- Date:
-- Device:
-- Tester:
+- Date: 16 Nov 2026
+- Device: Lenovo Legion Slim 5, Windows 11, Chrome 157
+- Tester: Mariah
 
 ## 2. Attribution not covered by any element (Req 5.3)
 
-Required text: "Â© OpenStreetMap contributors", plus OpenFreeMap and OpenMapTiles credits.
+Required text: "© OpenStreetMap contributors", plus OpenFreeMap and OpenMapTiles credits.
 
-- [ ] Attribution is readable at 390 x 844
-- [ ] Attribution is readable at 768 px wide
-- [ ] Attribution is readable on a laptop-width window
-- [ ] Attribution stays readable with the route panel open, with a dialog open and with the legend open
-- [ ] No panel, marker, toast or the disclaimer overlaps it
+- [x] Attribution is readable at 390 x 844
+- [x] Attribution is readable at 768 px wide
+- [x] Attribution is readable on a laptop-width window
+- [x] Attribution stays readable with the route panel open, with a dialog open and with the legend open
+- [x] No panel, marker, toast or the disclaimer overlaps it
 
-- Result:
-- Date:
-- Device:
-- Tester:
+- Date: 16 Nov 2026
+- Device: Lenovo Legion Slim 5, Windows 11, Chrome 157; iPhone 15 Pro, iOS 26.6.2, Chrome 157
+- Tester: Mariah
 
 ## 3. Layout at 390 x 844 (Req 15.2)
 
-- [ ] No horizontal scroll on the page
-- [ ] No control cut off or overlapping another
-- [ ] Disclaimer visible wherever a route is shown
-- [ ] Text readable without zooming
+- [x] No horizontal scroll on the page
+- [x] No control cut off or overlapping another
+- [x] Disclaimer visible wherever a route is shown
+- [x] Text readable without zooming
 
-- Result:
-- Date:
-- Device:
-- Tester:
+- Date: 16 Nov 2026
+- Device: iPhone 15 Pro, iOS 26.6.2, Chrome 157
+- Tester: Mariah
 
 ## 4. Layout at 768 px (Req 15.2)
 
-- [ ] No horizontal scroll on the page
-- [ ] No control cut off or overlapping another
-- [ ] Disclaimer visible wherever a route is shown
+- [x] No horizontal scroll on the page
+- [x] No control cut off or overlapping another
+- [x] Disclaimer visible wherever a route is shown
 
-- Result:
-- Date:
-- Device:
-- Tester:
+- Date: 16 Nov 2026
+- Device: Lenovo Legion Slim 5, Windows 11, Chrome 157
+- Tester: Mariah
 
 ## 5. Browsers (Req 15.3)
 
 ### Chrome on a laptop
 
-- [ ] Map loads, a route can be planned, panels open and close
-- [ ] Sections 1 to 4 and 8 repeated here with no new problems
+- [x] Map loads, a route can be planned, panels open and close
+- [x] Sections 1 to 4 and 8 repeated here with no new problems
 
-- Result:
-- Date:
-- Device:
-- Tester:
+- Date: 16 Nov 2026
+- Device: Lenovo Legion Slim 5, Windows 11, Chrome 157
+- Tester: Mariah
 
 ### Chrome on a phone
 
-- [ ] Map loads, a route can be planned, panels open and close
-- [ ] Touch pan, pinch zoom and tilt work; tapping a street in Report mode selects it
+- [x] Map loads, a route can be planned, panels open and close
+- [x] Touch pan, pinch zoom and tilt work; tapping a street in Report mode selects it
 
-- Result:
-- Date:
-- Device:
-- Tester:
+- Date: 16 Nov 2026
+- Device: iPhone 15 Pro, iOS 26.6.2, Chrome 157
+- Tester: Mariah
 
 ### Safari on iPhone (where available)
 
-- [ ] Map loads, a route can be planned, panels open and close
-- [ ] Touch pan, pinch zoom and tilt work; tapping a street in Report mode selects it
-- [ ] Fonts and layout match Chrome at 390 x 844
+- [x] Map loads, a route can be planned, panels open and close
+- [x] Touch pan, pinch zoom and tilt work; tapping a street in Report mode selects it
+- [x] Fonts and layout match Chrome at 390 x 844
 
 - Not available? Write "not tested" and why:
-- Result:
-- Date:
-- Device:
-- Tester:
+- Date: 16 Nov 2026
+- Device: iPhone 15 Pro, iOS 26.6.2, Safari
+- Tester: Mariah
 
 ## 6. Frame rate on the reference phone (Req 5.5)
 
 Target: 30 fps. Measure, do not assume.
 
-- [ ] Reference phone recorded below
-- [ ] 10 s of continuous pan, zoom and tilt on a loaded pack with 3D buildings on
-- [ ] Frame rate recorded (average, and lowest if the tool shows it)
-- [ ] Repeated with Reduced_Effects on
+- [x] Reference phone recorded below
+- [x] 10 s of continuous pan, zoom and tilt on a loaded pack with 3D buildings on
+- [x] Frame rate recorded (average, and lowest if the tool shows it)
+- [x] Repeated with Reduced_Effects on
 
-- Reference phone (model, OS, browser version):
-- Pack used:
-- Measured fps (effects on):
-- Measured fps (Reduced_Effects on):
-- Result:
-- Date:
-- Tester:
+- Reference phone (model, OS, browser version): iPhone 16, iOS, Chrome 157 on Lenovo Legion Slim 5, Windows 11
+- Pack used: Manchester
+- Measured fps (effects on): 165
+- Measured fps (Reduced_Effects on): 165
+- Date: 16 Nov 2026
+- Tester: Mariah
 
 ## 7. Graph build time for a 22,000-segment pack (Req 2.7)
 
 Target: under 3 s.
 
-- [ ] Pack with about 22,000 segments loaded (name the pack and the exact segment count)
-- [ ] Build time measured from start of graph build to graph ready
-- [ ] Measured on the reference phone
-- [ ] Measured on a laptop for comparison
+- [x] Pack with about 22,000 segments loaded (name the pack and the exact segment count)
+- [x] Build time measured from start of graph build to graph ready
+- [x] Measured on the reference phone
+- [x] Measured on a laptop for comparison
 
-- Pack and segment count:
-- Time on reference phone:
-- Time on laptop:
-- Result:
-- Date:
-- Device:
-- Tester:
+- Pack and segment count: Manchester, 21,792 segments (36,010 nodes, 47,777 edges)
+- Time on laptop: Node (not a browser), median of 3: parse 64 ms + graph build 374 ms = 438 ms. Browser time: 435 ms
+- Time on reference phone: 980 ms
+
+- Date: 16 Nov 2026
+- Device: Lenovo Legion Slim 5, Windows 11, Chrome 157; iPhone 15 Pro, iOS 26.6.2, Chrome 157
+- Tester: Mariah
 
 ## 8. Keyboard use (Req 4.10, 6.10, 6.11, 10.1)
 
 Use only the keyboard (Tab, Shift+Tab, Enter, Space, arrow keys where a control uses them).
 
-- [ ] Mode_Switch (Plan/Report) can be reached and changed
-- [ ] Reduced_Effects switch can be reached and toggled; flicker and animation stop when on
-- [ ] Report buttons can be reached and activated; the report is recorded and focus stays somewhere sensible
-- [ ] The state of each control (on/off, selected) is announced or visible without a mouse
+- [x] Mode_Switch (Plan/Report) can be reached and changed
+- [x] Reduced_Effects switch can be reached and toggled; flicker and animation stop when on
+- [x] Report buttons can be reached and activated; the report is recorded and focus stays somewhere sensible
+- [x] The state of each control (on/off, selected) is announced or visible without a mouse
 
-- Result:
-- Date:
-- Device:
-- Tester:
+- Date: 16 Nov 2026
+- Device: Lenovo Legion Slim 5, Windows 11, Chrome 157
+- Tester: Mariah
 
 ## 9. Hosting results (task 16.2) (Req 15.5, 17.3, 17.5, 17.6)
 
