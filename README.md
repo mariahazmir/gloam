@@ -6,28 +6,52 @@
 glowing, which are flickering, and which are swallowed by fog, then plans a
 route that trades a few extra minutes for better light.
 
-Built with Kiro for **Kiroween 2026** (Costume Contest).
+Built with [Kiro](https://kiro.dev) for **Kiroween 2026** (Costume Contest 🎃).
 
-**Live app:** [Click here!](https://gloam.tapau.me/)
+**[Walk into the Gloam →](https://gloam.tapau.me/)**  ·  **Demo video:** [YouTube link coming soon]
 
-**Demo video:** [YouTube link coming soon]
+## Why I made this
 
-## The problem
+I'm a city girl, born and raised in Kuala Lumpur, and I LOVE my city. I love cafe-hopping, taking pics, playing dress-up, and I take
+public transport because driving in KL is a traffic _nightmare_. But public
+transport only takes you so far, so the last bit is usually on foot. More than
+once my friends and I have ended up in a dark, sketchy walkway and thought, well,
+*nope*.
 
-Most cities don't keep a public record of which streets are lit. 
-So Gloam does some detective work: it reads clues from the map
-(road type, bus stops, food places, shops, how packed the buildings are) and
-makes an educated guess.
+Then I came to Ningbo on a study exchange, and suddenly lit walkways were EVERYWHERE.
+It's such an easy city to walk at night. So I started wondering: why can't KL 
+have that feeling too?
+
+Thing is, KL doesn't have the data. In OpenStreetMap, only about 0.8% of KL's
+vehicle roads are tagged as lit. Night-walking apps usually lean on lighting
+records that already exist, so cities like KL get left in the dark (pun-intended, wink wink).
+
+So Gloam does some detective work instead. It reads clues from the map (road
+type, bus stops, food places, shops, how packed the buildings are) and makes an
+educated guess.
 
 ## What you'll see
 
-- **Steady glow:** confirmed lit by people who walked it
+- **Steady glow:** streets already mapped as lit
 - **Flicker:** a guess. The more it flickers, the less sure Gloam is
 - **Fog:** likely dark, or not enough to go on
 - **Lantern path:** your chosen way home
+- **Heartbeat line:** how the dread builds along your whole route, before you
+  leave
 
-Think Gloam got a street wrong? Tap once to correct it. Enough agreeing
-reports and the glow updates. Old reports fade.
+Tap a street Gloam got wrong to correct it. Enough agreeing reports and the
+glow updates. Old reports fade, because lights get fixed and lights break.
+
+## Try it
+
+1. Open the [live app](https://gloam.tapau.me/). A sample walk loads so you can
+   see glow, flicker and fog straight away.
+2. Pick a city: Kuala Lumpur, London, Seattle, Berlin or Manchester.
+3. Type a street name (or tap the map) to set your start and end.
+4. Drag the dread slider and watch the lantern path bend towards better light.
+5. Switch on your own dread settings: dark, empty, enclosed, long stretches.
+
+Prefer less flicker? There's a reduced-effects switch!
 
 ## Honest by design
 
@@ -35,26 +59,42 @@ Gloam estimates which streets are likely well lit from map data. Estimates can
 be wrong, and Gloam can't tell you whether a route is safe. Trust your
 surroundings.
 
+It never says "safe route", it uses no crime data, and it shows its uncertainty
+on the map instead of hiding it. In the cities where the data lets me check, the
+model beats the simple baselines, but it does **not** beat the strongest one
+(road type plus footway kind) in Berlin or Manchester. KL couldn't be validated,
+so its estimates are shown as estimates. All the numbers, good and not so good,
+are in [`docs/findings.md`](docs/findings.md).
+
 ## Your secrets stay with you
 
-No accounts, no sign-in. Where you start, where you're going and your route
-never leave your device.
+No accounts, no sign-in. Where you start, where you're going, what you type in
+street search and your route never leave your device.
 
-## Run it
+## What's next
 
-The web app lives in `app/`. See [The app](#the-app) below for setup, tests,
-credits and privacy. The offline pipeline is described under
-[Pipeline notes](#pipeline-notes).
+Not built yet, but this is where I'd like Gloam to go:
+
+- **More cities.** Today Gloam ships five fixed city packs. The method isn't
+  tied to them, so I'd like to add more.
+- **A map for anywhere.** Eventually, pan anywhere and get estimates, like any
+  other map. That needs the pipeline to run on demand, plus checks of how well
+  the guesses hold up in each new place. Where OpenStreetMap is sparse,
+  confidence will be lower, and I won't claim it works everywhere until it's
+  been tested.
+- **Better street search**, so one street comes back as one result.
+- **Real night-walk ground truth for KL.**
 
 ## Built with Kiro
 
 Specs, steering docs and hooks live in [`.kiro/`](.kiro/). The story of how
-Kiro helped build this is in [`docs/kiro-log.md`](docs/kiro-log.md).
+Kiro helped build this (including where it got things wrong) is in
+[`docs/kiro-log.md`](docs/kiro-log.md).
 
 - **Specs:** two Build a Feature specs, `gloam-data-pipeline` and `gloam-web-app`.
 - **Steering:** product, tech, structure and design rules that every spec inherits.
-- **Hooks:** one protects my hand-written Kiro log, one runs the wording tests
-  on save, and one type-checks when the agent stops.
+- **Hooks:** one protects my hand-written Kiro log, one runs the wording tests on
+  save, and one type-checks when the agent stops.
 - **Property-based testing:** Hypothesis for the pipeline, fast-check for the app.
 
 ## Data credits
