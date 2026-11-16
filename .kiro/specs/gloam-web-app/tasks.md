@@ -371,12 +371,12 @@ Rules for every task:
     - The Route_Screen renders with no route: back control, both Street_Comboboxes, the four routing settings; route-only parts (chart, stretches, comparison, Disclaimer) hidden or replaced by a short "no route yet" line; nothing is auto-focused on arrival, on `hashchange` or on page load (focus goes to the screen title, as for every screen)
     - Do not change `ui/guidance.ts`; the "change start or end" control, if present, never holds or replaces "Search streets"
     - _Requirements: 6.10, 18.2, 18.3, 18.9, 19.1_
-  - [ ] 20.18 MANUAL, USER ONLY: run the statistics script and confirm its output before citing it
+  - [x] 20.18 MANUAL, USER ONLY: run the statistics script and confirm its output before citing it
     - The user runs the command from the design (`app/`: `npx vite build --ssr scripts/streetNameStats.ts --outDir .stats-tmp --emptyOutDir; node .stats-tmp/streetNameStats.js; Remove-Item -Recurse -Force .stats-tmp`) and confirms the output. Cite the results in `docs/` only after that confirmation.
     - The executor MUST NOT run this, tick it, or write any statistic into `docs/` without the user's confirmation
     - _Requirements: 19.11_
 
-- [ ] 21. Checkpoint - Ensure all tests pass
+- [x] 21. Checkpoint - Ensure all tests pass
   - Run `npx tsc --noEmit` and `npx vitest --run` in `app/`, show the output of both, and confirm both are clean. Ask the user if questions arise.
 
 ## Notes
