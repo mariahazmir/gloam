@@ -18,8 +18,6 @@ export interface ManifestEntry {
   id: PackId;
   /** City_Picker text. */
   label: string;
-  /** Only kl has one. */
-  description?: string;
   segmentsUrl: string;
   buildingsUrl: string;
   sampleWalk: { start: [lon: number, lat: number]; end: [lon: number, lat: number] };
@@ -36,12 +34,10 @@ function entry(
   label: string,
   start: [number, number],
   end: [number, number],
-  description?: string,
 ): ManifestEntry {
   return {
     id,
     label,
-    ...(description !== undefined ? { description } : {}),
     segmentsUrl: urlFor(id, 'segments'),
     buildingsUrl: urlFor(id, 'buildings'),
     sampleWalk: { start, end },
@@ -51,13 +47,7 @@ function entry(
 /** Five shipped packs. Seattle is first and is the first-run pack. */
 export const MANIFEST: ReadonlyArray<ManifestEntry> = [
   entry('seattle', 'Seattle', [-122.31081, 47.61418], [-122.31006, 47.60694]),
-  entry(
-    'kl',
-    'Kuala Lumpur',
-    [101.71795, 3.14787],
-    [101.71923, 3.15581],
-    'the case where lighting records are missing',
-  ),
+  entry('kl', 'Kuala Lumpur', [101.71795, 3.14787], [101.71923, 3.15581]),
   entry('london', 'London', [-0.15445, 51.50584], [-0.14145, 51.50186]),
   entry('berlin', 'Berlin', [13.42469, 52.52586], [13.4392, 52.52948]),
   entry('manchester', 'Manchester', [-2.24257, 53.49918], [-2.2321, 53.49495]),

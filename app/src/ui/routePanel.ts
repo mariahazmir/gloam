@@ -87,7 +87,7 @@ function differences(c: RouteComparison): HTMLElement {
 function routeCard(c: RouteComparison): HTMLElement {
   return el(
     'div',
-    { className: 'route-card sheet-keep' },
+    { className: 'route-card' },
     el(
       'div',
       {},
@@ -171,9 +171,9 @@ export function createRoutePanel(hosts: RoutePanelHosts): RoutePanel {
           el('div', { className: 'sheet-extra' }, createHeartbeatChart(model.series, { compact: true })),
         ),
       );
-      const details = link('route', STRINGS.screens.seeDetails.text, 'primary-button sheet-keep');
+      const details = link('route', STRINGS.screens.seeDetails.text, 'primary-button');
       details.append(el('span', { className: 'button-dot', attrs: { 'aria-hidden': 'true' } }));
-      hosts.footer.replaceChildren(details, el('p', { className: 'disclaimer sheet-keep', text: DISCLAIMER }));
+      hosts.footer.replaceChildren(details, el('p', { className: 'disclaimer', text: DISCLAIMER }));
 
       const metres = wholeMetres(stretches);
       hosts.page.replaceChildren(

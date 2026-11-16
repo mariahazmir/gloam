@@ -101,9 +101,8 @@ describe('City_Picker manifest', () => {
     expect(MANIFEST).toHaveLength(5);
   });
 
-  it('only kl has the description', () => {
-    const described = MANIFEST.filter((e) => e.description !== undefined);
-    expect(described.map((e) => e.id)).toEqual(['kl']);
-    expect(described[0]!.description).toBe('the case where lighting records are missing');
+  it('no entry has a description: the picker shows the city name only (Requirement 1.3)', () => {
+    expect(MANIFEST).toHaveLength(5);
+    for (const e of MANIFEST) expect(Object.keys(e).sort()).toEqual(['buildingsUrl', 'id', 'label', 'sampleWalk', 'segmentsUrl']);
   });
 });

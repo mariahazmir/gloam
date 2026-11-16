@@ -300,6 +300,8 @@ Rules for every task:
     - _Requirements: 4.6, 6.12, 18.7_
   - [x] 19.6 Spec fixes: Property 35 examples, largest-remainder stretch metres (Property 34), own wording with a reference-text test, routing settings on the Route_Screen, add the screens to `docs/app-checks.md`
     - _Requirements: 18.1, 18.3, 18.5, 18.6, 18.11_
+  - [x] 19.7 Compact collapsed sheet, no city description, no estimates note, glass attribution strip
+    - _Requirements: 1.3, 1.8, 18.9, 18.10_
 
 ## Notes
 
