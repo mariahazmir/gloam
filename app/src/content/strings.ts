@@ -177,6 +177,7 @@ export const STRINGS = {
     ),
     noAccounts: g('There are no accounts and no sign-in. Notes you add are stored on this device only.'),
     mapCredit: g('Map data © OpenStreetMap contributors. Tiles from OpenFreeMap, schema from OpenMapTiles.'),
+    fontLicences: g('Font licences (SIL Open Font License 1.1)'),
     cityHeading: g('About the loaded city'),
     noCity: g('No city is loaded yet.'),
   },

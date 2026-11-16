@@ -41,6 +41,14 @@ export function createAboutDialog(): AboutDialog {
     para(STRINGS.about.tiles.text),
     para(STRINGS.about.noAccounts.text),
     para(STRINGS.about.mapCredit.text),
+    el(
+      'p',
+      {},
+      el('a', {
+        text: STRINGS.about.fontLicences.text,
+        attrs: { href: `${import.meta.env.BASE_URL}font-licences.txt`, target: '_blank', rel: 'noopener' },
+      }),
+    ),
     city,
     el('p', { className: 'disclaimer', text: DISCLAIMER }),
   ]);

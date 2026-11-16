@@ -42,7 +42,9 @@ never leave your device.
 
 ## Run it
 
-[Setup steps coming soon]
+The web app lives in `app/`. See [The app](#the-app) below for setup, tests,
+credits and privacy. The offline pipeline is described under
+[Pipeline notes](#pipeline-notes).
 
 ## Built with Kiro
 
@@ -109,3 +111,71 @@ a measurement.
 
 Every score is an estimate from map data, shown with a confidence. The files
 in `data/` are sample data.
+
+## The app
+
+Live app: https://gloam.tapau.me/
+
+The app in `app/` is a dark 2.5D map built with TypeScript, Vite and
+MapLibre GL JS. It loads small precomputed city packs from `data/`, draws each
+street as glow, flicker or fog, and plans routes in your browser. A slider
+trades walking distance against dread, so you can see a shorter route next to
+one that favours better-lit streets. Every score is an estimate from map data,
+shown with its confidence. There is a reduced-effects switch for people who
+want no flicker or animation.
+
+### Run and test the app
+
+Run these from the `app/` folder:
+
+```
+npm ci
+npm run dev
+npx tsc --noEmit
+npx vitest --run
+```
+
+- `npm ci` installs the exact dependencies from `package-lock.json`.
+- `npm run dev` starts the Vite dev server and prints the local address.
+- `npx tsc --noEmit` type-checks the code.
+- `npx vitest --run` runs the unit and property-based tests once.
+
+A GitHub Pages build is available with `npm run build:pages` (base path `/gloam/`).
+
+### Not a safety tool
+
+Gloam does not say that any street or route is safe. It shows which streets
+are likely better lit or likely darker than most streets in the same city, and
+it can be wrong. Treat it as one input and trust your surroundings.
+
+Disclaimer, shown on every screen that shows a route:
+
+> Gloam estimates which streets are likely well lit from map data. Estimates can
+> be wrong, and Gloam can't tell you whether a route is safe. Trust your
+> surroundings.
+
+### Privacy
+
+- No accounts and no sign-in.
+- Start points, end points and routes stay on your device. Routing runs in the
+  browser, and no route request is sent over the network.
+- Corrections are kept in your browser's local storage only. Each one holds the
+  street segment id, the report type and the date. It holds no name, device
+  identifier or location trail.
+- The map tile provider can see the area you are viewing, as with any web map.
+  It does not see your routes or your start and end points.
+
+### App data credits
+
+- Map data © OpenStreetMap contributors, under the
+  [Open Database License (ODbL)](https://www.openstreetmap.org/copyright).
+- Map tiles from [OpenFreeMap](https://openfreemap.org).
+- Tile schema and vector data from [OpenMapTiles](https://openmaptiles.org).
+- Fonts bundled with the app, both under the SIL Open Font License 1.1:
+  Caprasimo (Copyright 2023 The Caprasimo Project Authors) and DM Sans
+  (Copyright 2014 The DM Sans Project Authors). Full copyright lines and licence
+  text are in [docs/font-licences.txt](docs/font-licences.txt).
+
+The app shows these three attributions on the map wherever it appears. The city
+packs in `data/` and the community totals in the demo are sample data and are
+labelled that way in the app.

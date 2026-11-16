@@ -1,4 +1,4 @@
-﻿# Gloam app checks
+# Gloam app checks
 
 Checklist and results file for the DOM, layout, browser, frame-rate, graph-time and hosting checks of the web app.
 
@@ -149,54 +149,41 @@ Use only the keyboard (Tab, Shift+Tab, Enter, Space, arrow keys where a control 
 
 ## 9. Hosting results (task 16.2) (Req 15.5, 17.3, 17.5, 17.6)
 
-Run on 12 Nov 2026 (10:01 +08:00) from the developer's machine (clock at +08:00; exact location not verified; the edge node that answered was LAX) with `app/scripts/checkHost.ts` against https://gloam.onrender.com/. Only what was measured is recorded. Empty items are not yet measured.
+Run on 12 Nov 2026 (Shanghai time, +08:00) from the developer's machine with `app/scripts/checkHost.ts` against https://gloam.onrender.com/. Only what was measured is recorded. Empty items are not yet measured.
 
 - Deployed URL: https://gloam.onrender.com/
+
+An earlier run on 12 Nov 2026 FAILED the compression check: the packs were served as `binary/octet-stream` with no `Content-Encoding`. This was fixed in task 16.3 (built packs now emit as `.json`), and the run below is after that fix and redeploy.
 
 ### checkHost output (verbatim)
 
 ```
 PASS  HTTPS
 PASS  page reachable (200)
-FAIL  https://gloam.onrender.com/assets/berlin.buildings-BZ7f3Ivm.geojson  reachable=true encoding=none
-FAIL  https://gloam.onrender.com/assets/berlin.segments-ClvanFG1.geojson  reachable=true encoding=none
-FAIL  https://gloam.onrender.com/assets/kl.buildings-BBl4d63W.geojson  reachable=true encoding=none
-FAIL  https://gloam.onrender.com/assets/kl.segments-DuqRM6vd.geojson  reachable=true encoding=none
-FAIL  https://gloam.onrender.com/assets/london.buildings-CoN6ifw3.geojson  reachable=true encoding=none
-FAIL  https://gloam.onrender.com/assets/london.segments-CQkqWw-o.geojson  reachable=true encoding=none
-FAIL  https://gloam.onrender.com/assets/manchester.buildings-NgzPwU0d.geojson  reachable=true encoding=none
-FAIL  https://gloam.onrender.com/assets/manchester.segments-DXM6p5Xg.geojson  reachable=true encoding=none
-FAIL  https://gloam.onrender.com/assets/seattle.buildings-CJS0d0JW.geojson  reachable=true encoding=none
-FAIL  https://gloam.onrender.com/assets/seattle.segments-DSEsUxXh.geojson  reachable=true encoding=none
-FAIL  https://gloam.onrender.com/data/berlin.buildings.geojson  reachable=false encoding=br
-FAIL  https://gloam.onrender.com/data/berlin.segments.geojson  reachable=false encoding=br
-FAIL  https://gloam.onrender.com/data/kl.buildings.geojson  reachable=false encoding=br
-FAIL  https://gloam.onrender.com/data/kl.segments.geojson  reachable=false encoding=br
-FAIL  https://gloam.onrender.com/data/london.buildings.geojson  reachable=false encoding=br
-FAIL  https://gloam.onrender.com/data/london.segments.geojson  reachable=false encoding=br
-FAIL  https://gloam.onrender.com/data/manchester.buildings.geojson  reachable=false encoding=br
-FAIL  https://gloam.onrender.com/data/manchester.segments.geojson  reachable=false encoding=br
-FAIL  https://gloam.onrender.com/data/seattle.buildings.geojson  reachable=false encoding=br
-FAIL  https://gloam.onrender.com/data/seattle.segments.geojson  reachable=false encoding=br
-FAIL  https://gloam.onrender.com/e.properties.geojson  reachable=false encoding=br
-FAIL  https://gloam.onrender.com/this._data.geojson  reachable=false encoding=br
-FAIL  https://gloam.onrender.com/this.workerOptions.geojson  reachable=false encoding=br
-Some checks failed.
+PASS  https://gloam.onrender.com/assets/berlin.buildings-BZ7f3Ivm.json  reachable=true encoding=br
+PASS  https://gloam.onrender.com/assets/berlin.segments-ClvanFG1.json  reachable=true encoding=br
+PASS  https://gloam.onrender.com/assets/kl.buildings-BBl4d63W.json  reachable=true encoding=br
+PASS  https://gloam.onrender.com/assets/kl.segments-DuqRM6vd.json  reachable=true encoding=br
+PASS  https://gloam.onrender.com/assets/london.buildings-CoN6ifw3.json  reachable=true encoding=br
+PASS  https://gloam.onrender.com/assets/london.segments-CQkqWw-o.json  reachable=true encoding=br
+PASS  https://gloam.onrender.com/assets/manchester.buildings-NgzPwU0d.json  reachable=true encoding=br
+PASS  https://gloam.onrender.com/assets/manchester.segments-DXM6p5Xg.json  reachable=true encoding=br
+PASS  https://gloam.onrender.com/assets/seattle.buildings-CJS0d0JW.json  reachable=true encoding=br
+PASS  https://gloam.onrender.com/assets/seattle.segments-DSEsUxXh.json  reachable=true encoding=br
+PASS  https://gloam.onrender.com/assets/sample-data-BdC1iuu5.json  reachable=true encoding=br
+All checks passed.
 ```
-
-Extra check with `curl -I -H "Accept-Encoding: br, gzip"` on `/assets/kl.segments-DuqRM6vd.geojson`: 200, `Content-Type: binary/octet-stream`, `Content-Length: 3147509`, no `Content-Encoding` header. `/data/kl.segments.geojson` returned 404 with a 1-byte body.
 
 ### What the output means
 
-- **Pack files are NOT compressed (check failed).** The 10 real pack files under `/assets/` (5 cities x segments and buildings) are reachable but sent with no Content-Encoding. They are served as `binary/octet-stream`, which the host most likely does not compress. KL segments alone is about 3.1 MB uncompressed. This is a real finding that needs a fix (for example, ship `.br`/`.gz` files, or change how the files are served so they get a compressible type). Not fixed in this task.
-- **The 13 `reachable=false` lines are not real pack files.** The 10 `/data/*.geojson` paths are source paths found in the built JavaScript, but they do not exist on the host (404); the built files live under `/assets/` with hashed names. The 3 others (`e.properties.geojson`, `this._data.geojson`, `this.workerOptions.geojson`) are text fragments from the map library code that the script's path finder matched by mistake. The `encoding=br` on those lines is from the 404 error page, not a pack file. The script's path finder over-matches, so its exit status is "failed" even once the real files are fixed. Not changed in this task.
-- HTTPS and the page being reachable passed. The `Strict-Transport-Security` header was present.
+- **Pack files are compressed (check passed).** All 11 files under `/assets/` (the ten city packs plus `sample-data`) are reachable and served with `Content-Encoding: br`. The path finder was tightened in task 16.3, so only real `/assets/` packs are checked; the earlier false failures for `/data/*.geojson` source paths and map-library strings are gone.
+- HTTPS and the page being reachable passed.
 
 ### Checklist
 
 - [x] HTTPS: PASS (checkHost, 12 Nov 2026)
-- [ ] Pack files compressed (Content-Encoding: gzip or Brotli): **FAILED on 12 Nov 2026**, see above. Re-run after the fix.
-  - Content-Encoding per pack file: `none` for all 10 files under `/assets/` (listed in the output above)
+- [x] Pack files compressed (Content-Encoding: gzip or Brotli): PASS (checkHost, 12 Nov 2026). An earlier run the same day failed (served as `binary/octet-stream`, no `Content-Encoding`); fixed in task 16.3.
+  - Content-Encoding per pack file: `br` for all 11 files under `/assets/` (the ten packs plus `sample-data`, listed in the output above)
 - [ ] URL stable (the same URL stays in use for the whole period): not yet checked
 - [ ] Up from 16 Dec to 29 Jan: **recheck before submitting.** Only a single reading on 12 Nov 2026 exists. Rechecked on: (empty)
 - [ ] Loads within 10 s on 10 Mbit/s from the US: not yet measured, to be filled in by the owner

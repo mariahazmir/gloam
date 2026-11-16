@@ -18,11 +18,13 @@ dist/
 pipeline/data/raw/
 pipeline/data/interim/
 *.osm.pbf
+app/.check-tmp/
 
 # OS and editor
 .DS_Store
 Thumbs.db
 .idea/
+
 # Large intermediate pipeline files
 pipeline/data/*.pbf
 pipeline/data/*.parquet
