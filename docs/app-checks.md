@@ -25,6 +25,19 @@ For each item, tick the box only after running the check, then fill in the four 
 - Device: Lenovo Legion Slim 5, Windows 11, Chrome 157
 - Tester: Mariah
 
+### Screens and addresses (Req 18.1)
+
+Screens: Map (`#/`), Route (`#/route`), Report (`#/report`), How Gloam guesses (`#/about`), Credits (`#/credits`).
+
+- [ ] Tab order follows the visual order on each of the five screens
+- [ ] Opening the Route, How Gloam guesses or Credits screen moves focus to its title, and the back control is reachable next
+- [ ] The grab handle, the ? button, the route details button, the report link and every back control show a visible focus ring
+- [ ] After the browser back button, focus is on the screen shown and not lost
+
+- Date:
+- Device:
+- Tester:
+
 ## 2. Attribution not covered by any element (Req 5.3)
 
 Required text: "© OpenStreetMap contributors", plus OpenFreeMap and OpenMapTiles credits.
@@ -50,6 +63,22 @@ Required text: "© OpenStreetMap contributors", plus OpenFreeMap and OpenMapTile
 - Device: iPhone 15 Pro, iOS 26.6.2, Chrome 157
 - Tester: Mariah
 
+### Screens and addresses at 390 x 844 (Req 18.1 to 18.10)
+
+- [ ] Map: no horizontal scroll, no control cut off; the sheet stops below the attribution strip
+- [ ] Map: the Disclaimer is visible with the sheet expanded and collapsed while a route is shown
+- [ ] Route: no horizontal scroll, no control cut off; the routing settings and the Disclaimer are visible
+- [ ] Report: no horizontal scroll, no control cut off; the attribution strip and the Disclaimer are visible
+- [ ] How Gloam guesses: no horizontal scroll, no control cut off
+- [ ] Credits: no horizontal scroll, no control cut off
+- [ ] The browser back button goes from Route, Report, How Gloam guesses and Credits to the screen before, without reloading the map or the city
+- [ ] Opening `#/route`, `#/report`, `#/about` and `#/credits` directly shows that screen
+- [ ] Opening `#/nonsense`, `#` and no hash shows the Map screen; `#/route/` and `#/route?x=1` show the Route screen
+
+- Date:
+- Device:
+- Tester:
+
 ## 4. Layout at 768 px (Req 15.2)
 
 - [x] No horizontal scroll on the page
@@ -59,6 +88,19 @@ Required text: "© OpenStreetMap contributors", plus OpenFreeMap and OpenMapTile
 - Date: 16 Nov 2026
 - Device: Lenovo Legion Slim 5, Windows 11, Chrome 157
 - Tester: Mariah
+
+### Screens and addresses at 768 px (Req 18.1 to 18.10)
+
+- [ ] Map and Report: the sheet is a 390 px column at the left and the map is visible to its right
+- [ ] Route, How Gloam guesses and Credits: the page is centred and no wider than 480 px
+- [ ] Each of the five screens: no horizontal scroll, no control cut off or overlapping another
+- [ ] Disclaimer visible on the Map, Route and Report screens while a route is shown
+- [ ] The browser back button goes from each screen to the screen before, without reloading the map or the city
+- [ ] Opening each screen's address directly shows that screen; an unknown address shows the Map screen
+
+- Date:
+- Device:
+- Tester:
 
 ## 5. Browsers (Req 15.3)
 
@@ -136,6 +178,20 @@ Use only the keyboard (Tab, Shift+Tab, Enter, Space, arrow keys where a control 
 - Date: 16 Nov 2026
 - Device: Lenovo Legion Slim 5, Windows 11, Chrome 157
 - Tester: Mariah
+
+### Screens and addresses by keyboard (Req 18.1 to 18.5)
+
+- [ ] The ? button opens How Gloam guesses with Enter
+- [ ] The sources and licences link opens Credits with Enter
+- [ ] The route details button opens Route with Enter
+- [ ] The Report half of the Mode_Switch opens Report, and Plan returns to Map
+- [ ] Every back control returns with Enter, and the browser back shortcut (Alt+Left) returns to the screen before
+- [ ] The four routing settings on the Route screen toggle with Space, and the route redraws
+- [ ] The grab handle collapses and expands the sheet with Enter and Space, and its state is announced
+
+- Date:
+- Device:
+- Tester:
 
 ## 9. Hosting results (task 16.2) (Req 15.5, 17.3, 17.5, 17.6)
 
