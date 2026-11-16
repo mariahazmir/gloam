@@ -388,6 +388,8 @@ Credits: 4,000 at start (redeemed 8 Nov).
 - Picker chose one walk per city by maximising the dark-metre difference; I noted that makes them best cases, not typical, and will label them honestly in the UI.
 - Credits: 18.35
 
+## 11 Nov: Tasks
+
 ### Web App Task 13: map and visuals
 
 - What Kiro built: the bundled dark map style (one OpenFreeMap vector source loaded through its TileJSON; only water, waterway, landcover, landuse, park and roads; no labels, icons or glyphs), the map view with an always-open attribution, the street layers with 27 flicker cohort layers, the "your note" marker, the 5 s tile-timeout fallback and an fps sampler, with mocked-event tests. tsc clean; 44 files, 207 tests passing. Not yet run in a browser.
@@ -395,10 +397,12 @@ Credits: 4,000 at start (redeemed 8 Nov).
 - What went wrong: during 13.1 Kiro appended its own entry to this log, which I write myself. I told it off, deleted its entry and added a steering rule saying never to edit docs/kiro-log.md. Kiro also chose the base-map colours itself instead of using the palette in design.md; I've asked it to use one palette module for both the map and the tier colours.
 - Credits: 16.76
 
-### WWeb App Task 14.1 to 14.2: shell
+### Web App Task 14.1 to 14.2: shell
 
 - Kiro’s first browser check found the map blank. Cause: MapLibre 6.17 couldn’t locate its worker file, in dev and in the production build. Kiro fixed it by importing the worker as a Vite asset. My guess (Vite blocking the pack files) was wrong; I should have asked for the Console first.
 - Credits: 29.79
+
+## 12 Nov: Tasks
 
 ### Web App Task 14.3: plan controls
 
@@ -460,3 +464,47 @@ Credits: 4,000 at start (redeemed 8 Nov).
 - `npx vitest --run` ended with 49 test files and 264 tests passing, in 5.12 s. Nothing failed, so nothing was edited.
 - Credits: 1.36
 
+### Web App Task 16 (16.1 to 16.3): hosting config, live check, compression fix
+
+- 16.1: `render.yaml`, a GitHub Pages fallback build, and `app/scripts/checkHost.ts` to report HTTPS, reachability and `Content-Encoding` for each pack file.
+- 16.2: run `checkHost` against the deployed site and record the results in `docs/app-checks.md`.
+- 16.3 (added to `tasks.md` after 16.2 failed): serve the packs with a compressible type and tighten the path finder.
+- 16.1: `render.yaml` (build `cd app && npm ci && npm run build`, publish `app/dist`, Node 22.12.0, `VITE_GLOAM_HOSTED=true`), a `build:pages` script with the `/gloam/` base path, and `checkHost.ts` with its pure logic in `hostCheck.ts`. No new dependency. 269 tests passing.
+- 16.2: ran `checkHost` against https://gloam.onrender.com/ and recorded the result honestly in section 9. HTTPS passed, but all ten packs came back with no `Content-Encoding`. It left the load-time, phone and uptime items unmeasured instead of inventing numbers.
+- 16.3: `vite.config.ts` now emits pack assets as `.json`, and `findPackPaths` matches only real `/assets/` packs. `dist/assets` shows ten packs plus sample data, all `.json`. 270 tests passing, tsc clean.
+- The 16.1 report did not mention the `.gitignore` change, the size report, the README note or the build listing I had asked for. I checked the packs were committed myself. The deploy had all ten packs, so they were.
+- The compression failure was real. Render served the `.geojson` files as `binary/octet-stream`, and it does not compress that type. Renaming the built files to `.json` was the smallest fix, and the `data/` sources and the pipeline were not touched.
+- `checkHost` reported 13 false failures (the `/data/*.geojson` source strings and library strings in the bundle). I had Kiro tighten the finder.
+- I asked whether the finder handled hyphens in hashes such as `london.segments-CQkqWw-o.json`. The live run listed London correctly.
+- Live check after the redeploy: `curl` showed `Content-Type: application/json` and `Content-Encoding: br`. `checkHost` against https://gloam.onrender.com/ passed for HTTPS, the page and all 11 files (ten packs plus sample data), each `br`.
+- I once ran it with the example URL from the file header by mistake. It was my error, not a bug.
+- Pointed Kiro at 16.3 before 17.1 and 17.2, so the README doesn't describe a failing requirement.
+- Asked Kiro to replace the failed record in section 9 with the passing run, keeping one line about the first failure.
+- Credits: 4.13
+
+## 15 Nov: Tasks
+
+### Web App Task 17 and 18: README app section, credits, final checkpoint
+
+- 17.1: an app section appended to the existing README (what it is, how to run and test, Disclaimer verbatim, no-safety statement, privacy).
+- 17.2: attribution for OpenStreetMap, OpenFreeMap and OpenMapTiles, and the font licences for Caprasimo and DM Sans.
+- Two extras from me: the live link and the Pages fallback in the README, and the font licence text served from the deployed site and linked from About.
+- 18: the final checkpoint, with raw output, no edits unless something fails.
+
+**What Kiro did**
+- 17.1: appended "The app" to `README.md`. It removed the one-line "Setup steps coming soon" placeholder and said so.
+- 17.2: added a fonts bullet (SIL OFL 1.1) and linked the existing `docs/font-licences.txt` instead of creating a duplicate. The About text already credited all three map sources, so it made no change there.
+- 18: `npx tsc --noEmit` exit 0; `npx vitest --run` 50 files, 270 tests passing, 3.90 s. No edits needed. It also printed the tier shares of each city's example route, with at least 3 tiers at 5% or more in all five cities.
+
+**What I checked or caught**
+- The OFL asks for the licence text to accompany the fonts, and the site serves the font files, but the licence was only in the repo. I asked for it to be served and linked from About.
+- Kiro's 17 and 18 reports did not mention the live link, the Pages line or the licence file. [ ] checked with the greps and `Test-Path`
+- Berlin's example route has only 5.168% in the brighter tier, which is close to the 5% rule. A pipeline or tier change could break that real-pack test.
+
+**Still to confirm**
+- [ ] Live link and Pages line in the README
+- [ ] `font-licences.txt` in `dist` and linked from About
+- [ ] Manual checks in `docs/app-checks.md` filled in
+- [ ] README wordmark and mascot cleanup
+- [ ] 
+- Credits: 5.91

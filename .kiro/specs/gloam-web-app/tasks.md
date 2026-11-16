@@ -275,15 +275,15 @@ Rules for every task:
     - In `app/vite.config.ts`, make built `.geojson` pack assets emit as `assets/[name]-[hash].json` (via `assetFileNames`), because Render serves `.geojson` as `binary/octet-stream` with no Content-Encoding; source files in `data/` stay `.geojson` and app imports keep working; no new dependency. In `checkHost` path finding, report only pack files under `/assets/` that the app's own code requests, and ignore `/data/*.geojson` source paths and strings from map library code; add a test with those false cases as inputs
     - _Requirements: 17.6_
 
-- [ ] 17. Docs
-  - [ ] 17.1 Add an app section to `README.md`
+- [x] 17. Docs
+  - [x] 17.1 Add an app section to `README.md`
     - Add an app section to the existing README without rewriting or removing what is there (do not create the README from scratch): what the app is, how to run and test, data credits, the Disclaimer, no-safety statement, privacy summary
     - _Requirements: 6.9, 12.1, 13.1, 13.2, 13.3_
-  - [ ] 17.2 Add attribution and font licence files
+  - [x] 17.2 Add attribution and font licence files
     - OpenStreetMap contributors, OpenFreeMap and OpenMapTiles credits in README and About text; SIL OFL licence text for Caprasimo and DM Sans in `docs/`
     - _Requirements: 5.3, 12.1_
 
-- [ ] 18. Final checkpoint - Ensure all tests pass
+- [x] 18. Final checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 ## Notes
