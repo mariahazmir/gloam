@@ -8,7 +8,7 @@ route that trades a few extra minutes for better light.
 
 Built with Kiro for **Kiroween 2026** (Costume Contest).
 
-**Live app:** [URL coming soon]
+**Live app:** [Click here!](https://gloam.tapau.me/)
 
 **Demo video:** [YouTube link coming soon]
 
