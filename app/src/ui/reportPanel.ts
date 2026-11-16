@@ -51,9 +51,9 @@ export function createReportPanel(opts: ReportPanelOptions): ReportPanel {
 
   const buttonRow = el(
     'div',
-    { className: 'point-buttons', attrs: { role: 'group', 'aria-label': STRINGS.report.buttons.text } },
+    { className: 'report-buttons', attrs: { role: 'group', 'aria-label': STRINGS.report.buttons.text } },
     ...BUTTONS.map(({ type, label }) => {
-      const b = el('button', { className: 'plan-button', text: label, attrs: { type: 'button' } });
+      const b = el('button', { className: `report-button report-${type}`, text: label, attrs: { type: 'button' } });
       b.addEventListener('click', () => {
         pressed = b;
         opts.onReport(type);
@@ -97,15 +97,17 @@ export function createReportPanel(opts: ReportPanelOptions): ReportPanel {
       // Card: only in Report_Mode.
       reportSection.hidden = !view.inReportMode;
       if (view.inReportMode) {
-        const children: Array<Node> = [el('h3', { className: 'tools-heading', text: STRINGS.report.heading.text })];
+        const children: Array<Node> = [];
         if (view.card === null) {
+          children.push(el('h3', { className: 'report-title', text: STRINGS.report.heading.text }));
           children.push(el('p', { text: view.nothingThere ? STRINGS.report.noStreetThere.text : STRINGS.report.tapPrompt.text, attrs: { role: 'status' } }));
         } else {
           const c = view.card;
           children.push(
+            el('h3', { className: 'report-title', text: STRINGS.screens.reportTitle.text }),
             el('p', { className: 'card-name', text: c.name }),
+            el('p', { className: 'card-detail', text: `${STRINGS.app.name.text}: ${c.tierText}. ${STRINGS.screens.youKnowBetter.text}` }),
             el('p', { className: 'card-detail', text: c.highway }),
-            el('p', { className: 'card-detail', text: c.tierText }),
           );
           if (c.status !== null) {
             const status = el('p', { className: 'card-detail', text: c.status.text });
@@ -113,7 +115,7 @@ export function createReportPanel(opts: ReportPanelOptions): ReportPanel {
             children.push(status);
           }
           if (c.yourNote !== null) children.push(el('p', { className: 'card-note', text: c.yourNote }));
-          children.push(buttonRow);
+          children.push(buttonRow, el('p', { className: 'note-effect glass', text: STRINGS.screens.noteEffect.text }));
         }
         if (view.storeError) {
           children.push(el('p', { className: 'plan-message', text: STRINGS.errors.correctionsStore.text, attrs: { role: 'status' } }));

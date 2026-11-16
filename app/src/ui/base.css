@@ -1,5 +1,6 @@
-/* Gloam base styles. Colours come from custom properties that ui/shell.ts sets from
-   visual/palette.ts; this file holds no hex values. Mobile first (390 x 844). */
+/* Gloam base styles, after the design reference (reference.html). Colours come from custom
+   properties that ui/shell.ts sets from visual/palette.ts; this file holds no hex values.
+   Mobile first (390 x 844). Screens: the map with two bottom sheets, and three full pages. */
 
 @font-face {
   font-family: 'Caprasimo';
@@ -42,8 +43,8 @@ body {
   font-size: 1rem;
   line-height: 1.4;
   color: white;
-  background: linear-gradient(var(--night-top), var(--night-bottom));
-  overflow-x: hidden;
+  background: var(--night-bottom) linear-gradient(var(--night-top), var(--night-bottom)) fixed;
+  overflow: hidden;
 }
 
 h1,
@@ -58,51 +59,455 @@ button {
   color: inherit;
 }
 
+a {
+  color: inherit;
+}
+
 /* Visible focus on every interactive control (Requirement 15.4). */
 :focus-visible {
   outline: 3px solid var(--lantern);
   outline-offset: 2px;
 }
 
-/* Frosted glass card. */
+/* Frosted glass card: white at 13%, a 1.5px border of white at 28%, a blur behind. */
 .glass {
   background: var(--glass-fill);
   border: var(--glass-border-width) solid var(--glass-border);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  border-radius: 0.75rem;
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border-radius: 1.5rem;
 }
 
-/* ---- Layout ---------------------------------------------------------------- */
+/* Text for screen readers only; still in the page and the accessibility tree. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- Layout: the map, its top overlay, sheets and pages -------------------- */
 
 .shell {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  height: 100vh;
-  height: 100dvh;
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
 }
 
-/* Compact header: one row (wordmark + city chips) and a small caption line.
-   On a phone it is 4 + 44 + ~14 + 4 = about 66 px, under the 72 px limit. */
+.map-layer,
+.map {
+  position: absolute;
+  inset: 0;
+}
+
+/* Header, chips, attribution and the city note, stacked over the top of the map. The column
+   ignores pointer input so map taps pass through the gaps; its children take it back. */
+.map-top {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  right: 1rem;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+.map-top > * {
+  max-width: 100%;
+  pointer-events: auto;
+}
+
 .topbar {
-  min-width: 0;
-  padding: 0.25rem 0.75rem;
-}
-
-.topbar-row {
+  align-self: stretch;
   display: flex;
   align-items: center;
   gap: 0.75rem;
   min-width: 0;
+  height: 3.375rem;
+  padding: 0 0.45rem 0 1.25rem;
+  border-radius: 999px;
 }
 
 .brand {
   flex: none;
   margin: 0;
-  font-size: 1.5rem;
-  line-height: 1.1;
+  font-size: 1.8rem;
+  line-height: 1;
+  color: var(--amber);
+  text-transform: lowercase;
 }
+
+.walk-label {
+  min-width: 0;
+  margin-left: auto;
+  overflow: hidden;
+  font-size: 0.875rem;
+  color: var(--mist);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.icon-button {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  color: white;
+  text-decoration: none;
+  border-radius: 999px;
+}
+
+.header-help {
+  width: 2.75rem;
+  height: 2.75rem;
+  font-family: 'Caprasimo', Georgia, serif;
+  font-size: 1.2rem;
+  color: var(--amber);
+  background: var(--glass-fill);
+  border: var(--glass-border-width) solid var(--glass-border);
+}
+
+/* A chevron drawn with two borders, pointing left. */
+.back-chevron {
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-left: 0.25rem;
+  border-left: 3px solid currentColor;
+  border-bottom: 3px solid currentColor;
+  border-radius: 1px;
+  transform: rotate(45deg);
+}
+
+.chip-row {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.sample-chip-host {
+  flex: none;
+}
+
+.sample-chip-host:has(> [hidden]) {
+  display: none;
+}
+
+/* In the chip row the badge is a flat chip, not a tilted sticker. */
+.chip-row .sample-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.25rem;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.8rem;
+  border: 0;
+  transform: none;
+}
+
+.caption-host:empty {
+  display: none;
+}
+
+/* The map attribution, always open, in a strip no sheet covers (Requirements 5.3, 18.10). */
+.attribution-strip .maplibregl-ctrl-attrib {
+  margin: 0;
+  padding: 0.2rem 0.75rem;
+  font-size: 0.7rem;
+  line-height: 1.35;
+  color: var(--mist);
+  background: var(--sheet);
+  border-radius: 999px;
+}
+
+.attribution-strip .maplibregl-ctrl-attrib a {
+  color: var(--amber);
+}
+
+.corner-host:empty {
+  display: none;
+}
+
+.corner-note {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.7rem;
+  line-height: 1.3;
+  color: var(--mist);
+  border-radius: 1rem;
+}
+
+.corner-note p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.corner-note p + p {
+  margin-top: 0.15rem;
+}
+
+/* Bottom sheets sit over the map and stop below the top overlay, so the attribution stays clear. */
+.sheet {
+  position: absolute;
+  left: 0.6rem;
+  right: 0.6rem;
+  bottom: 0.6rem;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  /* Never over the top overlay, and at most 58% of the screen so the map stays in view. */
+  max-height: min(calc(100dvh - var(--map-top-h, 12rem) - 1.25rem), 58dvh);
+  padding: 0.5rem 1rem 1rem;
+  overflow-y: auto;
+  background: var(--sheet);
+  border-radius: 2rem;
+}
+
+.sheet-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sheet-body > div:empty {
+  display: none;
+}
+
+
+
+.sheet-handle,
+.sheet-grip {
+  flex: none;
+  align-self: center;
+  position: relative;
+  width: 4rem;
+  height: 1.5rem;
+  margin-bottom: 0.25rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.sheet-grip {
+  cursor: default;
+}
+
+.sheet-handle::before,
+.sheet-grip::before {
+  content: '';
+  position: absolute;
+  left: calc(50% - 1.375rem);
+  top: calc(50% - 2.5px);
+  width: 2.75rem;
+  height: 5px;
+  background: var(--glass-border);
+  border-radius: 3px;
+}
+
+/* Collapsed: only the route card, the details link and the Disclaimer (Requirement 18.9). */
+.sheet.collapsed .sheet-extra,
+.sheet.collapsed .mode-switch {
+  display: none;
+}
+
+/* Full pages: the night gradient with a magenta glow top right and a pumpkin glow bottom left. */
+.page {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  overflow-y: auto;
+  background:
+    radial-gradient(circle at 105% 14%, color-mix(in srgb, var(--glow) 38%, transparent), transparent 34%),
+    radial-gradient(circle at -8% 82%, color-mix(in srgb, var(--pumpkin) 30%, transparent), transparent 34%),
+    linear-gradient(var(--night-top), var(--night-bottom));
+  background-attachment: fixed;
+}
+
+.page-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  max-width: 30rem;
+  min-height: 100%;
+  margin: 0 auto;
+  padding: 1.25rem 1.25rem 1.5rem;
+}
+
+.page-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 1.9rem;
+  line-height: 1.05;
+  color: var(--amber);
+  text-transform: lowercase;
+}
+
+.page-title:focus {
+  outline: none;
+}
+
+.page-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.page-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.875rem 1rem;
+}
+
+.page-empty {
+  margin: 0;
+  padding: 0.875rem 1rem;
+  color: var(--mist);
+}
+
+.page-foot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: auto;
+}
+
+.section-heading {
+  margin: 0.25rem 0 0;
+  font-size: 1.15rem;
+  color: var(--amber);
+  text-transform: lowercase;
+}
+
+.section-label {
+  margin: 0;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mist);
+}
+
+.lead {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--mist);
+}
+
+.guess-intro,
+.guess-rest {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.guess-rest {
+  flex: 1;
+  gap: 0.875rem;
+}
+
+.small-print {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--mist);
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  font-weight: 700;
+  color: var(--amber);
+}
+
+/* On wide screens the sheets become a 390 px column at the left and pages stay narrow (18.8). */
+@media (min-width: 768px) {
+  .sheet {
+    left: 1rem;
+    right: auto;
+    bottom: 1rem;
+    width: 24.375rem;
+  }
+
+  .map-top {
+    right: auto;
+    width: min(40rem, calc(100% - 2rem));
+  }
+}
+
+/* ---- Buttons --------------------------------------------------------------- */
+
+.primary-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 3.25rem;
+  padding: 0 1.25rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--night-bottom);
+  text-decoration: none;
+  background: white;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.button-dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  background: var(--pumpkin);
+  border-radius: 50%;
+}
+
+.secondary-button,
+.plan-button {
+  min-height: 2.75rem;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  background: var(--glass-fill);
+  border: var(--glass-border-width) solid var(--glass-border);
+  border-radius: 999px;
+}
+
+.secondary-button {
+  font-weight: 700;
+}
+
+/* The pressed state shows in the border width and a tick as well as in colour. */
+.plan-button[aria-pressed='true'] {
+  color: var(--night-bottom);
+  background: linear-gradient(135deg, var(--lantern), var(--pumpkin));
+  border: 3px solid var(--lantern);
+  font-weight: 700;
+}
+
+.plan-button[aria-pressed='true']::before {
+  content: '\2713\00a0';
+}
+
+/* ---- City picker ----------------------------------------------------------- */
 
 /* The chips scroll sideways inside this box; the page itself never does. */
 .picker-host {
@@ -116,88 +521,6 @@ button {
 .picker-host::-webkit-scrollbar {
   display: none;
 }
-
-.caption-host {
-  min-width: 0;
-}
-
-.caption-host:empty {
-  display: none;
-}
-
-/* The map owns its cell. Panels are siblings, never overlays, so the attribution
-   control inside the map is never covered. */
-.map-wrap {
-  position: relative;
-  min-height: 0;
-  min-width: 0;
-  overflow: hidden;
-}
-
-.map {
-  position: absolute;
-  inset: 0;
-}
-
-.corner-host {
-  position: absolute;
-  top: 0.5rem;
-  left: 0.5rem;
-  max-width: calc(100% - 1rem);
-  z-index: 1;
-  pointer-events: none;
-}
-
-.corner-host > * {
-  pointer-events: auto;
-}
-
-.panel {
-  min-width: 0;
-  max-height: 40vh;
-  max-height: 40dvh;
-  padding: 0.5rem 0.75rem;
-  overflow-y: auto;
-}
-
-.panel:empty {
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .shell {
-    grid-template-columns: 22rem minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr);
-  }
-
-  .topbar {
-    grid-column: 1 / -1;
-    padding: 0.35rem 1rem;
-  }
-
-  .map-wrap {
-    grid-column: 2;
-    grid-row: 2;
-  }
-
-  .panel {
-    grid-column: 1;
-    grid-row: 2;
-    max-height: none;
-    padding: 0.75rem 1rem;
-  }
-
-  /* With nothing in the panel yet, give the map the full width. */
-  .shell:has(.panel:empty) {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .shell:has(.panel:empty) .map-wrap {
-    grid-column: 1;
-  }
-}
-
-/* ---- City picker ----------------------------------------------------------- */
 
 .city-list {
   display: flex;
@@ -216,16 +539,21 @@ button {
 .city-button {
   min-height: 2.75rem;
   padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 700;
   white-space: nowrap;
   cursor: pointer;
   background: var(--glass-fill);
   border: var(--glass-border-width) solid var(--glass-border);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   border-radius: 999px;
 }
 
 .city-button[aria-current='true'] {
-  border-color: var(--lantern);
-  background: var(--night-bottom);
+  color: var(--night-bottom);
+  background: white;
+  border-color: white;
 }
 
 /* The focus ring sits inside the chip so the scroll box does not clip it. */
@@ -235,6 +563,7 @@ button {
 
 .city-description {
   margin: 0;
+  padding: 0 0.5rem;
   overflow: hidden;
   font-size: 0.7rem;
   line-height: 1.2;
@@ -243,18 +572,11 @@ button {
   opacity: 0.85;
 }
 
-.picker-status {
-  margin-top: 0.5rem;
-}
-
-.picker-status:empty {
-  display: none;
-}
-
 .progress {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
 }
 
 .progress-ring {
@@ -291,27 +613,11 @@ button {
   min-height: 2.75rem;
   padding: 0.4rem 1rem;
   cursor: pointer;
+  color: var(--night-bottom);
   background: var(--pumpkin);
   border: 0;
   border-radius: 999px;
   font-weight: 700;
-}
-
-/* ---- Map corner note ------------------------------------------------------- */
-
-.corner-note {
-  padding: 0.35rem 0.6rem;
-  font-size: 0.75rem;
-  line-height: 1.3;
-}
-
-.corner-note p {
-  margin: 0;
-  overflow-wrap: anywhere;
-}
-
-.corner-note p + p {
-  margin-top: 0.2rem;
 }
 
 /* ---- Plan_Mode controls ---------------------------------------------------- */
@@ -336,7 +642,7 @@ button {
 .crosshair::after {
   content: '';
   position: absolute;
-  background: var(--lantern);
+  background: white;
   box-shadow: 0 0 0 1px var(--night-bottom);
 }
 
@@ -354,19 +660,48 @@ button {
   height: 2px;
 }
 
-.plan-controls {
+/* Mode_Switch: a segmented pill. The pressed half is white with a tick. */
+.mode-switch {
   display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.25rem;
+  padding: 0.2rem;
+  background: var(--glass-fill);
+  border: var(--glass-border-width) solid var(--glass-border);
+  border-radius: 999px;
 }
 
-.plan-only {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
+.mode-switch .plan-button {
+  flex: 1;
+  min-height: 2.5rem;
+  background: transparent;
+  border: 0;
 }
 
-.mode-switch,
+.mode-switch .plan-button[aria-pressed='true'] {
+  background: white;
+  border: 0;
+}
+
+.points {
+  padding: 0 1rem;
+  border-radius: 1.25rem;
+}
+
+.points-summary {
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.points-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-bottom: 0.75rem;
+}
+
 .tap-sets,
 .point-buttons {
   display: flex;
@@ -375,30 +710,19 @@ button {
   gap: 0.5rem;
 }
 
-.plan-button {
-  min-height: 2.75rem;
-  padding: 0.4rem 0.9rem;
-  cursor: pointer;
-  background: var(--glass-fill);
-  border: var(--glass-border-width) solid var(--glass-border);
-  border-radius: 999px;
-}
-
-/* The pressed state shows in the border width and a tick as well as in colour. */
-.plan-button[aria-pressed='true'] {
-  background: var(--night-bottom);
-  border: 3px solid var(--lantern);
-  font-weight: 700;
-}
-
-.plan-button[aria-pressed='true']::before {
-  content: '\2713\00a0';
+.tap-sets-label {
+  font-size: 0.85rem;
+  color: var(--mist);
 }
 
 .lambda-block {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+}
+
+.lambda-label {
+  font-size: 0.75rem;
+  color: var(--mist);
 }
 
 .lambda-row {
@@ -407,61 +731,183 @@ button {
   gap: 0.75rem;
 }
 
+/* The slider: a gradient fill to the thumb (--fill, 0 to 1, set by planControls.ts) and a white thumb. */
 .lambda-slider {
   flex: 1 1 auto;
   min-width: 0;
-  min-height: 2.75rem;
-  accent-color: var(--lantern);
+  height: 2.75rem;
+  margin: 0;
+  background: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.lambda-slider::-webkit-slider-runnable-track {
+  height: 10px;
+  background:
+    linear-gradient(90deg, var(--lantern), var(--glow)) 0 0 / calc(var(--fill, 0.3) * 100%) 100% no-repeat,
+    var(--glass-border);
+  border-radius: 5px;
+}
+
+.lambda-slider::-webkit-slider-thumb {
+  width: 28px;
+  height: 28px;
+  margin-top: -9px;
+  background: white;
+  border: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 16px var(--lantern);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.lambda-slider::-moz-range-track {
+  height: 10px;
+  background: var(--glass-border);
+  border-radius: 5px;
+}
+
+.lambda-slider::-moz-range-progress {
+  height: 10px;
+  background: linear-gradient(90deg, var(--lantern), var(--glow));
+  border-radius: 5px;
+}
+
+.lambda-slider::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  background: white;
+  border: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 16px var(--lantern);
 }
 
 .lambda-readout {
   flex: none;
-  min-width: 2.5rem;
+  min-width: 2.25rem;
   text-align: right;
   font-family: 'Caprasimo', Georgia, serif;
+  font-size: 1.3rem;
+  color: var(--amber);
 }
 
 .lambda-ends {
   display: flex;
   justify-content: space-between;
   gap: 0.5rem;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
+  color: var(--mist);
 }
 
+/* Routing settings on the Route_Screen, inside a glass card already. */
 .settings-box {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
   min-width: 0;
   margin: 0;
-  padding: 0.5rem 0.75rem;
-  border: var(--glass-border-width) solid var(--glass-border);
-  border-radius: 0.75rem;
+  padding: 0;
+  border: 0;
 }
 
-.toggle {
+.settings-box legend {
+  padding: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mist);
+}
+
+/* Toggle rows: label, then "on" or "off" in words, then a track. */
+.toggle,
+.switch-row {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  min-height: 2.75rem;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 3.5rem;
+  padding: 0;
+  text-align: left;
   cursor: pointer;
+  background: none;
+  border: 0;
+  border-bottom: var(--glass-border-width) solid var(--glass-border);
 }
 
-.toggle input {
-  flex: none;
-  width: 1.4rem;
-  height: 1.4rem;
-  accent-color: var(--lantern);
+.toggle:last-child,
+.switch-row:last-of-type {
+  border-bottom: 0;
 }
 
-.toggle-label {
+.toggle-label,
+.switch-text {
   flex: 1 1 auto;
   min-width: 0;
+  order: 1;
 }
 
-.toggle-state {
-  flex: none;
+.switch-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.switch-label {
   font-weight: 700;
+}
+
+.switch-detail {
+  font-size: 0.8rem;
+  color: var(--mist);
+}
+
+.toggle-state,
+.switch-state {
+  flex: none;
+  order: 2;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--mist);
+}
+
+.toggle input,
+.switch-track {
+  flex: none;
+  order: 3;
+  position: relative;
+  width: 3.25rem;
+  height: 1.875rem;
+  margin: 0;
+  background: var(--glass-border);
+  border-radius: 999px;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.toggle input::before,
+.switch-track::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.15s;
+}
+
+.toggle input:checked,
+.switch-row[aria-checked='true'] .switch-track {
+  background: var(--pumpkin);
+}
+
+.toggle input:checked::before,
+.switch-row[aria-checked='true'] .switch-track::before {
+  transform: translateX(1.375rem);
 }
 
 .plan-messages:empty {
@@ -474,34 +920,23 @@ button {
   background: var(--glass-fill);
   border: var(--glass-border-width) solid var(--glass-border);
   border-left: 4px solid var(--pumpkin);
-  border-radius: 0.75rem;
+  border-radius: 1.25rem;
 }
 
 .plan-message + .plan-message {
   margin-top: 0.4rem;
 }
 
-/* ---- Route panel ----------------------------------------------------------- */
-
-/* Text for screen readers only; still in the page and the accessibility tree. */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border: 0;
-}
+/* ---- Example label and hint ------------------------------------------------- */
 
 .guidance:empty {
   display: none;
 }
 
 .guidance {
-  margin-bottom: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .example-banner {
@@ -511,12 +946,14 @@ button {
   gap: 0.75rem;
   width: 100%;
   min-height: 2.75rem;
-  padding: 0.4rem 0.75rem;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--mist);
   text-align: left;
   cursor: pointer;
   background: var(--glass-fill);
   border: var(--glass-border-width) dashed var(--glass-border);
-  border-radius: 0.75rem;
+  border-radius: 1.25rem;
 }
 
 .example-clear {
@@ -527,39 +964,286 @@ button {
 
 .hint {
   margin: 0;
-  padding: 0.5rem 0.75rem;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.9rem;
+  color: var(--mist);
   background: var(--glass-fill);
   border: var(--glass-border-width) solid var(--glass-border);
-  border-radius: 0.75rem;
+  border-radius: 1.25rem;
 }
+
+/* ---- Route card, tiles and Route_Screen -------------------------------------- */
 
 .route-host:empty {
   display: none;
 }
 
-.route-host {
-  margin-bottom: 0.75rem;
-}
-
-.route-panel {
+.route-summary {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.75rem;
   min-width: 0;
 }
 
-.route-headline,
-.route-subhead {
+/* The lantern card: the warm gradient with the big Caprasimo figure. */
+.route-card {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.875rem 1.125rem;
+  color: var(--night-bottom);
+  background: linear-gradient(135deg, var(--lantern), var(--pumpkin) 60%, var(--glow));
+  border-radius: 1.5rem;
+}
+
+.route-card-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.route-card-figure {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin-top: 0.1rem;
+}
+
+.route-card-minutes {
+  font-family: 'Caprasimo', Georgia, serif;
+  font-size: 3.75rem;
+  line-height: 1;
+}
+
+.route-card-unit {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.route-card-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 0.875rem;
+  line-height: 1.35;
+  text-align: right;
+}
+
+/* The route-mix tile: each row is a bold figure and its Tier wording. */
+.route-mix {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.6rem 0.875rem;
+  border-radius: 1.25rem;
+}
+
+.mix-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.mix-value {
+  flex: none;
+  min-width: 3.25rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.mix-label {
+  min-width: 0;
+  font-size: 0.78rem;
+  line-height: 1.25;
+  color: var(--mist);
+}
+
+.page-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+/* The details link and the Disclaimer stick to the bottom of the sheet, so the Disclaimer is
+   in view while a route shows even when the sheet scrolls (Requirement 6.9). */
+.sheet-footer {
+  position: sticky;
+  bottom: -1rem;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 0 -1rem -1rem;
+  padding: 0.6rem 1rem 1rem;
+  background: var(--night-bottom);
+  border-radius: 0 0 2rem 2rem;
+}
+
+.disclaimer {
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: var(--mist);
+}
+
+.heartbeat {
   margin: 0;
 }
 
-.route-headline {
-  font-size: 1.5rem;
-  line-height: 1.15;
+.heartbeat-title {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.heartbeat-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.heartbeat-key {
+  margin: 0.2rem 0 0;
+  font-size: 0.75rem;
+  color: var(--mist);
+}
+
+/* The compact chart in the sheet: a short strip with no text, strokes kept at their width. */
+.heartbeat-compact .heartbeat-title,
+.heartbeat-compact text,
+.heartbeat-compact .heartbeat-low-marker {
+  display: none;
+}
+
+.heartbeat-compact .heartbeat-svg {
+  height: 3.5rem;
+}
+
+.heartbeat-compact path,
+.heartbeat-compact line,
+.heartbeat-compact rect {
+  vector-effect: non-scaling-stroke;
+}
+
+/* A slow pulse, well under 3 flashes a second. Off in Reduced_Effects_Mode. */
+.heartbeat-line {
+  animation: gloam-beat 1.6s ease-in-out infinite;
+}
+
+@keyframes gloam-beat {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.heartbeat-card {
+  padding: 1rem 1.1rem;
+}
+
+.card-note-line {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--mist);
+}
+
+.stretch-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stretch {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0.875rem;
+  border-radius: 1.375rem;
+}
+
+.stretch-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.stretch-name {
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.stretch-detail {
+  font-size: 0.8rem;
+  color: var(--mist);
+}
+
+/* Each Tier's marker has its own line pattern, so rows differ without colour (Requirement 18.6). */
+.stretch-mark {
+  flex: none;
+  align-self: stretch;
+  width: 12px;
+  min-height: 2.75rem;
+  border-radius: 6px;
+}
+
+.mark-confirmed_lit {
+  background: var(--lit-line);
+  box-shadow: 0 0 12px var(--lantern);
+}
+
+.mark-brighter_than_most {
+  background: repeating-linear-gradient(var(--lit-line) 0 8px, transparent 8px 12px);
+  border: 2px solid var(--lit-line);
+}
+
+.mark-typical {
+  background: repeating-linear-gradient(var(--glow) 0 4px, transparent 4px 8px);
+  border: 2px solid var(--glow);
+}
+
+.mark-darker_than_most {
+  border: 3px dotted var(--fog);
+}
+
+.mark-mapped_unlit {
+  width: 5px;
+  margin: 0 3.5px;
+  background: var(--fog);
+  opacity: 0.6;
+}
+
+.badge {
+  flex: none;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+  border-radius: 999px;
+}
+
+.badge-confirmed {
+  color: var(--night-bottom);
+  background: var(--lantern);
+}
+
+.badge-estimated {
+  background: color-mix(in srgb, var(--lit-line) 25%, transparent);
+  border: var(--glass-border-width) dashed var(--lit-line);
+}
+
+.badge-unlit {
+  background: color-mix(in srgb, var(--fog) 25%, transparent);
+  border: var(--glass-border-width) solid var(--fog);
 }
 
 .route-subhead {
+  margin: 0;
   font-size: 1rem;
+  color: var(--amber);
 }
 
 .route-table {
@@ -607,7 +1291,7 @@ button {
   display: flex;
   justify-content: space-between;
   gap: 0.75rem;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 .delta-item dt {
@@ -620,98 +1304,108 @@ button {
   font-weight: 700;
 }
 
-.heartbeat {
-  margin: 0;
-}
-
-.heartbeat-title {
-  font-size: 0.85rem;
-  font-weight: 700;
-}
-
-.heartbeat-svg {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.heartbeat-key {
-  margin: 0.2rem 0 0;
-  font-size: 0.75rem;
-}
-
-/* A slow pulse, well under 3 flashes a second. Off in Reduced_Effects_Mode. */
-.heartbeat-line {
-  animation: gloam-beat 1.6s ease-in-out infinite;
-}
-
-@keyframes gloam-beat {
-  0%,
-  100% {
-    opacity: 0.7;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-.disclaimer {
-  margin: 0;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.85rem;
-  border: var(--glass-border-width) solid var(--glass-border);
-  border-radius: 0.75rem;
-}
-
-/* ---- Legend, switches and dialogs ------------------------------------------ */
-
-.tools {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  margin-top: 0.75rem;
-}
-
-.tools-heading {
-  margin: 0;
-  font-size: 1.1rem;
-}
+/* ---- Legend, switches and the guess and credits screens ------------------------ */
 
 .legend-list {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
-  margin: 0.3rem 0 0;
+  gap: 0.6rem;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.legend-item {
+.legend-card {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  font-size: 0.85rem;
+  gap: 0.875rem;
+  padding: 0.75rem 1rem;
+  border-radius: 1.5rem;
 }
 
-/* Each swatch differs by line pattern as well as colour. */
+.legend-card-glow {
+  color: var(--night-bottom);
+  background: linear-gradient(135deg, var(--lantern), var(--pumpkin));
+}
+
+.legend-title {
+  font-weight: 700;
+}
+
+.legend-detail {
+  font-size: 0.8rem;
+}
+
+.legend-card.glass .legend-detail {
+  color: var(--mist);
+}
+
+/* Each swatch differs by pattern as well as colour. */
 .legend-swatch {
   flex: none;
-  width: 2rem;
-  height: 0;
-  border-top: 4px solid var(--lantern);
+  width: 34px;
+  height: 10px;
+  border-radius: 5px;
 }
 
 .legend-glow {
-  box-shadow: 0 0 8px 2px var(--lantern);
+  background: white;
+  box-shadow: 0 0 12px white;
 }
 
 .legend-flicker {
-  border-top-style: dashed;
+  background: repeating-linear-gradient(90deg, var(--lit-line) 0 6px, transparent 6px 12px);
+  border: 2px solid var(--lit-line);
+  animation: gloam-flick 3.1s infinite;
 }
 
 .legend-fog {
-  border-top: 4px dotted var(--dusk);
-  filter: blur(1px);
+  height: 16px;
+  background: var(--fog);
+  border-radius: 8px;
+  opacity: 0.6;
+  filter: blur(2px);
+}
+
+.legend-route {
+  background: linear-gradient(90deg, var(--pumpkin), var(--glow));
+}
+
+/* Three dips in 3.1 s: about 1 flash a second, well under the cap of 3. */
+@keyframes gloam-flick {
+  0%,
+  100% {
+    opacity: 0.95;
+  }
+  12% {
+    opacity: 0.4;
+  }
+  18% {
+    opacity: 1;
+  }
+  46% {
+    opacity: 0.55;
+  }
+  52% {
+    opacity: 0.9;
+  }
+  80% {
+    opacity: 0.45;
+  }
+}
+
+.switch-card {
+  gap: 0;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.demo-badge-row:has(> [hidden]) {
+  display: none;
+}
+
+.demo-badge-row {
+  padding: 0 0 0.6rem;
 }
 
 .tool-row {
@@ -721,19 +1415,14 @@ button {
   gap: 0.5rem;
 }
 
-/* A switch shows "on" or "off" in its text; the tick and border mark the on state too. */
-.tool-switch[aria-checked='true'] {
-  background: var(--night-bottom);
-  border: 3px solid var(--lantern);
-  font-weight: 700;
-}
-
 .tool-note {
   margin: 0;
   font-size: 0.8rem;
+  color: var(--mist);
 }
 
 .sample-badge {
+  display: inline-block;
   padding: 0.2rem 0.6rem;
   font-size: 0.75rem;
   font-weight: 700;
@@ -742,78 +1431,186 @@ button {
   background: var(--lantern);
   border: 2px dashed var(--night-bottom);
   border-radius: 999px;
-}
-
-.info-dialog {
-  width: min(32rem, calc(100vw - 1.5rem));
-  max-height: calc(100dvh - 2rem);
-  padding: 1rem;
-  overflow-y: auto;
-  color: white;
-  background: var(--night-bottom);
-}
-
-.info-dialog::backdrop {
-  background: rgba(0, 0, 0, 0.6);
-}
-
-.dialog-title {
-  margin: 0 0 0.5rem;
-}
-
-.dialog-body p {
-  margin: 0 0 0.6rem;
+  transform: rotate(-3deg);
 }
 
 .figure-list {
-  margin: 0 0 0.6rem;
+  margin: 0;
   padding-left: 1.2rem;
+  font-size: 0.85rem;
+}
+
+.guess-rest p {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.guess-rest .disclaimer,
+.guess-rest .small-print {
+  font-size: 0.75rem;
 }
 
 .raw-link {
-  color: var(--lantern);
+  font-weight: 700;
+  color: var(--amber);
 }
 
-.dialog-actions {
-  margin-top: 0.75rem;
+.credit-list {
+  gap: 0;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
 }
 
-/* ---- Report card and Dark_Spot_List ---------------------------------------- */
-
-.report-card,
-.dark-spots {
-  margin-top: 0.75rem;
-  padding: 0.5rem 0.75rem;
-  background: var(--glass-fill);
-  border: var(--glass-border-width) solid var(--glass-border);
-  border-radius: 0.75rem;
+.credit-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.55rem 0;
+  border-bottom: var(--glass-border-width) solid var(--glass-border);
 }
 
-.report-card p,
-.dark-spots p {
-  margin: 0 0 0.4rem;
+.credit-row:last-child {
+  border-bottom: 0;
 }
 
+.credit-label {
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.credit-detail {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--mist);
+  overflow-wrap: anywhere;
+}
+
+.credit-detail .text-link {
+  min-height: 0;
+}
+
+.demo-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.demo-head .sample-badge {
+  transform: none;
+}
+
+/* ---- Report_Screen sheet and Dark_Spot_List ----------------------------------- */
+
+.report-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.report-card p {
+  margin: 0;
+}
+
+.report-title {
+  margin: 0;
+  font-size: 1.85rem;
+  line-height: 1.1;
+  color: var(--amber);
+  text-transform: lowercase;
+}
+
+/* The street's name as a white label, as on the reference map. */
 .card-name {
-  font-family: 'Caprasimo', Georgia, serif;
-  font-size: 1.15rem;
+  align-self: flex-start;
+  padding: 0.35rem 0.875rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--night-bottom);
+  background: white;
+  border-radius: 999px;
+  overflow-wrap: anywhere;
 }
 
 .card-detail {
-  font-size: 0.85rem;
+  font-size: 0.875rem;
+  color: var(--mist);
 }
 
 /* "your note" is words plus a dashed outline, not colour alone. */
 .card-note {
-  display: inline-block;
-  padding: 0.15rem 0.5rem;
+  align-self: flex-start;
+  padding: 0.15rem 0.6rem;
   font-weight: 700;
   border: 2px dashed var(--pumpkin);
   border-radius: 999px;
 }
 
-.dark-spots > summary {
+.report-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.4rem;
+}
+
+.report-button {
+  min-height: 3.5rem;
+  padding: 0 1.375rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-align: left;
   cursor: pointer;
+  border: 0;
+  border-radius: 999px;
+}
+
+.report-actually_lit {
+  color: var(--night-bottom);
+  background: linear-gradient(135deg, var(--lantern), var(--pumpkin));
+}
+
+.report-actually_dark {
+  color: white;
+  background: linear-gradient(135deg, var(--dusk), var(--glow));
+}
+
+.report-light_is_out {
+  background: var(--glass-fill);
+  border: var(--glass-border-width) solid var(--glass-border);
+}
+
+.note-effect {
+  margin: 0.2rem 0 0;
+  padding: 0.75rem 0.875rem;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--mist);
+  border-radius: 1.25rem;
+}
+
+.dark-spots {
+  padding: 0.25rem 1rem 0.5rem;
+  background: var(--glass-fill);
+  border: var(--glass-border-width) solid var(--glass-border);
+  border-radius: 1.25rem;
+}
+
+.dark-spots p {
+  margin: 0 0 0.4rem;
+}
+
+.dark-spots > summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  cursor: pointer;
+}
+
+.tools-heading {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--amber);
 }
 
 .spot-list {
@@ -838,11 +1635,13 @@ button {
   margin-right: 0.5rem;
 }
 
-/* ---- Reduced effects ------------------------------------------------------- */
+/* ---- Reduced effects: no animation anywhere ------------------------------------- */
 
-.reduced-effects .progress-ring,
-.reduced-effects .heartbeat-line {
-  animation: none;
+.reduced-effects *,
+.reduced-effects *::before,
+.reduced-effects *::after {
+  animation: none !important;
+  transition: none !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

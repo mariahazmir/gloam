@@ -5,7 +5,7 @@ import { ArgumentError } from '../validation/errors';
 import { requireFinite, requireUnit } from '../validation/guards';
 import { type Effect, EFFECT_LADDER } from '../visual/effects';
 import { FLICKER_STEP_MS, flickerBrightness, flickerParams } from '../visual/flicker';
-import { NIGHT, PALETTE } from '../visual/palette';
+import { NIGHT, PALETTE, TONES } from '../visual/palette';
 import {
   CONFIDENCE_BANDS,
   PHASES,
@@ -185,10 +185,10 @@ function markerLayerSpecs(): LayerSpecification[] {
       source: MARKERS_SOURCE_ID,
       filter: ['==', ['get', 'role'], 'start'],
       paint: {
-        'circle-radius': 7,
-        'circle-color': PALETTE.lantern,
-        'circle-stroke-width': 2,
-        'circle-stroke-color': NIGHT.bottom,
+        'circle-radius': 8,
+        'circle-color': PALETTE.pumpkin,
+        'circle-stroke-width': 3,
+        'circle-stroke-color': 'white',
       },
     },
     {
@@ -198,11 +198,11 @@ function markerLayerSpecs(): LayerSpecification[] {
       source: MARKERS_SOURCE_ID,
       filter: ['==', ['get', 'role'], 'end'],
       paint: {
-        'circle-radius': 9,
+        'circle-radius': 10,
         'circle-color': NIGHT.bottom,
         'circle-opacity': 0.35,
         'circle-stroke-width': 4,
-        'circle-stroke-color': PALETTE.pumpkin,
+        'circle-stroke-color': 'white',
       },
     },
   ] as unknown as LayerSpecification[];
@@ -331,10 +331,10 @@ function buildingsLayerSpec(): LayerSpecification {
     source: BUILDINGS_SOURCE_ID,
     minzoom: BUILDINGS_MIN_ZOOM,
     paint: {
-      'fill-extrusion-color': NIGHT.top,
+      'fill-extrusion-color': TONES.building,
       'fill-extrusion-height': ['get', 'height_m'],
       'fill-extrusion-base': 0,
-      'fill-extrusion-opacity': 0.85,
+      'fill-extrusion-opacity': 0.6,
     },
   } as unknown as LayerSpecification;
 }
@@ -346,14 +346,19 @@ function routeLayerSpecs(): LayerSpecification[] {
       type: 'line',
       source: ROUTE_SOURCE_ID,
       layout: { 'line-cap': 'round', 'line-join': 'round' },
-      paint: { 'line-color': NIGHT.bottom, 'line-width': 11, 'line-opacity': 0.9 },
+      paint: { 'line-color': 'white', 'line-width': 12, 'line-opacity': 0.95 },
     },
     {
       id: ROUTE_LAYER_ID,
       type: 'line',
       source: ROUTE_SOURCE_ID,
       layout: { 'line-cap': 'round', 'line-join': 'round' },
-      paint: { 'line-color': PALETTE.lantern, 'line-width': 7, 'line-opacity': 1 },
+      // Pumpkin at the start to glow at the end (needs lineMetrics on the source).
+      paint: {
+        'line-width': 7,
+        'line-opacity': 1,
+        'line-gradient': ['interpolate', ['linear'], ['line-progress'], 0, PALETTE.pumpkin, 1, PALETTE.glow],
+      },
     },
   ] as unknown as LayerSpecification[];
 }
@@ -379,7 +384,7 @@ export function addGloamLayers(
   buildings: ReadonlyArray<Building> | null = null,
 ): void {
   map.addSource(SEGMENTS_SOURCE_ID, geojson(buildSegmentsGeoJSON(segments), { promoteId: 'id' }));
-  map.addSource(ROUTE_SOURCE_ID, geojson(routeGeoJSON(null)));
+  map.addSource(ROUTE_SOURCE_ID, geojson(routeGeoJSON(null), { lineMetrics: true }));
   map.addSource(MARKERS_SOURCE_ID, geojson(buildMarkersGeoJSON(null, null)));
   for (const spec of segmentLayerSpecs(effects.reduced)) map.addLayer(spec);
   map.addLayer(noteLayerSpec());

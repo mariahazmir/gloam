@@ -1,4 +1,4 @@
-import { Map as MapLibreMap, setWorkerUrl } from 'maplibre-gl';
+import { AttributionControl, Map as MapLibreMap, setWorkerUrl } from 'maplibre-gl';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import { requireFinite, requireLatLon } from '../validation/guards';
 import { buildStyle } from './style';
@@ -17,19 +17,24 @@ export interface MapViewOptions {
   container: HTMLElement;
   center: readonly [lon: number, lat: number];
   zoom: number;
+  /** Where the attribution goes: a strip under the header that no sheet covers (Requirement 18.10). */
+  attributionHost: HTMLElement;
 }
 
 export function createMapView(opts: MapViewOptions): MapLibreMap {
   requireLatLon('center', opts.center[0], opts.center[1]);
   requireFinite('zoom', opts.zoom);
-  return new MapLibreMap({
+  const map = new MapLibreMap({
     container: opts.container,
     style: buildStyle(),
     center: [opts.center[0], opts.center[1]],
     zoom: opts.zoom,
     pitch: 0,
     maxPitch: MAX_PITCH,
-    // compact: false keeps the attribution open, never collapsed behind a button.
-    attributionControl: { compact: false },
+    attributionControl: false,
   });
+  // Mounted in the strip through the control's IControl onAdd, so it sits outside the map's
+  // corners. compact: false keeps the attribution open, never collapsed behind a button.
+  opts.attributionHost.append(new AttributionControl({ compact: false }).onAdd(map));
+  return map;
 }
