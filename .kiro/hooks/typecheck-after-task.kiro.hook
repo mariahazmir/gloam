@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Typecheck when the agent stops",
+  "description": "Sub-agents only ran their own files and twice left type errors in earlier tests. Run the full type check after every agent run so the next task starts clean.",
+  "version": "1",
+  "when": {
+    "type": "agentStop"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "cd app && npx tsc --noEmit"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "Protect my Kiro log",
+  "description": "docs/kiro-log.md is written by hand, in my own words. Kiro appended entries to it three times despite a steering rule, so this checks every write before it happens.",
+  "version": "1",
+  "when": {
+    "type": "preToolUse",
+    "toolTypes": ["write"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "If this write targets docs/kiro-log.md, do not perform it. Reply that the log is written by hand by the project owner and move on without editing it. If it targets any other file, continue normally."
+  }
+}
