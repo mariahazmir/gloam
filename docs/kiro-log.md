@@ -490,21 +490,11 @@ Credits: 4,000 at start (redeemed 8 Nov).
 - 17.2: attribution for OpenStreetMap, OpenFreeMap and OpenMapTiles, and the font licences for Caprasimo and DM Sans.
 - Two extras from me: the live link and the Pages fallback in the README, and the font licence text served from the deployed site and linked from About.
 - 18: the final checkpoint, with raw output, no edits unless something fails.
-
-**What Kiro did**
 - 17.1: appended "The app" to `README.md`. It removed the one-line "Setup steps coming soon" placeholder and said so.
 - 17.2: added a fonts bullet (SIL OFL 1.1) and linked the existing `docs/font-licences.txt` instead of creating a duplicate. The About text already credited all three map sources, so it made no change there.
 - 18: `npx tsc --noEmit` exit 0; `npx vitest --run` 50 files, 270 tests passing, 3.90 s. No edits needed. It also printed the tier shares of each city's example route, with at least 3 tiers at 5% or more in all five cities.
-
-**What I checked or caught**
 - The OFL asks for the licence text to accompany the fonts, and the site serves the font files, but the licence was only in the repo. I asked for it to be served and linked from About.
-- Kiro's 17 and 18 reports did not mention the live link, the Pages line or the licence file. [ ] checked with the greps and `Test-Path`
+- Kiro's 17 and 18 reports did not mention the live link, the Pages line or the licence file.
 - Berlin's example route has only 5.168% in the brighter tier, which is close to the 5% rule. A pipeline or tier change could break that real-pack test.
-
-**Still to confirm**
-- [ ] Live link and Pages line in the README
-- [ ] `font-licences.txt` in `dist` and linked from About
-- [ ] Manual checks in `docs/app-checks.md` filled in
-- [ ] README wordmark and mascot cleanup
-- [ ] 
 - Credits: 5.91
+
