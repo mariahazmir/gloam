@@ -58,7 +58,24 @@ At the default λ = 3 (median; range in brackets):
 - Dark-tier metres (metres on streets ranked "mapped unlit" or "darker than most") is a second measure, reported only for pairs where the shortest route had some (25 to 34 of the 40). At λ = 3 its median change is −42.2% in Kuala Lumpur and −84.6 to −96.2% elsewhere. I do not use it as a headline. The router does not minimise it, and on some pairs it rises (up to +4,805% in Seattle, a percentage of a very small number). Quote the dread exposure column.
 - The five built-in example walks were picked by a script to show a difference (800 to 1,500 m, at least three tiers). They are best cases, not typical walks, and the app says so on screen.
 
-## 5. Performance and hosting
+## 5. Street search
+ 
+Source: `app/scripts/streetNameStats.ts`, run on 16 Nov 2026. It runs offline over the city packs.
+ 
+| City | Segments | With a name | Distinct names | Names with more than one stretch | Most stretches for one name |
+|---|---|---|---|---|---|
+| Seattle | 17,402 | 15.6% | 324 | 94 (29.0%) | 11 ("south weller street") |
+| Kuala Lumpur | 10,225 | 19.1% | 430 | 31 (7.2%) | 4 ("bintang walk") |
+| London | 15,296 | 32.3% | 958 | 203 (21.2%) | 32 ("oxford street") |
+| Berlin | 16,668 | 22.4% | 384 | 74 (19.3%) | 8 ("lichtenberger strasse") |
+| Manchester | 21,792 | 17.7% | 1,407 | 196 (13.9%) | 19 ("princess street") |
+ 
+- Typing a street name sets the start or end point. It matches the names already in the city pack on the device, so it adds no data file and sends nothing.
+- Only named streets can be found. "With a name" counts segments, footways and steps included, so it is not the share of walkable length. Tapping the map, the crosshair and "use my location" still set any point.
+- A stretch is a set of same-named segments that touch each other. Pieces that do not touch are separate results, told apart by distance and direction from the map centre. For a name with many stretches the nearest come first, and at most 8 results show.
+- Timing in Node, median of 3: building the index takes 12.6 ms (Kuala Lumpur) to 27.7 ms (Manchester), and one search for "st" takes under 1 ms. On a phone: ~1 s (timed by hand with a stopwatch).
+
+## 6. Performance and hosting
 
 Source: `docs/app-checks.md`.
 
@@ -71,23 +88,26 @@ Source: `docs/app-checks.md`.
 - Load time on a 10 Mbit/s connection: Ningbo 5.85s, Malaysia not tested, US not tested.
 - Browsers tested: Chrome 157 on a Windows laptop; Chrome and Safari on an iPhone 15 Pro, iOS 26.6.2. Layouts checked at 390 x 844 and 768 px, plus keyboard use and focus order.
 
-## 6. Privacy
+## 7. Privacy
 
-- The app makes only these requests: its own files, the map tiles, the two pack files for the chosen city, and one sample-data file while Demo mode is on. Route planning makes no network requests.
+- The app makes only these requests: its own files, the map tiles, the two pack files for the chosen city, and one sample-data file while Demo mode is on. Route planning and street search make no network requests.
+- A typed street name stays in the input and in memory. It is not stored, logged or sent. A test stubs the network and storage and runs the search over generated input.
 - It stores two things on the device (`gloam.settings.v1` and `gloam.corrections.v1`). No accounts, no cookies, no analytics.
 - A saved correction holds only the street id, the report type and the date.
 - The tile provider can see the area being viewed, never the routes.
 - A test checks these limits by stubbing `fetch`, `XMLHttpRequest`, `WebSocket` and `sendBeacon` and running the graph, tiers, router, snapping and status code over generated input.
 
-## 7. What the tests found
+## 8. What the tests found
 
-The suite has 280 tests across 53 files, including 35 numbered properties that run at least 100 generated cases each. Two real bugs came from them:
+The suite has 357 tests across 61 files, including 37 numbered properties that run at least 100 generated cases each. Two real bugs came from them:
 
 - A router property found a null route for a snap position so close to an edge end that float rounding made the piece cost vanish. The fix collapses a snap within 1 mm onto the end node and adds a regression test.
 - The brightness-change limit for flicker failed when the sampled curve was checked with the real 33 ms update step. The fix lowered the dip depth to 0.25 and made the property test four steps.
 
-## 8. Limits and what is unverified
+## 9. Limits and what is unverified
 
+- Street search finds named streets only: 15.6 to 32.3% of segments carry a name (section 5). Streets without a name can be set only by tapping the map, the crosshair or "use my location".
+- A street can be several search results, and a result sets the point at the middle of its stretch, so on a long street the point may be far from where the walker means.
 - Berlin and Manchester: the model did not beat the highway-footway baseline on walking paths.
 - Kuala Lumpur and Seattle: not validated. KL has no ground truth.
 - Community reports in the demo are sample data and labelled as such. Real corrections stay on the device, so no report reaches anyone else.
@@ -95,9 +115,9 @@ The suite has 280 tests across 53 files, including 35 numbered properties that r
 - Not measured: load time on 10 Mbit/s from the US, China and Malaysia; whether the URL stays stable; uptime from 16 Dec to 29 Jan; frame rate on a phone.
 - The site must stay up from 16 Dec to 29 Jan. Last checked: 16 Nov 2026 (`checkHost`: HTTPS, page and all 11 pack files reachable, Brotli). Recheck before submitting.
 
-## 9. What I would do next
+## 10. What I would do next
 
-- Street-name search that runs on the device, so nothing typed leaves it.
+- Street search that joins the pieces of one street into a single result and lets the walker choose a point along it. Today a street can come back as several results, and a result sets the point at the middle of its stretch.
 - Ground truth for Kuala Lumpur, to test the case the app is built for.
 - More cities, each with its own validation, starting with ones that have enough tagged unlit streets.
 - A wider area per city. Today each city is limited to its pack.
