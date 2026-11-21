@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Typecheck when the agent stops",
+      "description": "Sub-agents only ran their own files and twice left type errors in earlier tests. Run the full type check after every agent run so the next task starts clean.",
+      "trigger": "Stop",
+      "action": {
+        "type": "command",
+        "command": "cd app && npx tsc --noEmit"
+      },
+      "enabled": true
+    }
+  ]
+}

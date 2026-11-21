@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Wording check on save",
+      "description": "Gloam must never say a route is safe. Whenever app source changes, run the banned-word and wording tests so a slip is caught in seconds, not at the next checkpoint.",
+      "trigger": "PostFileSave",
+      "matcher": "(app/src/.*[^/]*\\.ts$|app/index\\.html$)",
+      "action": {
+        "type": "command",
+        "command": "cd app && npx vitest --run tests/wording.test.ts tests/ownWording.test.ts tests/bannedWords.property.test.ts"
+      },
+      "enabled": true
+    }
+  ]
+}
