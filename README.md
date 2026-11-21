@@ -8,7 +8,7 @@ route that trades a few extra minutes for better light.
 
 Built with [Kiro](https://kiro.dev) for **Kiroween 2026** (Costume Contest 🎃).
 
-**[Walk into the Gloam →](https://gloam.tapau.me/)**  ·  **Demo video:** [YouTube link coming soon]
+**[Walk into the Gloam →](https://gloam.tapau.me/)**  ·  **[Watch the night walk →](https://youtu.be/CISSZ81DvWY)**
 
 ## Why I made this
 
@@ -22,7 +22,7 @@ Then I came to Ningbo on a study exchange, and suddenly lit walkways were EVERYW
 It's such an easy city to walk at night. So I started wondering: why can't KL 
 have that feeling too?
 
-Thing is, KL doesn't have the data. In OpenStreetMap, only about 0.8% of KL's
+Thing is, KL doesn't have the data. In OpenStreetMap, less than 1% of KL's
 vehicle roads are tagged as lit. Night-walking apps usually lean on lighting
 records that already exist, so cities like KL get left in the dark (pun-intended, _winkwink_).
 
@@ -39,8 +39,8 @@ educated guess.
 - **Heartbeat line:** how the dread builds along your whole route, before you
   leave
 
-Tap a street Gloam got wrong to correct it. Enough agreeing reports and the
-glow updates. Old reports fade, because lights get fixed and lights break.
+Tap a street Gloam got wrong to correct it. Your note changes your own routes straight away. When 3 reports agree, 
+the street's card says "confirmed by 3 people" (in this version those shared totals are sample data, since reports stay on your device). Old reports fade, because lights get fixed and lights break.
 
 ## Try it
 
@@ -49,7 +49,7 @@ glow updates. Old reports fade, because lights get fixed and lights break.
 2. Pick a city: Kuala Lumpur, London, Seattle, Berlin or Manchester.
 3. Type a street name (or tap the map) to set your start and end.
 4. Drag the dread slider and watch the lantern path bend towards better light.
-5. Switch on your own dread settings: dark, empty, enclosed, long stretches.
+5. Switch on your own routing settings: avoid steps, avoid service roads and back lanes, prefer main roads, treat low-confidence guesses as darker.
 
 Prefer less flicker? There's a reduced-effects switch!
 
@@ -155,8 +155,7 @@ Buildings without a usable height tag are drawn at a default height of 8.0 m
 (config field `default_building_height_m`). That height is an assumption, not
 a measurement.
 
-Every score is an estimate from map data, shown with a confidence. The files
-in `data/` are sample data.
+The demo reports in `data/sample-data.json` are sample data.
 
 ## The app
 
@@ -165,8 +164,8 @@ Live app: https://gloam.tapau.me/
 The app in `app/` is a dark 2.5D map built with TypeScript, Vite and
 MapLibre GL JS. It loads small precomputed city packs from `data/`, draws each
 street as glow, flicker or fog, and plans routes in your browser. A slider
-trades walking distance against dread, so you can see a shorter route next to
-one that favours better-lit streets. Every score is an estimate from map data,
+trades walking distance against dread, so you can compare the shortest route with one that favours better-lit streets.
+Every score is an estimate from map data,
 shown with its confidence. There is a reduced-effects switch for people who
 want no flicker or animation.
 
@@ -222,6 +221,4 @@ Disclaimer, shown on every screen that shows a route:
   (Copyright 2014 The DM Sans Project Authors). Full copyright lines and licence
   text are in [docs/font-licences.txt](docs/font-licences.txt).
 
-The app shows these three attributions on the map wherever it appears. The city
-packs in `data/` and the community totals in the demo are sample data and are
-labelled that way in the app.
+The app shows these three attributions on the map wherever it appears. The community totals in the demo come from `data/sample-data.json` and are labelled SAMPLE DATA in the app.
